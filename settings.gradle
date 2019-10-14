@@ -1,0 +1,4 @@
+rootProject.name = 'grips_java'
+
+include 'fastsim'
+include 'protobuf-lib'
