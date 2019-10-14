@@ -15,33 +15,26 @@
  *
  */
 
-package com.grips.team_server;
+package com.grips.protobuf_lib;
 
 import com.google.protobuf.GeneratedMessage;
 import org.jetbrains.annotations.Nullable;
-import org.robocup_logistics.llsf_comm.ProtobufMessage;
-import org.robocup_logistics.llsf_utils.Key;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Service;
+import com.grips.protobuf_lib.llsf_utils.Key;
+import com.grips.protobuf_lib.llsf_comm.ProtobufMessage;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.util.Set;
 
-@Service
 public class ProtobufServer implements Runnable {
 
-    @Autowired
     private RobotConnections robotConnections;
 
     private ServerSocket _server_socket;
 
-    @Autowired
-    private ConfigurableApplicationContext ctx;
+    //private ConfigurableApplicationContext ctx; todo
 
     public ProtobufServer(int listen_port) {
         try {
@@ -62,10 +55,10 @@ public class ProtobufServer implements Runnable {
                 String robot_address = live_socket.getInetAddress().getHostAddress();
                 System.out.println("New Connection from IP: " + robot_address + ":" + live_socket.getPort() + ".");
 
-                RobotHandler handler = ctx.getBean(RobotHandler.class);
-                handler.set_socket(live_socket);
+                //RobotHandler handler = ctx.getBean(RobotHandler.class); comment in after todo is finished
+                //handler.set_socket(live_socket);
 
-                new Thread(handler).start();
+                //new Thread(handler).start();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
