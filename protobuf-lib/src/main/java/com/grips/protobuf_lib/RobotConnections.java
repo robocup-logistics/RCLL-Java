@@ -18,8 +18,6 @@
 package com.grips.protobuf_lib;
 
 import com.grips.model.teamserver.Robot;
-import com.grips.scheduler.ProductionScheduler;
-
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -30,16 +28,14 @@ import java.util.stream.Collectors;
 
 public class RobotConnections {
 
-    ProductionScheduler productionScheduler;
-
     private Collection<Robot> _connectedRobots = new ArrayList<>();
 
-    public synchronized Set<Long>  getRobotIds() {
+    public synchronized Set<Long>  getclientId() {
         return _connectedRobots.stream().map(r -> r.getId()).collect(Collectors.toSet());
     }
 
-    public synchronized Socket getConnection(long robotId) {
-        Optional<Robot> robot = _connectedRobots.stream().filter(r -> r.getId() == robotId).findFirst();
+    public synchronized Socket getConnection(long clientId) {
+        Optional<Robot> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findFirst();
         if (!robot.isPresent()) {
             System.out.println("Robot with given ID was not found in list");
             return null;
@@ -57,8 +53,8 @@ public class RobotConnections {
         }
     }
 
-    public synchronized void removeRobot(long robotId) {
-        Optional<Robot> robot = _connectedRobots.stream().filter(r -> r.getId() == robotId).findFirst();
+    public synchronized void removeRobot(long clientId) {
+        Optional<Robot> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findFirst();
         if (!robot.isPresent()) {
             System.out.println("Robot that should be removed was not found in list!");
             return;
@@ -67,14 +63,14 @@ public class RobotConnections {
         _connectedRobots.remove(robot.get());
     }
 
-    public synchronized boolean isRobotConnected(long robotId) {
-        return _connectedRobots.stream().filter(r -> r.getId() == robotId).findAny().isPresent();
+    public synchronized boolean isRobotConnected(long clientId) {
+        return _connectedRobots.stream().filter(r -> r.getId() == clientId).findAny().isPresent();
     }
 
-    public synchronized Robot getRobot(long robotId) {
-        Optional<Robot> robot = _connectedRobots.stream().filter(r -> r.getId() == robotId).findFirst();
+    public synchronized Robot getRobot(long clientId) {
+        Optional<Robot> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findFirst();
         if (!robot.isPresent()) {
-            System.out.println("Robot with ID " + robotId + " you are looking for does not exist");
+            System.out.println("Robot with ID " + clientId + " you are looking for does not exist");
             return null;
         }
 
@@ -95,8 +91,8 @@ public class RobotConnections {
         _connectedRobots.remove(robot.get());
     }
 
-    public synchronized boolean isRobotActive(long robotId) {
-        Optional<Robot> robot = _connectedRobots.stream().filter(r -> r.getId() == robotId).findAny();
+    public synchronized boolean isRobotActive(long clientId) {
+        Optional<Robot> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findAny();
         if (!robot.isPresent()) {
             System.out.println("Robot that should be checked for activity was not found");
             return false;

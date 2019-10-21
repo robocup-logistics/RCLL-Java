@@ -19,7 +19,7 @@ package com.grips.protobuf_lib;
 
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.GeneratedMessage;
-import com.grips.protobuf_lib.llsf_utils.Key;
+import org.robocup_logistics.llsf_utils.Key;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -89,8 +89,7 @@ public class RobotMessageRegister {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        } catch (InvocationTargetException e) {            e.printStackTrace();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (SecurityException e) {

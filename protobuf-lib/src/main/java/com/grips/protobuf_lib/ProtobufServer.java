@@ -19,8 +19,8 @@ package com.grips.protobuf_lib;
 
 import com.google.protobuf.GeneratedMessage;
 import org.jetbrains.annotations.Nullable;
-import com.grips.protobuf_lib.llsf_utils.Key;
-import com.grips.protobuf_lib.llsf_comm.ProtobufMessage;
+import org.robocup_logistics.llsf_utils.Key;
+import org.robocup_logistics.llsf_comm.ProtobufMessage;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

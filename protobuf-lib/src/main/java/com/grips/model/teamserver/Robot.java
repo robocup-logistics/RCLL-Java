@@ -17,15 +17,10 @@
 
 package com.grips.model.teamserver;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
 import java.net.Socket;
 
-@Entity
 public class Robot {
 
-    @Override
     public int hashCode() {
         return new Long(id).intValue();
     }
@@ -44,7 +39,6 @@ public class Robot {
         DISQUALIFIED
     }
 
-    @Id
     private long id;
 
     private boolean waiting;
@@ -57,7 +51,6 @@ public class Robot {
 
     private int waitingTime;
 
-    @Transient
     private Socket connection;
 
     public long getId() {
@@ -81,7 +74,6 @@ public class Robot {
 
     public void setRobotState(RobotState robotState) { this.robotState = robotState; }
 
-    @Override
     public boolean equals(Object other) {
         if (other == null) return false;
         if (other == this) return true;
