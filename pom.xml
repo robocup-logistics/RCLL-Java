@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>protobuf_communication</groupId>
+    <artifactId>grips</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <repositories>
+        <repository>
+            <id>gitlab-maven-protobuf</id>
+            <url>https://gitlab.com/grips_robocup/grips_java</url>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <repository>
+            <id>gitlab-maven-protobuf</id>
+            <url>https://gitlab.com/grips_robocup/grips_java</url>
+        </repository>
+        <snapshotRepository>
+            <id>gitlab-maven-protobuf</id>
+            <url>https://gitlab.com/grips_robocup/grips_java</url>
+        </snapshotRepository>
+    </distributionManagement>
+</project>
