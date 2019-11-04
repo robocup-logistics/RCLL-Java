@@ -4,24 +4,49 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>protobuf_communication</groupId>
-    <artifactId>grips</artifactId>
+    <groupId>grips</groupId>
+    <artifactId>protobuf</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 
     <repositories>
         <repository>
             <id>gitlab-maven-protobuf</id>
-            <url>https://gitlab.com/grips_robocup/grips_java</url>
+            <url>https://gitlab.com/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven</url>
         </repository>
     </repositories>
     <distributionManagement>
         <repository>
             <id>gitlab-maven-protobuf</id>
-            <url>https://gitlab.com/grips_robocup/grips_java</url>
+            <url>https://gitlab.com/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven</url>
         </repository>
         <snapshotRepository>
             <id>gitlab-maven-protobuf</id>
-            <url>https://gitlab.com/grips_robocup/grips_java</url>
+            <url>https://gitlab.com/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven</url>
         </snapshotRepository>
     </distributionManagement>
+    <dependencies>
+<dependency>
+    <groupId>com.google.protobuf</groupId>
+    <artifactId>protobuf-java</artifactId>
+    <version>3.10.0</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
+<dependency>
+    <groupId>org.jetbrains</groupId>
+    <artifactId>annotations</artifactId>
+    <version>16.0.1</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+<dependency>
+    <groupId>com.google.guava</groupId>
+    <artifactId>guava</artifactId>
+    <version>28.1-jre</version>
+</dependency>
+
+    </dependencies>	
 </project>
