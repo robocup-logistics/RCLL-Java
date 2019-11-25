@@ -36,6 +36,7 @@ public class ProtobufServer implements Runnable {
 
     //private ConfigurableApplicationContext ctx; todo
 
+
     public ProtobufServer(int listen_port) {
         try {
             _server_socket = new ServerSocket(listen_port);

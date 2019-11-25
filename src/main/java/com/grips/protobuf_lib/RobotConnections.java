@@ -17,7 +17,7 @@
 
 package com.grips.protobuf_lib;
 
-import com.grips.model.teamserver.Robot;
+import com.grips.model.teamserver.Peer;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -28,14 +28,18 @@ import java.util.stream.Collectors;
 
 public class RobotConnections {
 
-    private Collection<Robot> _connectedRobots = new ArrayList<>();
+    private Collection<Peer> _connectedRobots = new ArrayList<>();
+    private int Timeout_Time;
 
+    public synchronized void setTimeout_Time(int mil_sec){
+        Timeout_Time = mil_sec;
+    }
     public synchronized Set<Long>  getclientId() {
         return _connectedRobots.stream().map(r -> r.getId()).collect(Collectors.toSet());
     }
 
     public synchronized Socket getConnection(long clientId) {
-        Optional<Robot> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findFirst();
+        Optional<Peer> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findFirst();
         if (!robot.isPresent()) {
             System.out.println("Robot with given ID was not found in list");
             return null;
@@ -44,7 +48,7 @@ public class RobotConnections {
         return robot.get().getConnection();
     }
 
-    public synchronized void addRobot(Robot robot) {
+    public synchronized void addRobot(Peer robot) {
         if (!isRobotConnected(robot.getId())) {
             _connectedRobots.add(robot);
             System.out.println("Robot with ID added " + robot.getId());
@@ -54,7 +58,7 @@ public class RobotConnections {
     }
 
     public synchronized void removeRobot(long clientId) {
-        Optional<Robot> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findFirst();
+        Optional<Peer> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findFirst();
         if (!robot.isPresent()) {
             System.out.println("Robot that should be removed was not found in list!");
             return;
@@ -67,8 +71,8 @@ public class RobotConnections {
         return _connectedRobots.stream().filter(r -> r.getId() == clientId).findAny().isPresent();
     }
 
-    public synchronized Robot getRobot(long clientId) {
-        Optional<Robot> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findFirst();
+    public synchronized Peer getRobot(long clientId) {
+        Optional<Peer> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findFirst();
         if (!robot.isPresent()) {
             System.out.println("Robot with ID " + clientId + " you are looking for does not exist");
             return null;
@@ -78,7 +82,7 @@ public class RobotConnections {
     }
 
     public synchronized void removeLostRobot(Socket socket) {
-        Optional<Robot> robot = _connectedRobots.stream().filter(r -> r.getConnection().equals(socket)).findFirst();
+        Optional<Peer> robot = _connectedRobots.stream().filter(r -> r.getConnection().equals(socket)).findFirst();
         if (!robot.isPresent()) {
             System.out.println("Robot to whom connection was lost, already was removed from list");
             return;
@@ -92,7 +96,7 @@ public class RobotConnections {
     }
 
     public synchronized boolean isRobotActive(long clientId) {
-        Optional<Robot> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findAny();
+        Optional<Peer> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findAny();
         if (!robot.isPresent()) {
             System.out.println("Robot that should be checked for activity was not found");
             return false;
@@ -100,14 +104,14 @@ public class RobotConnections {
 
         long lastActive = robot.get().getLastActive();
 
-        if (lastActive + Config.NUM_MILIS_ROBOT_LOST < System.currentTimeMillis()) {
+        if (lastActive + Timeout_Time < System.currentTimeMillis()) {
             return false;
         }
 
         return true;
     }
 
-    public ArrayList<Robot> getRobots() {
+    public ArrayList<Peer> getRobots() {
         return new ArrayList<>(_connectedRobots);
     }
 }

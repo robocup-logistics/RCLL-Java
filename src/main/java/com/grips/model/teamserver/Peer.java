@@ -19,7 +19,7 @@ package com.grips.model.teamserver;
 
 import java.net.Socket;
 
-public class Robot {
+public class Peer {
 
     public int hashCode() {
         return new Long(id).intValue();
@@ -77,8 +77,8 @@ public class Robot {
     public boolean equals(Object other) {
         if (other == null) return false;
         if (other == this) return true;
-        if (!(other instanceof Robot)) return false;
-        Robot otherRobot = (Robot) other;
+        if (!(other instanceof Peer)) return false;
+        Peer otherRobot = (Peer) other;
         if (this.getId() != otherRobot.getId()) return false;
         return true;
     }
