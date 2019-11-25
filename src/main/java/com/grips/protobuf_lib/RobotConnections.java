@@ -31,9 +31,10 @@ public class RobotConnections {
     private Collection<Peer> _connectedRobots = new ArrayList<>();
     private int Timeout_Time;
 
-    public synchronized void setTimeout_Time(int mil_sec){
+    public RobotConnections(int mil_sec){
         Timeout_Time = mil_sec;
     }
+
     public synchronized Set<Long>  getclientId() {
         return _connectedRobots.stream().map(r -> r.getId()).collect(Collectors.toSet());
     }
