@@ -407,6 +407,7 @@ org/robocup_logistics/llsf_msgs/OrderInfoProtos$SetOrderDelivered$CompType$1.cla
 org/robocup_logistics/llsf_msgs/OrderInfoProtos$ConfirmDelivery$Builder.class
 org/robocup_logistics/llsf_msgs/PrsTaskProtos$SendPrepareMachineTaskOrBuilder.class
 org/robocup_logistics/llsf_comm/ProtobufBroadcastPeer.class
+com/grips/refbox/RefBoxConnectionManager.class
 org/robocup_logistics/llsf_msgs/MachineCommandsProtos$SetMachineLights$CompType$1.class
 org/robocup_logistics/llsf_msgs/MachineInstructionProtos$PrepareInstructionCS$1.class
 org/robocup_logistics/llsf_msgs/OrderInfoProtos$Order$1.class
