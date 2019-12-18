@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class ProtobufServer implements Runnable {
 
@@ -33,13 +36,12 @@ public class ProtobufServer implements Runnable {
 
     private ServerSocket _server_socket;
 
-    //private ConfigurableApplicationContext ctx; todo
 
+    private Consumer<Socket> onNewConnection;
 
-    public ProtobufServer(int listen_port) {
+    public ProtobufServer(int listen_port, Consumer<Socket> onNewConnection) {
         try {
             _server_socket = new ServerSocket(listen_port);
-            //_server_socket = ctx.getBean(ServerSocket.class, listen_port);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,10 +57,7 @@ public class ProtobufServer implements Runnable {
                 String robot_address = live_socket.getInetAddress().getHostAddress();
                 System.out.println("New Connection from IP: " + robot_address + ":" + live_socket.getPort() + ".");
 
-                //RobotHandler handler = ctx.getBean(RobotHandler.class); comment in after todo is finished
-                //handler.set_socket(live_socket);
-
-                //new Thread(handler).start();
+                this.onNewConnection.accept(live_socket);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
