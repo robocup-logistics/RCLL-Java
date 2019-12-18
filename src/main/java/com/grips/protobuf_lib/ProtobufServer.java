@@ -39,7 +39,9 @@ public class ProtobufServer implements Runnable {
 
     private Consumer<Socket> onNewConnection;
 
-    public ProtobufServer(int listen_port, Consumer<Socket> onNewConnection) {
+    public ProtobufServer(int listen_port, RobotConnections robotConnections, Consumer<Socket> onNewConnection) {
+        this.onNewConnection = onNewConnection;
+        this.robotConnections = robotConnections;
         try {
             _server_socket = new ServerSocket(listen_port);
         } catch (IOException e) {
