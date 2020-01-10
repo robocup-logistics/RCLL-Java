@@ -17,94 +17,33 @@
 
 package com.grips.model.teamserver;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.net.Socket;
 
+@Getter
+@Setter
 public class Peer {
-
-    public int hashCode() {
-        return new Long(id).intValue();
-    }
-
-    public int getWaitingTime() {
-        return waitingTime;
-    }
-
-    public void setWaitingTime(int waitingTime) {
-        this.waitingTime = waitingTime;
-    }
-
-    public enum RobotState {
-        ACTIVE,
-        MAINTENANCE,
-        DISQUALIFIED
-    }
-
     private long id;
-
     private boolean waiting;
-
     private long lastActive;
-
     private long timeLastTaskAssignment;
-
-    private RobotState robotState;
-
+    private PeerState robotState;
     private int waitingTime;
-
     private Socket connection;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public boolean isWaiting() {
-        return waiting;
-    }
-
-    public void setWaiting(boolean waiting) {
-        this.waiting = waiting;
-    }
-
-
-    public RobotState getRobotState() { return robotState; }
-
-    public void setRobotState(RobotState robotState) { this.robotState = robotState; }
 
     public boolean equals(Object other) {
         if (other == null) return false;
         if (other == this) return true;
         if (!(other instanceof Peer)) return false;
         Peer otherRobot = (Peer) other;
-        if (this.getId() != otherRobot.getId()) return false;
-        return true;
+        return this.getId() == otherRobot.getId();
     }
 
-    public long getLastActive() {
-        return lastActive;
+    public int hashCode() {
+        return new Long(id).intValue();
     }
 
-    public void setLastActive(long lastActive) {
-        this.lastActive = lastActive;
-    }
-
-    public Socket getConnection() {
-        return connection;
-    }
-
-    public void setConnection(Socket connection) {
-        this.connection = connection;
-    }
-
-    public long getTimeLastTaskAssignment() {
-        return timeLastTaskAssignment;
-    }
-
-    public void setTimeLastTaskAssignment(long timeLastTaskAssignment) {
-        this.timeLastTaskAssignment = timeLastTaskAssignment;
-    }
 }
 

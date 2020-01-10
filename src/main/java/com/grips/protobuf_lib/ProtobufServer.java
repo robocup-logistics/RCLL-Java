@@ -26,17 +26,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class ProtobufServer implements Runnable {
 
     private RobotConnections robotConnections;
-
     private ServerSocket _server_socket;
-
-
     private Consumer<Socket> onNewConnection;
 
     public ProtobufServer(int listen_port, RobotConnections robotConnections, Consumer<Socket> onNewConnection) {
