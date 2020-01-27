@@ -34,7 +34,7 @@ public class MachineClient {
         addMessageToSendQueue(machine, reset);
     }
 
-    private void sendPrepareBS(MachineClientUtils.MachineSide side, MachineClientUtils.BaseColor base_color)
+    public void sendPrepareBS(MachineClientUtils.MachineSide side, MachineClientUtils.BaseColor base_color)
     {
         MachineClientUtils.Machine machine = MachineClientUtils.Machine.BS;
         MachineInstructionProtos.PrepareInstructionBS bsInstruction =
@@ -53,7 +53,7 @@ public class MachineClient {
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
-    private void sendPrepareDS(int gate, int orderId) {
+    public void sendPrepareDS(int gate, int orderId) {
         MachineClientUtils.Machine machine = MachineClientUtils.Machine.DS;
         MachineInstructionProtos.PrepareInstructionDS dsInstruction =
                 MachineInstructionProtos.PrepareInstructionDS.newBuilder()
@@ -70,7 +70,7 @@ public class MachineClient {
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
-    private void sendPrepareRS(MachineClientUtils.Machine machine, MachineClientUtils.RingColor color) {
+    public void sendPrepareRS(MachineClientUtils.Machine machine, MachineClientUtils.RingColor color) {
         ProductColorProtos.RingColor refbox_color = ProductColorProtos.RingColor.valueOf(color.ordinal()+1);
         MachineInstructionProtos.PrepareInstructionRS rsInstruction =
                 MachineInstructionProtos.PrepareInstructionRS.newBuilder()
@@ -87,7 +87,7 @@ public class MachineClient {
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
-    private void sendPrepareCS(MachineClientUtils.Machine machine, MachineClientUtils.CSOp operation) {
+    public void sendPrepareCS(MachineClientUtils.Machine machine, MachineClientUtils.CSOp operation) {
         MachineDescriptionProtos.CSOp refbox_operation = MachineDescriptionProtos.CSOp.valueOf(operation.ordinal() + 1);
         MachineInstructionProtos.PrepareInstructionCS csInstruction =
                 MachineInstructionProtos.PrepareInstructionCS.newBuilder()
@@ -104,7 +104,7 @@ public class MachineClient {
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
-    private void sendPrepareSS(MachineClientUtils.Machine machine, MachineInstructionProtos.SSTask ssTask) {
+    public void sendPrepareSS(MachineClientUtils.Machine machine, MachineInstructionProtos.SSTask ssTask) {
 
         MachineInstructionProtos.PrepareInstructionSS ssInstruction = MachineInstructionProtos.PrepareInstructionSS.newBuilder()
                 .setTask(ssTask)
