@@ -6,7 +6,7 @@
 
     <groupId>grips</groupId>
     <artifactId>protobuf</artifactId>
-    <version>0.0.7</version>
+    <version>0.0.14</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -30,11 +30,20 @@
         </snapshotRepository>
     </distributionManagement>
     <dependencies>
-<dependency>
-    <groupId>com.google.protobuf</groupId>
-    <artifactId>protobuf-java</artifactId>
-    <version>2.6.1</version>
-</dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.10</version>
+            <scope>provided</scope>
+        </dependency>
 
     </dependencies>	
 </project>
