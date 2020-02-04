@@ -1,18 +1,25 @@
 package com.grips.model.teamserver;
 
 import com.google.protobuf.GeneratedMessage;
+import com.grips.protobuf_lib.RobotMessageRegister;
+import org.robocup_logistics.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_msgs.MachineDescriptionProtos;
 import org.robocup_logistics.llsf_msgs.MachineInstructionProtos;
 import org.robocup_logistics.llsf_msgs.ProductColorProtos;
 import org.robocup_logistics.llsf_msgs.TeamProtos;
+import org.robocup_logistics.llsf_utils.Key;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class MachineClient {
 
-    private MachineClientUtils.TeamColor color;
-    private Map<MachineClientUtils.Machine, GeneratedMessage> sendQueue;
+    private final MachineClientUtils.TeamColor color;
+    private final Map<MachineClientUtils.Machine, GeneratedMessage> sendQueue;
 
     public MachineClient (MachineClientUtils.TeamColor color)
     {
@@ -117,5 +124,21 @@ public class MachineClient {
                 .build();
 
         addMessageToSendQueue(machine, prepareMachineMsg);
+    }
+
+    public List<ProtobufMessage> fetchPrepareMessages() {
+        return fetchForType(MachineInstructionProtos.PrepareMachine.class);
+    }
+
+    public List<ProtobufMessage> fetchResetMessages() {
+        return fetchForType(MachineInstructionProtos.PrepareMachine.class);
+    }
+
+    private List<ProtobufMessage> fetchForType(Class<? extends GeneratedMessage> clazz) {
+        Key key = RobotMessageRegister.getInstance().get_msg_key_from_class(clazz);
+        return this.sendQueue.values().stream()
+                .filter(x -> x.getClass().equals(clazz))
+                .map(x -> new ProtobufMessage(key.cmp_id, key.msg_id, x))
+                .collect(Collectors.toList());
     }
 }
