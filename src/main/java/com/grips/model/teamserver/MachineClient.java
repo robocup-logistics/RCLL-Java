@@ -18,25 +18,20 @@ import java.util.stream.Collectors;
 
 public class MachineClient {
 
-    private final MachineClientUtils.TeamColor color;
+    private final MachineClientUtils.TeamColor teamColor;
     private final Map<MachineClientUtils.Machine, GeneratedMessage> sendQueue;
 
-    public MachineClient (MachineClientUtils.TeamColor color)
+    public MachineClient (MachineClientUtils.TeamColor teamColor)
     {
-        this.color = color;
+        this.teamColor = teamColor;
         this.sendQueue = new ConcurrentHashMap<>();
-    }
-
-    private void addMessageToSendQueue(MachineClientUtils.Machine machine, GeneratedMessage msg)
-    {
-        sendQueue.put(machine, msg);
     }
 
     public void sendResetMachine(MachineClientUtils.Machine machine)
     {
         MachineInstructionProtos.ResetMachine reset = MachineInstructionProtos.ResetMachine.newBuilder()
-                .setMachine(machine.toString())
-                .setTeamColor(TeamProtos.Team.valueOf(color.toString()))
+                .setMachine(machineNameForMsg(machine, teamColor))
+                .setTeamColor(TeamProtos.Team.valueOf(teamColor.toString()))
                 .build();
         addMessageToSendQueue(machine, reset);
     }
@@ -52,8 +47,8 @@ public class MachineClient {
                         .build();
         MachineInstructionProtos.PrepareMachine prepareMachineMsg =
                 MachineInstructionProtos.PrepareMachine.newBuilder()
-                        .setTeamColor(TeamProtos.Team.valueOf(color.toString()))
-                        .setMachine(machine.toString())
+                        .setTeamColor(TeamProtos.Team.valueOf(teamColor.toString()))
+                        .setMachine(machineNameForMsg(machine, teamColor))
                         .setInstructionBs(bsInstruction)
                         .build();
 
@@ -69,8 +64,8 @@ public class MachineClient {
                         .build();
         MachineInstructionProtos.PrepareMachine prepareMachineMsg =
                 MachineInstructionProtos.PrepareMachine.newBuilder()
-                        .setTeamColor(TeamProtos.Team.valueOf(color.toString()))
-                        .setMachine(machine.toString())
+                        .setTeamColor(TeamProtos.Team.valueOf(teamColor.toString()))
+                        .setMachine(machineNameForMsg(machine, teamColor))
                         .setInstructionDs(dsInstruction)
                         .build();
 
@@ -87,7 +82,7 @@ public class MachineClient {
         MachineInstructionProtos.PrepareMachine prepareMachineMsg =
                 MachineInstructionProtos.PrepareMachine.newBuilder()
                         .setTeamColor(TeamProtos.Team.valueOf(color.toString()))
-                        .setMachine(machine.toString())
+                        .setMachine(machineNameForMsg(machine, teamColor))
                         .setInstructionRs(rsInstruction)
                         .build();
 
@@ -103,8 +98,8 @@ public class MachineClient {
 
         MachineInstructionProtos.PrepareMachine prepareMachineMsg =
                 MachineInstructionProtos.PrepareMachine.newBuilder()
-                        .setTeamColor(TeamProtos.Team.valueOf(color.toString()))
-                        .setMachine(machine.toString())
+                        .setTeamColor(TeamProtos.Team.valueOf(teamColor.toString()))
+                        .setMachine(machineNameForMsg(machine, teamColor))
                         .setInstructionCs(csInstruction)
                         .build();
 
@@ -118,8 +113,8 @@ public class MachineClient {
                 .build();
 
         MachineInstructionProtos.PrepareMachine prepareMachineMsg = MachineInstructionProtos.PrepareMachine.newBuilder()
-                .setTeamColor(TeamProtos.Team.valueOf(color.toString()))
-                .setMachine(machine.toString())
+                .setTeamColor(TeamProtos.Team.valueOf(teamColor.toString()))
+                .setMachine(machineNameForMsg(machine, teamColor))
                 .setInstructionSs(ssInstruction)
                 .build();
 
@@ -135,7 +130,20 @@ public class MachineClient {
     }
 
     public List<ProtobufMessage> fetchResetMessages() {
-        return fetchForType(MachineInstructionProtos.PrepareMachine.class);
+        return fetchForType(MachineInstructionProtos.ResetMachine.class);
+    }
+
+    private String machineNameForMsg(MachineClientUtils.Machine machine, MachineClientUtils.TeamColor color) {
+        StringBuilder returner = new StringBuilder();
+        switch (color) {
+            case CYAN:
+                returner.append("C-");
+                break;
+            case MAGENTA:
+                returner.append("M-");
+        }
+        returner.append(machine.toString());
+        return returner.toString();
     }
 
     private List<ProtobufMessage> fetchForType(Class<? extends GeneratedMessage> clazz) {
@@ -145,4 +153,10 @@ public class MachineClient {
                 .map(x -> new ProtobufMessage(key.cmp_id, key.msg_id, x))
                 .collect(Collectors.toList());
     }
+
+    private void addMessageToSendQueue(MachineClientUtils.Machine machine, GeneratedMessage msg)
+    {
+        sendQueue.put(machine, msg);
+    }
+
 }
