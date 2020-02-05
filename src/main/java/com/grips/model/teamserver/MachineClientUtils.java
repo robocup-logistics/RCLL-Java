@@ -1,18 +1,18 @@
 package com.grips.model.teamserver;
 
 public class MachineClientUtils {
-    public Machine parseMachineWithColor(String machine) {
+    public static Machine parseMachineWithColor(String machine) {
         if (machine.contains("BS")) {
             return Machine.BS;
         } else if (machine.contains("DS")) {
             return Machine.DS;
-        } else if (machine.contains("CS-1")) {
+        } else if (machine.contains("CS1")) {
             return Machine.CS_1;
-        } else if (machine.contains("CS-2")) {
+        } else if (machine.contains("CS2")) {
             return Machine.CS_2;
-        } else if (machine.contains("RS-1")) {
+        } else if (machine.contains("RS1")) {
             return Machine.RS_2;
-        } else if (machine.contains("RS-2")) {
+        } else if (machine.contains("RS2")) {
             return Machine.RS_2;
         } else if (machine.contains("SS")) {
             return Machine.SS;
