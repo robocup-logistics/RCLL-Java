@@ -126,6 +126,10 @@ public class MachineClient {
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
+    public void stopMessageForMachine(MachineClientUtils.Machine machine) {
+        sendQueue.remove(machine);
+    }
+
     public List<ProtobufMessage> fetchPrepareMessages() {
         return fetchForType(MachineInstructionProtos.PrepareMachine.class);
     }

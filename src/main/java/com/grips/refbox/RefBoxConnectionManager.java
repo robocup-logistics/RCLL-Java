@@ -17,6 +17,7 @@
 
 package com.grips.refbox;
 
+import lombok.extern.java.Log;
 import org.robocup_logistics.llsf_comm.ProtobufBroadcastPeer;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_comm.ProtobufMessageHandler;
@@ -25,7 +26,8 @@ import org.robocup_logistics.llsf_msgs.*;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 
-public class RefBoxConnectionManager<PublicRefBoxHandler> {
+@Log
+public class RefBoxConnectionManager {
     public final static int CIPHER_TYPE_NO_CIPHER = 0;
     public final static int CIPHER_TYPE_AES_128_ECB = 1;
     public final static int CIPHER_TYPE_AES_128_CBC = 2;
@@ -116,10 +118,12 @@ public class RefBoxConnectionManager<PublicRefBoxHandler> {
     }
 
     public void sendPublicMsg(ProtobufMessage msg) {
+        log.fine("Sending public message to Refbox: " + msg.toString());
         _proto_broadcast_peer.enqueue(msg);
     }
 
     public void sendPrivateMsg(ProtobufMessage msg) {
+        log.fine("Sending public message to Refbox: " + msg.toString());
         _proto_team_peer.enqueue(msg);
     }
 

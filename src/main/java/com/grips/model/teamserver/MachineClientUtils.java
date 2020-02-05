@@ -1,6 +1,24 @@
 package com.grips.model.teamserver;
 
 public class MachineClientUtils {
+    public Machine parseMachineWithColor(String machine) {
+        if (machine.contains("BS")) {
+            return Machine.BS;
+        } else if (machine.contains("DS")) {
+            return Machine.DS;
+        } else if (machine.contains("CS-1")) {
+            return Machine.CS_1;
+        } else if (machine.contains("CS-2")) {
+            return Machine.CS_2;
+        } else if (machine.contains("RS-1")) {
+            return Machine.RS_2;
+        } else if (machine.contains("RS-2")) {
+            return Machine.RS_2;
+        } else if (machine.contains("SS")) {
+            return Machine.SS;
+        }
+        throw new IllegalArgumentException("Unkown machine: " + machine);
+    }
     public enum TeamColor {CYAN, MAGENTA}
     public enum Machine {
         BS("BS"), DS("DS"), RS_1("RS-1"), RS_2("RS-2"), CS_1("CS-1"), CS_2("CS-2"), SS("SS");
