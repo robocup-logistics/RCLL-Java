@@ -4,7 +4,7 @@ public class MachineClientUtils {
 
     public static MachineState parseMachineState(String state) {
         switch (state) {
-            case "READY_AT_OUTPUT":
+            case "READY-AT-OUTPUT":
                 return MachineState.READY_AT_OUTPUT;
             case "IDLE":
                 return MachineState.IDLE;

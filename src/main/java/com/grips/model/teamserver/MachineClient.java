@@ -141,6 +141,7 @@ public class MachineClient {
     public void update(MachineInfoProtos.MachineInfo info) {
         this.updateMachineState(info);
         this.updateMessages();
+        log.info("States after update: " + machineStatuse.toString());
     }
 
     private void updateMachineState(MachineInfoProtos.MachineInfo info) {
@@ -169,7 +170,7 @@ public class MachineClient {
                 .filter(machineStatuse::containsKey)
                 .filter(sendQueue::containsKey)
                 .forEach(x -> {
-                    if (machineStatuse.get(x).equals(MachineClientUtils.MachineState.DOWN)) {
+                    if (machineStatuse.get(x).equals(MachineClientUtils.MachineState.BROKEN)) {
                         sendQueue.remove(x);
                     }
                 });

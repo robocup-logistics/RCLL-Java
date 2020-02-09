@@ -6,7 +6,7 @@
 
     <groupId>grips</groupId>
     <artifactId>protobuf</artifactId>
-    <version>0.0.20</version>
+    <version>0.0.21</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
