@@ -33,7 +33,7 @@ public class MachineClientUtils {
         } else if (machine.contains("CS2")) {
             return Machine.CS2;
         } else if (machine.contains("RS1")) {
-            return Machine.RS2;
+            return Machine.RS1;
         } else if (machine.contains("RS2")) {
             return Machine.RS2;
         } else if (machine.contains("SS")) {
