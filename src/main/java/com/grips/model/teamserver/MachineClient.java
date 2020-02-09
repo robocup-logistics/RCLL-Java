@@ -70,7 +70,7 @@ public class MachineClient {
     }
 
     public void sendPrepareRS(MachineClientUtils.Machine machine, MachineClientUtils.RingColor color) {
-        ProductColorProtos.RingColor refbox_color = ProductColorProtos.RingColor.valueOf(color.ordinal()+1);
+        ProductColorProtos.RingColor refbox_color = toRefboxRingColor(color);
         MachineInstructionProtos.PrepareInstructionRS rsInstruction =
                 MachineInstructionProtos.PrepareInstructionRS.newBuilder()
                         .setRingColor(refbox_color)
@@ -180,6 +180,19 @@ public class MachineClient {
                 });
     }
 
+    private ProductColorProtos.RingColor toRefboxRingColor(MachineClientUtils.RingColor ringColor) {
+        switch (ringColor) {
+            case RING_BLUE:
+                return ProductColorProtos.RingColor.RING_BLUE;
+            case RING_GREEN:
+                return ProductColorProtos.RingColor.RING_GREEN;
+            case RING_ORANGE:
+                return ProductColorProtos.RingColor.RING_ORANGE;
+            case RING_YELLOW:
+                return ProductColorProtos.RingColor.RING_YELLOW;
+        }
+        throw new IllegalArgumentException("RingColor not mapped: " + ringColor);
+    }
 
     private void updateMachineStatus(MachineInfoProtos.Machine machineInfo) {
         MachineClientUtils.Machine machine = MachineClientUtils.parseMachineWithColor(machineInfo.getName());

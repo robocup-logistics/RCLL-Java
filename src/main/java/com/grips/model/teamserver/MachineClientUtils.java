@@ -1,5 +1,7 @@
 package com.grips.model.teamserver;
 
+import org.robocup_logistics.llsf_msgs.ProductColorProtos;
+
 public class MachineClientUtils {
 
     public static MachineState parseMachineState(String state) {
@@ -23,6 +25,7 @@ public class MachineClientUtils {
         }
         throw new IllegalArgumentException("Unkown Machine state: " + state);
     }
+
     public static Machine parseMachineWithColor(String machine) {
         if (machine.contains("BS")) {
             return Machine.BS;
