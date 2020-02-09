@@ -1,6 +1,26 @@
 package com.grips.model.teamserver;
 
 public class MachineClientUtils {
+
+    public static MachineState parseMachineState(String state) {
+        switch (state) {
+            case "READY_AT_OUTPUT":
+                return MachineState.READY_AT_OUTPUT;
+            case "IDLE":
+                return MachineState.IDLE;
+            case "DOWN":
+                return MachineState.DOWN;
+            case "BROKEN":
+                return MachineState.BROKEN;
+            case "PREPARED":
+                return MachineState.PREPARED;
+            case "PROCESSING":
+                return MachineState.PROCESSING;
+            case "PROCESSED":
+                return MachineState.PROCESSED;
+        }
+        throw new IllegalArgumentException("Unkown Machine state: " + state);
+    }
     public static Machine parseMachineWithColor(String machine) {
         if (machine.contains("BS")) {
             return Machine.BS;
@@ -19,12 +39,43 @@ public class MachineClientUtils {
         }
         throw new IllegalArgumentException("Unkown machine: " + machine);
     }
+
     public enum TeamColor {CYAN, MAGENTA}
+
     public enum Machine {
         BS, DS, RS1, RS2, CS1, CS2, SS;
     }
-    public enum MachineSide {Input, Output}
-    public enum BaseColor {BASE_RED, BASE_BLACK, BASE_SILVER}
-    public enum RingColor {RING_BLUE, RING_GREEN, RING_ORANGE, RING_YELLOW}
-    public enum CSOp {RETRIEVE_CAP, MOUNT_CAP}
+
+    public enum MachineSide {
+        Input,
+        Output
+    }
+
+    public enum BaseColor {
+        BASE_RED,
+        BASE_BLACK,
+        BASE_SILVER
+    }
+
+    public enum RingColor {
+        RING_BLUE,
+        RING_GREEN,
+        RING_ORANGE,
+        RING_YELLOW
+    }
+
+    public enum MachineState {
+        READY_AT_OUTPUT,
+        IDLE,
+        DOWN,
+        BROKEN,
+        PREPARED,
+        PROCESSING,
+        PROCESSED
+    }
+
+    public enum CSOp {
+        RETRIEVE_CAP,
+        MOUNT_CAP
+    }
 }

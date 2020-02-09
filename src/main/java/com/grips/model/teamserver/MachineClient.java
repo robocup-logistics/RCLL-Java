@@ -2,29 +2,26 @@ package com.grips.model.teamserver;
 
 import com.google.protobuf.GeneratedMessage;
 import com.grips.protobuf_lib.RobotMessageRegister;
+import lombok.extern.java.Log;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
-import org.robocup_logistics.llsf_msgs.MachineDescriptionProtos;
-import org.robocup_logistics.llsf_msgs.MachineInstructionProtos;
-import org.robocup_logistics.llsf_msgs.ProductColorProtos;
-import org.robocup_logistics.llsf_msgs.TeamProtos;
+import org.robocup_logistics.llsf_msgs.*;
 import org.robocup_logistics.llsf_utils.Key;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+@Log
 public class MachineClient {
-
     private final MachineClientUtils.TeamColor teamColor;
     private final Map<MachineClientUtils.Machine, GeneratedMessage> sendQueue;
+    private final Map<MachineClientUtils.Machine, MachineClientUtils.MachineState> machineStatuse;
 
     public MachineClient (MachineClientUtils.TeamColor teamColor)
     {
         this.teamColor = teamColor;
         this.sendQueue = new ConcurrentHashMap<>();
+        this.machineStatuse = new ConcurrentHashMap<>();
     }
 
     public void sendResetMachine(MachineClientUtils.Machine machine)
@@ -126,11 +123,63 @@ public class MachineClient {
     }
 
     public List<ProtobufMessage> fetchPrepareMessages() {
-        return fetchForType(MachineInstructionProtos.PrepareMachine.class);
+        return fetchMsgForType(MachineInstructionProtos.PrepareMachine.class);
     }
 
     public List<ProtobufMessage> fetchResetMessages() {
-        return fetchForType(MachineInstructionProtos.ResetMachine.class);
+        return fetchMsgForType(MachineInstructionProtos.ResetMachine.class);
+    }
+
+    public Set<MachineClientUtils.Machine> fetchMachinesPreparing() {
+        return fetchMachinesForType(MachineInstructionProtos.PrepareMachine.class);
+    }
+
+    public Set<MachineClientUtils.Machine> fetchMachinesResetting() {
+        return fetchMachinesForType(MachineInstructionProtos.ResetMachine.class);
+    }
+
+    public void update(MachineInfoProtos.MachineInfo info) {
+        this.updateMachineState(info);
+        this.updateMessages();
+    }
+
+    private void updateMachineState(MachineInfoProtos.MachineInfo info) {
+        if (info.hasTeamColor()) {
+            if (TeamProtos.Team.CYAN.equals(info.getTeamColor()) && this.teamColor.equals(MachineClientUtils.TeamColor.CYAN)) {
+                info.getMachinesList().forEach(this::updateMachineStatus);
+            } else if (TeamProtos.Team.MAGENTA.equals(info.getTeamColor()) && this.teamColor.equals(MachineClientUtils.TeamColor.MAGENTA)) {
+                info.getMachinesList().forEach(this::updateMachineStatus);
+            }
+        } else {
+            log.warning("MachineInfo without team color received");
+        }
+    }
+
+    //todo check if remove conditions are correct!.
+    private void updateMessages() {
+        fetchMachinesPreparing().stream()
+                .filter(machineStatuse::containsKey)
+                .filter(sendQueue::containsKey)
+                .forEach(x -> {
+                    if (!machineStatuse.get(x).equals(MachineClientUtils.MachineState.IDLE)) {
+                        sendQueue.remove(x);
+                    }
+                });
+        fetchMachinesResetting().stream()
+                .filter(machineStatuse::containsKey)
+                .filter(sendQueue::containsKey)
+                .forEach(x -> {
+                    if (machineStatuse.get(x).equals(MachineClientUtils.MachineState.DOWN)) {
+                        sendQueue.remove(x);
+                    }
+                });
+    }
+
+
+    private void updateMachineStatus(MachineInfoProtos.Machine machineInfo) {
+        MachineClientUtils.Machine machine = MachineClientUtils.parseMachineWithColor(machineInfo.getName());
+        MachineClientUtils.MachineState state = MachineClientUtils.parseMachineState(machineInfo.getState());
+        machineStatuse.put(machine, state);
     }
 
     private String machineNameForMsg(MachineClientUtils.Machine machine, MachineClientUtils.TeamColor color) {
@@ -146,12 +195,22 @@ public class MachineClient {
         return returner.toString();
     }
 
-    private List<ProtobufMessage> fetchForType(Class<? extends GeneratedMessage> clazz) {
+    private List<ProtobufMessage> fetchMsgForType(Class<? extends GeneratedMessage> clazz) {
         Key key = RobotMessageRegister.getInstance().get_msg_key_from_class(clazz);
         return this.sendQueue.values().stream()
                 .filter(x -> x.getClass().equals(clazz))
                 .map(x -> new ProtobufMessage(key.cmp_id, key.msg_id, x))
                 .collect(Collectors.toList());
+    }
+
+    private Set<MachineClientUtils.Machine> fetchMachinesForType(Class<? extends GeneratedMessage> clazz) {
+        Set<MachineClientUtils.Machine> returner = new HashSet<>();
+        this.sendQueue.forEach((machine, msg) -> {
+            if (msg.getClass().equals(clazz)) {
+                returner.add(machine);
+            }
+        });
+        return returner;
     }
 
     private void addMessageToSendQueue(MachineClientUtils.Machine machine, GeneratedMessage msg)
