@@ -69,8 +69,8 @@ public class MachineClient {
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
-    public void sendPrepareRS(MachineClientUtils.Machine machine, MachineClientUtils.RingColor color) {
-        ProductColorProtos.RingColor refbox_color = toRefboxRingColor(color);
+    public void sendPrepareRS(MachineClientUtils.Machine machine, MachineClientUtils.RingColor ringColor) {
+        ProductColorProtos.RingColor refbox_color = toRefboxRingColor(ringColor);
         MachineInstructionProtos.PrepareInstructionRS rsInstruction =
                 MachineInstructionProtos.PrepareInstructionRS.newBuilder()
                         .setRingColor(refbox_color)
@@ -78,7 +78,7 @@ public class MachineClient {
 
         MachineInstructionProtos.PrepareMachine prepareMachineMsg =
                 MachineInstructionProtos.PrepareMachine.newBuilder()
-                        .setTeamColor(TeamProtos.Team.valueOf(color.toString()))
+                        .setTeamColor(TeamProtos.Team.valueOf(teamColor.toString()))
                         .setMachine(machineNameForMsg(machine, teamColor))
                         .setInstructionRs(rsInstruction)
                         .build();
