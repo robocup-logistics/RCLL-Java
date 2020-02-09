@@ -138,6 +138,10 @@ public class MachineClient {
         return fetchMachinesForType(MachineInstructionProtos.ResetMachine.class);
     }
 
+    public Optional<MachineClientUtils.MachineState> getStateForMachine(MachineClientUtils.Machine machine) {
+        return Optional.ofNullable(this.machineStatuse.get(machine));
+    }
+
     public void update(MachineInfoProtos.MachineInfo info) {
         this.updateMachineState(info);
         this.updateMessages();

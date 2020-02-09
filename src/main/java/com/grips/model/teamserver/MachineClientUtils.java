@@ -18,6 +18,8 @@ public class MachineClientUtils {
                 return MachineState.PROCESSING;
             case "PROCESSED":
                 return MachineState.PROCESSED;
+            case "WAIT-IDLE":
+                return MachineState.WAIT_IDLE;
         }
         throw new IllegalArgumentException("Unkown Machine state: " + state);
     }
@@ -67,6 +69,7 @@ public class MachineClientUtils {
     public enum MachineState {
         READY_AT_OUTPUT,
         IDLE,
+        WAIT_IDLE,
         DOWN,
         BROKEN,
         PREPARED,
