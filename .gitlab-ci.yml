@@ -1,6 +1,6 @@
 deploy:
-  image: maven:3.3.9-jdk-8
+  image: gradle:4.4.1-jre-alpine
   script:
-    - 'mvn deploy -s ci_settings.xml'
+    - 'gradle -PjobToken=$CI_JOB_TOKEN publish'
   only:
     - master

@@ -1,0 +1,40 @@
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+group = 'grips'
+version = '0.0.26'
+
+description = """"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+     maven { url "https://gitlab.com/api/v4/projects/14813135/packages/maven" }
+     maven { url "https://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version:'2.6.1'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:'5.5.2'
+    testCompile group: 'org.assertj', name: 'assertj-core', version:'3.15.0'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.18.10'
+}
+publishing {
+    repositories {
+        maven {
+            url "https://gitlab.com/api/v4/projects/14813135/packages/maven"
+            credentials(HttpHeaderCredentials) {
+                if (project.hasProperty('jobToken')) {
+                    name = "Job-Token"
+                    value = project.property('jobToken')
+                } else {
+                    name = "Private-Token"
+                    value = "REPLACE_WITH_YOUR_PERSONAL_ACCESS_TOKEN"
+                }
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
+    }
+}
