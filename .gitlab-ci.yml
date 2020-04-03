@@ -1,5 +1,5 @@
 deploy:
-  image: gradle:4.4.1-jre-alpine
+  image: gradle:4.10-jdk-alpine
   script:
     - 'gradle -PjobToken=$CI_JOB_TOKEN publish'
   only:
