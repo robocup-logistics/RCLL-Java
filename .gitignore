@@ -1,4 +1,6 @@
 protobuf.iml
 target
+build
+.gradle
 .idea
 *.pdf
