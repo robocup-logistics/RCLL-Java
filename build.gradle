@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'grips'
-version = '0.0.27'
+version = '0.0.28'
 
 description = """"""
 
@@ -103,4 +103,11 @@ task delete2014Folder(type:Exec) {
     println "Finished delete2014Folder"
 }
 
+
+tasks.clean.doFirst {deleteGeneratedSourceSet}
+task deleteGeneratedSourceSet {
+    println "Deleting: " + new File(".").absolutePath + "/src/generated/"
+    delete new File(".").absolutePath + "/src/generated/"
+    println "Finished deleteGeneratedSourceSet"
+}
 
