@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class RobotMessageRegister {
     private static RobotMessageRegister _instance;
-    private HashMap<Key, GeneratedMessage> _msgs = new HashMap<Key, GeneratedMessage>();
+    private HashMap<Key, GeneratedMessageV3> _msgs = new HashMap<>();
 
     private RobotMessageRegister() {
     }
@@ -38,10 +38,10 @@ public class RobotMessageRegister {
         return (_instance == null) ? _instance = new RobotMessageRegister() : _instance;
     }
 
-    public <T extends GeneratedMessage> void add_message(Class<T> c) {
+    public <T extends GeneratedMessageV3> void add_message(Class<T> c) {
         try {
             Method m = c.getMethod("getDefaultInstance", (Class<?>[]) null);
-            T msg = (T) m.invoke((Object[]) null, (Object[]) null);
+            T msg = (T) m.invoke(null, (Object[]) null);
             Descriptors.EnumDescriptor desc = msg.getDescriptorForType().findEnumTypeByName("CompType");
 
             int cmp_id = desc.findValueByName("COMP_ID").getNumber();
@@ -62,8 +62,8 @@ public class RobotMessageRegister {
         }
     }
 
-    public GeneratedMessage get_generated_empty_msg_from_key(int cmp_id, int msg_id) {
-        for (Map.Entry<Key, GeneratedMessage> e : _msgs.entrySet()) {
+    public GeneratedMessageV3 get_generated_empty_msg_from_key(int cmp_id, int msg_id) {
+        for (Map.Entry<Key, GeneratedMessageV3> e : _msgs.entrySet()) {
             Key key = e.getKey();
             if (key.cmp_id == cmp_id && key.msg_id == msg_id) {
                 return e.getValue();
@@ -74,7 +74,7 @@ public class RobotMessageRegister {
         return null;
     }
 
-    public GeneratedMessage get_generated_empty_msg_from_key(Key key) {
+    public GeneratedMessageV3 get_generated_empty_msg_from_key(Key key) {
         return get_generated_empty_msg_from_key(key.cmp_id, key.msg_id);
     }
 

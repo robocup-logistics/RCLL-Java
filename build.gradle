@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'grips'
-version = '0.0.28'
+version = '0.0.29'
 
 description = """"""
 
@@ -96,6 +96,7 @@ sourceSets {
         }
     }
 }
+
 tasks.build.doFirst {delete2014Folder}
 task delete2014Folder(type:Exec) {
     println "Deleting: " + new File(".").absolutePath + "/rcll-refbox/src/msgs/2014"
