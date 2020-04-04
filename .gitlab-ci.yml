@@ -6,3 +6,7 @@ deploy:
     - 'gradle -PjobToken=$CI_JOB_TOKEN publish'
   only:
     - master
+  artifacts:
+    name: generated_protobuf_messages
+    paths:
+      - ./src/generated/main
