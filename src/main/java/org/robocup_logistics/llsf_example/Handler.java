@@ -19,6 +19,7 @@
 package org.robocup_logistics.llsf_example;
 
 import com.google.protobuf.GeneratedMessage;
+import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.robocup_logistics.llsf_comm.ProtobufMessageHandler;
 import org.robocup_logistics.llsf_msgs.BeaconSignalProtos.BeaconSignal;
@@ -37,7 +38,7 @@ import java.util.List;
 
 public class Handler implements ProtobufMessageHandler {
 	
-	public void handle_message(ByteBuffer in_msg, GeneratedMessage msg) {
+	public void handle_message(ByteBuffer in_msg, GeneratedMessageV3 msg) {
 		
 		if (msg instanceof RobotInfo) {
 			

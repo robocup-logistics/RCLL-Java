@@ -1,6 +1,7 @@
 package com.grips.model.teamserver;
 
 import com.google.protobuf.GeneratedMessage;
+import com.google.protobuf.GeneratedMessageV3;
 import com.grips.protobuf_lib.RobotMessageRegister;
 import lombok.extern.java.Log;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 @Log
 public class MachineClient {
     private final MachineClientUtils.TeamColor teamColor;
-    private final Map<MachineClientUtils.Machine, GeneratedMessage> sendQueue;
+    private final Map<MachineClientUtils.Machine, GeneratedMessageV3> sendQueue;
     private final Map<MachineClientUtils.Machine, MachineClientUtils.MachineState> machineStatuse;
 
     public MachineClient (MachineClientUtils.TeamColor teamColor)
@@ -56,7 +57,7 @@ public class MachineClient {
         MachineClientUtils.Machine machine = MachineClientUtils.Machine.DS;
         MachineInstructionProtos.PrepareInstructionDS dsInstruction =
                 MachineInstructionProtos.PrepareInstructionDS.newBuilder()
-                        .setGate(gate)
+                        //.setGate(gate)
                         .setOrderId(orderId)
                         .build();
         MachineInstructionProtos.PrepareMachine prepareMachineMsg =
@@ -213,7 +214,7 @@ public class MachineClient {
         return returner.toString();
     }
 
-    private List<ProtobufMessage> fetchMsgForType(Class<? extends GeneratedMessage> clazz) {
+    private List<ProtobufMessage> fetchMsgForType(Class<? extends GeneratedMessageV3> clazz) {
         Key key = RobotMessageRegister.getInstance().get_msg_key_from_class(clazz);
         return this.sendQueue.values().stream()
                 .filter(x -> x.getClass().equals(clazz))
@@ -221,7 +222,7 @@ public class MachineClient {
                 .collect(Collectors.toList());
     }
 
-    private Set<MachineClientUtils.Machine> fetchMachinesForType(Class<? extends GeneratedMessage> clazz) {
+    private Set<MachineClientUtils.Machine> fetchMachinesForType(Class<? extends GeneratedMessageV3> clazz) {
         Set<MachineClientUtils.Machine> returner = new HashSet<>();
         this.sendQueue.forEach((machine, msg) -> {
             if (msg.getClass().equals(clazz)) {
@@ -231,7 +232,7 @@ public class MachineClient {
         return returner;
     }
 
-    private void addMessageToSendQueue(MachineClientUtils.Machine machine, GeneratedMessage msg)
+    private void addMessageToSendQueue(MachineClientUtils.Machine machine, GeneratedMessageV3 msg)
     {
         sendQueue.put(machine, msg);
     }

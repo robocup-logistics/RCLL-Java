@@ -35,9 +35,9 @@ public class User {
 			e.printStackTrace();
 		}
 		
-		peerPublic.<RobotInfo>add_message(RobotInfo.class);
-		peerPublic.<BeaconSignal>add_message(BeaconSignal.class);
-		peerPublic.<GameState>add_message(GameState.class);
+		peerPublic.add_message(RobotInfo.class);
+		peerPublic.add_message(BeaconSignal.class);
+		peerPublic.add_message(GameState.class);
 		
 		Handler handler = new Handler();
 		peerPublic.register_handler(handler);

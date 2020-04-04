@@ -1,8 +1,11 @@
-apply plugin: 'java'
-apply plugin: 'maven-publish'
+plugins {
+    id "java"
+    id "maven-publish"
+    id "com.google.protobuf" version "0.8.12"
+}
 
 group = 'grips'
-version = '0.0.26'
+version = '0.0.27'
 
 description = """"""
 
@@ -14,7 +17,7 @@ repositories {
      maven { url "https://repo.maven.apache.org/maven2" }
 }
 dependencies {
-    compile group: 'com.google.protobuf', name: 'protobuf-java', version:'2.6.1'
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version:'3.11.4'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:'5.5.2'
     testCompile group: 'org.assertj', name: 'assertj-core', version:'3.15.0'
 
@@ -23,6 +26,7 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
+
 publishing {
     publications {
         mavenJava(MavenPublication) { from project.components.java }
@@ -45,3 +49,58 @@ publishing {
         }
     }
 }
+
+protobuf {
+    // Configure the protoc executable
+    generatedFilesBaseDir = "$projectDir/src/generated"
+    protoc {
+        // Download from repositories
+        artifact = 'com.google.protobuf:protoc:3.11.4'
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {
+                }
+                cpp {
+                }
+            }
+        }
+    }
+}
+
+configurations {
+    generatedCompile.extendsFrom compile
+}
+
+sourceSets {
+    generated {
+        java {
+            srcDir 'src/generated/main/java'
+            dependencies {
+                compile group: 'com.google.protobuf', name: 'protobuf-java', version:'3.11.4'
+            }
+        }
+    }
+    main {
+        compileClasspath += generated.compileClasspath + generated.output
+        proto {
+            // In addition to the default 'src/main/proto'
+            srcDir 'rcll-refbox/src/msgs/'
+        }
+        java {
+        }
+    }
+    test {
+        proto {
+        }
+    }
+}
+tasks.build.doFirst {delete2014Folder}
+task delete2014Folder(type:Exec) {
+    println "Deleting: " + new File(".").absolutePath + "/rcll-refbox/src/msgs/2014"
+    delete (new File(".").absolutePath + "/rcll-refbox/src/msgs/2014/")
+    println "Finished delete2014Folder"
+}
+
+

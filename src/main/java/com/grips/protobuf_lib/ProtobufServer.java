@@ -18,6 +18,7 @@
 package com.grips.protobuf_lib;
 
 import com.google.protobuf.GeneratedMessage;
+import com.google.protobuf.GeneratedMessageV3;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_utils.Key;
 
@@ -83,7 +84,7 @@ public class ProtobufServer implements Runnable {
         }
     }
 
-    public <T extends GeneratedMessage> void send_to_robot(long robot_id, T msg) {
+    public <T extends GeneratedMessageV3> void send_to_robot(long robot_id, T msg) {
         if (null == msg) {
             System.err.println("Error: msg to send is null!");
             return;

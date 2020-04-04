@@ -1,6 +1,7 @@
 package org.robocup_logistics.llsf_tools;
 
 import com.google.protobuf.GeneratedMessage;
+import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.robocup_logistics.llsf_comm.ProtobufBroadcastPeer;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
@@ -101,14 +102,14 @@ public class FakeRobot {
 			e.printStackTrace();
 		}
 
-		peerPublic.<BeaconSignal>add_message(BeaconSignal.class);
-		peerPublic.<OrderInfo>add_message(OrderInfo.class);
-		peerPublic.<GameState>add_message(GameState.class);
-		peerPublic.<VersionInfo>add_message(VersionInfo.class);
-		peerPublic.<ExplorationInfo>add_message(ExplorationInfo.class);
-		peerPublic.<MachineInfo>add_message(MachineInfo.class);
-		peerPublic.<MachineReportInfo>add_message(MachineReportInfo.class);
-		peerPublic.<RobotInfo>add_message(RobotInfo.class);
+		peerPublic.add_message(BeaconSignal.class);
+		peerPublic.add_message(OrderInfo.class);
+		peerPublic.add_message(GameState.class);
+		peerPublic.add_message(VersionInfo.class);
+		peerPublic.add_message(ExplorationInfo.class);
+		peerPublic.add_message(MachineInfo.class);
+		peerPublic.add_message(MachineReportInfo.class);
+		peerPublic.add_message(RobotInfo.class);
 		
 		Handler handler = new Handler();
 		peerPublic.register_handler(handler);
@@ -154,7 +155,7 @@ public class FakeRobot {
 	
 	private static class Handler implements ProtobufMessageHandler {
 		
-		public void handle_message(ByteBuffer in_msg, GeneratedMessage msg) {
+		public void handle_message(ByteBuffer in_msg, GeneratedMessageV3 msg) {
 			
 			if (msg instanceof BeaconSignal) {
 				
@@ -255,14 +256,14 @@ public class FakeRobot {
 								e.printStackTrace();
 							}
 							
-							peerPrivate.<BeaconSignal>add_message(BeaconSignal.class);
-							peerPrivate.<OrderInfo>add_message(OrderInfo.class);
-							peerPrivate.<GameState>add_message(GameState.class);
-							peerPrivate.<VersionInfo>add_message(VersionInfo.class);
-							peerPrivate.<ExplorationInfo>add_message(ExplorationInfo.class);
-							peerPrivate.<MachineInfo>add_message(MachineInfo.class);
-							peerPrivate.<MachineReportInfo>add_message(MachineReportInfo.class);
-							peerPrivate.<RobotInfo>add_message(RobotInfo.class);
+							peerPrivate.add_message(BeaconSignal.class);
+							peerPrivate.add_message(OrderInfo.class);
+							peerPrivate.add_message(GameState.class);
+							peerPrivate.add_message(VersionInfo.class);
+							peerPrivate.add_message(ExplorationInfo.class);
+							peerPrivate.add_message(MachineInfo.class);
+							peerPrivate.add_message(MachineReportInfo.class);
+							peerPrivate.add_message(RobotInfo.class);
 							
 							Handler handler = new Handler();
 							peerPrivate.register_handler(handler);

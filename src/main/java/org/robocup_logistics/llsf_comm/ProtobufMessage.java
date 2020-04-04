@@ -1,6 +1,7 @@
 package org.robocup_logistics.llsf_comm;
 
 import com.google.protobuf.GeneratedMessage;
+import com.google.protobuf.GeneratedMessageV3;
 import org.robocup_logistics.llsf_encryption.BufferEncryptor;
 
 import javax.crypto.BadPaddingException;
@@ -61,7 +62,7 @@ public class ProtobufMessage {
 	 * @param gmsg
 	 *            the instance of the actual protobuf message
 	 */
-	public ProtobufMessage(int cmp_id, int msg_id, GeneratedMessage gmsg) {
+	public ProtobufMessage(int cmp_id, int msg_id, GeneratedMessageV3 gmsg) {
 		this(cmp_id, msg_id);
 		this.set_message(gmsg);
 	}
@@ -130,7 +131,7 @@ public class ProtobufMessage {
 	 * @param gmsg
 	 *            the protobuf message, has to extend from GeneratedMessage
 	 */
-	public void set_message(GeneratedMessage gmsg) {
+	public void set_message(GeneratedMessageV3 gmsg) {
 		int cmp = (int) Math.pow(2, 31) - 1;
 		byte[] msg = gmsg.toByteArray();
 		if (msg.length > cmp) {

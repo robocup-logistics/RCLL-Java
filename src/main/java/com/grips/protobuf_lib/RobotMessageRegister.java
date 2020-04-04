@@ -19,6 +19,7 @@ package com.grips.protobuf_lib;
 
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.GeneratedMessage;
+import com.google.protobuf.GeneratedMessageV3;
 import org.robocup_logistics.llsf_utils.Key;
 
 import java.lang.reflect.InvocationTargetException;
@@ -77,7 +78,7 @@ public class RobotMessageRegister {
         return get_generated_empty_msg_from_key(key.cmp_id, key.msg_id);
     }
 
-    public <T extends GeneratedMessage> Key get_msg_key_from_class(Class<T> c) {
+    public <T extends GeneratedMessageV3> Key get_msg_key_from_class(Class<T> c) {
         try {
             Method m = c.getMethod("getDefaultInstance", (Class<?>[]) null);
             T msg = (T) m.invoke((Object[]) null, (Object[]) null);

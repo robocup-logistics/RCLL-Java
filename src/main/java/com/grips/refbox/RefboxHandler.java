@@ -1,6 +1,6 @@
 package com.grips.refbox;
 
-import com.google.protobuf.GeneratedMessage;
+import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.robocup_logistics.llsf_msgs.*;
 
@@ -65,7 +65,7 @@ public class RefboxHandler {
         this.consumer_ring_info = ring_info;
     }
 
-    public void handle_message(ByteBuffer in_msg, GeneratedMessage msg) {
+    public void handle_message(ByteBuffer in_msg, GeneratedMessageV3 msg) {
         if (null == in_msg) {
             System.err.println("ERROR: in_msg is null in TeamHandler!");
             return;

@@ -2,6 +2,7 @@ package org.robocup_logistics.llsf_comm;
 
 import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.GeneratedMessage;
+import com.google.protobuf.GeneratedMessageV3;
 import org.robocup_logistics.llsf_exceptions.EncryptedStreamMessageException;
 import org.robocup_logistics.llsf_exceptions.UnknownProtocolVersionException;
 import org.robocup_logistics.llsf_utils.Key;
@@ -40,7 +41,7 @@ public class ProtobufClient {
 	private SendThread send;
 	private RecvThread recv;
 	
-	private HashMap<Key, GeneratedMessage> msgs = new HashMap<Key, GeneratedMessage>();
+	private HashMap<Key, GeneratedMessageV3> msgs = new HashMap<>();
 	private ProtobufMessageHandler handler;
 	
 	private boolean is_connected = false;
@@ -171,7 +172,7 @@ public class ProtobufClient {
 	 *            the class object of the same protobuf message
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends GeneratedMessage> void add_message(Class<T> c) {
+	public <T extends GeneratedMessageV3> void add_message(Class<T> c) {
 		try {
 			Method m = c.getMethod("getDefaultInstance", (Class<?>[]) null);
 			T msg = (T) m.invoke((Object[]) null, (Object[]) null);
@@ -196,7 +197,7 @@ public class ProtobufClient {
 	
 	private void handle_message(int cmp_id, int msg_id, ByteBuffer in_msg) {
 		if (handler != null) {
-			for (Map.Entry<Key, GeneratedMessage> e: msgs.entrySet()) {
+			for (Map.Entry<Key, GeneratedMessageV3> e: msgs.entrySet()) {
 				Key key = e.getKey();
 				if (key.cmp_id == cmp_id && key.msg_id == msg_id) {
 					handler.handle_message(in_msg, e.getValue());
