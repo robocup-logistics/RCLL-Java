@@ -17,9 +17,16 @@ dependencies {
     compile group: 'com.google.protobuf', name: 'protobuf-java', version:'2.6.1'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:'5.5.2'
     testCompile group: 'org.assertj', name: 'assertj-core', version:'3.15.0'
-    compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.18.10'
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
 publishing {
+    publications {
+        mavenJava(MavenPublication) { from project.components.java }
+    }
     repositories {
         maven {
             url "https://gitlab.com/api/v4/projects/14813135/packages/maven"
