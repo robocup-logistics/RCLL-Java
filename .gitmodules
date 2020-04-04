@@ -1,0 +1,3 @@
+[submodule "rcll-refbox"]
+	path = rcll-refbox
+	url = https://github.com/robocup-logistics/rcll-refbox.git
