@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'grips'
-version = '0.0.29'
+version = '0.0.30'
 
 description = """"""
 
@@ -25,6 +25,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    // https://mvnrepository.com/artifact/org.assertj/assertj-core
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.15.0'
+
 }
 
 publishing {
@@ -112,3 +116,6 @@ task deleteGeneratedSourceSet {
     println "Finished deleteGeneratedSourceSet"
 }
 
+test {
+    useJUnitPlatform()
+}
