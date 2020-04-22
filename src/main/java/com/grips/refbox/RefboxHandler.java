@@ -16,27 +16,27 @@ import java.util.function.Consumer;
 @Setter
 @CommonsLog
 public class RefboxHandler implements ProtobufMessageHandler {
-    private Consumer<MachineInfoProtos.MachineInfo> consumer_machine_info;
-    private Consumer<GameStateProtos.GameState> consumer_game_state;
-    private Consumer<ExplorationInfoProtos.ExplorationInfo> consumer_exploration_info;
-    private Consumer<VersionProtos.VersionInfo> consumer_version_info;
-    private Consumer<RobotInfoProtos.RobotInfo> consumer_robot_info;
-    private Consumer<MachineReportProtos.MachineReportInfo> consumer_machine_report;
-    private Consumer<BeaconSignalProtos.BeaconSignal> consumer_beacon_sig;
-    private Consumer<OrderInfoProtos.OrderInfo> consumer_order_info;
-    private Consumer<RingInfoProtos.RingInfo> consumer_ring_info;
+    private Consumer<MachineInfoProtos.MachineInfo> machineInfoCallback;
+    private Consumer<GameStateProtos.GameState> gameStateCallback;
+    private Consumer<ExplorationInfoProtos.ExplorationInfo> explorationInfoCallback;
+    private Consumer<VersionProtos.VersionInfo> versionInfoCallback;
+    private Consumer<RobotInfoProtos.RobotInfo> robotInfoCallback;
+    private Consumer<MachineReportProtos.MachineReportInfo> machineReportInfoCallback;
+    private Consumer<BeaconSignalProtos.BeaconSignal> beaconSignalCallback;
+    private Consumer<OrderInfoProtos.OrderInfo> orderInfoCallback;
+    private Consumer<RingInfoProtos.RingInfo> ringInfoCallback;
 
-    private RefboxHandler() {
+    public RefboxHandler() {
         //setting default handler which only log a message that nothing will be don
-        consumer_machine_info = (msg) -> log.debug("consumer_machine_info not set");
-        consumer_game_state = (msg) -> log.debug("consumer_game_state not set");
-        consumer_exploration_info = (msg) -> log.debug("consumer_exploration_info not set");
-        consumer_version_info = (msg) -> log.debug("consumer_version_info not set");
-        consumer_robot_info = (msg) -> log.debug("consumer_robot_info not set");
-        consumer_machine_report = (msg) -> log.debug("consumer_machine_report not set");
-        consumer_beacon_sig = (msg) -> log.debug("consumer_beacon_sig not set");
-        consumer_order_info = (msg) -> log.debug("consumer_order_info not set");
-        consumer_ring_info = (msg) -> log.debug("consumer_ring_info not set");
+        machineInfoCallback = (msg) -> log.debug("machineInfoCallback not set");
+        gameStateCallback = (msg) -> log.debug("gameStateCallback not set");
+        explorationInfoCallback = (msg) -> log.debug("explorationInfoCallback not set");
+        versionInfoCallback = (msg) -> log.debug("versionInfoCallback not set");
+        robotInfoCallback = (msg) -> log.debug("robotInfoCallback not set");
+        machineReportInfoCallback = (msg) -> log.debug("machineReportInfoCallback not set");
+        beaconSignalCallback = (msg) -> log.debug("beaconSignalCallback not set");
+        orderInfoCallback = (msg) -> log.debug("orderInfoCallback not set");
+        ringInfoCallback = (msg) -> log.debug("ringInfoCallback not set");
     }
 
     @Override
@@ -54,23 +54,23 @@ public class RefboxHandler implements ProtobufMessageHandler {
 
         try {
             if (msg instanceof BeaconSignalProtos.BeaconSignal) {
-                consumer_beacon_sig.accept(BeaconSignalProtos.BeaconSignal.parseFrom(array));
+                beaconSignalCallback.accept(BeaconSignalProtos.BeaconSignal.parseFrom(array));
             } else if (msg instanceof OrderInfoProtos.OrderInfo) {
-                consumer_order_info.accept(OrderInfoProtos.OrderInfo.parseFrom(array));
+                orderInfoCallback.accept(OrderInfoProtos.OrderInfo.parseFrom(array));
             } else if (msg instanceof RingInfoProtos.RingInfo) {
-                consumer_ring_info.accept(RingInfoProtos.RingInfo.parseFrom(array));
+                ringInfoCallback.accept(RingInfoProtos.RingInfo.parseFrom(array));
             } else if (msg instanceof MachineInfoProtos.MachineInfo) {
-                consumer_machine_info.accept(MachineInfoProtos.MachineInfo.parseFrom(array));
+                machineInfoCallback.accept(MachineInfoProtos.MachineInfo.parseFrom(array));
             } else if (msg instanceof MachineReportProtos.MachineReportInfo) {
-                consumer_machine_report.accept(MachineReportProtos.MachineReportInfo.parseFrom(array));
+                machineReportInfoCallback.accept(MachineReportProtos.MachineReportInfo.parseFrom(array));
             } else if (msg instanceof GameStateProtos.GameState) {
-                consumer_game_state.accept(GameStateProtos.GameState.parseFrom(array));
+                gameStateCallback.accept(GameStateProtos.GameState.parseFrom(array));
             } else if (msg instanceof ExplorationInfoProtos.ExplorationInfo) {
-                consumer_exploration_info.accept(ExplorationInfoProtos.ExplorationInfo.parseFrom(array));
+                explorationInfoCallback.accept(ExplorationInfoProtos.ExplorationInfo.parseFrom(array));
             } else if (msg instanceof VersionProtos.VersionInfo) {
-                consumer_version_info.accept(VersionProtos.VersionInfo.parseFrom(array));
+                versionInfoCallback.accept(VersionProtos.VersionInfo.parseFrom(array));
             } else if (msg instanceof RobotInfoProtos.RobotInfo) {
-                consumer_robot_info.accept(RobotInfoProtos.RobotInfo.parseFrom(array));
+                robotInfoCallback.accept(RobotInfoProtos.RobotInfo.parseFrom(array));
             } else {
                 log.error(this.getClass() + " received unkown msg!");
             }
