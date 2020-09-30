@@ -64,7 +64,9 @@ public class RefBoxConnectionManager {
         // Setup Public Broadcast channel
         _proto_broadcast_peer = new ProtobufBroadcastPeer(connectionConfig.getIp(),
                 connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort());
+    }
 
+    public void startServer() {
         try {
             _proto_broadcast_peer.start();
             registerBroadcastMsgs();
