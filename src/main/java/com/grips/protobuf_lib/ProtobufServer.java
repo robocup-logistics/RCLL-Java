@@ -19,6 +19,7 @@ package com.grips.protobuf_lib;
 
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.GeneratedMessageV3;
+import lombok.extern.apachecommons.CommonsLog;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_utils.Key;
 
@@ -29,26 +30,31 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
+@CommonsLog
 public class ProtobufServer implements Runnable {
 
     private RobotConnections robotConnections;
     private ServerSocket _server_socket;
     private Consumer<Socket> onNewConnection;
+    private int listenPort;
 
-    public ProtobufServer(int listen_port, RobotConnections robotConnections, Consumer<Socket> onNewConnection) {
+    public ProtobufServer(int listenPort, RobotConnections robotConnections, Consumer<Socket> onNewConnection) {
         this.onNewConnection = onNewConnection;
         this.robotConnections = robotConnections;
-        try {
-            _server_socket = new ServerSocket(listen_port);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.listenPort = listenPort;
+    }
+
+    public void start() throws IOException {
+        _server_socket = new ServerSocket(listenPort);
         new Thread(this).start();
     }
 
-
     @Override
     public void run() {
+        if (_server_socket == null) {
+            log.error("_server_socket is null, did you call start()");
+            return;
+        }
         while (true) {
             try {
                 Socket live_socket = _server_socket.accept();
@@ -57,9 +63,9 @@ public class ProtobufServer implements Runnable {
 
                 this.onNewConnection.accept(live_socket);
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("IOException: ", e);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("Exeption: ", e);
             }
         }
     }
