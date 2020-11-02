@@ -277,7 +277,7 @@ public class ProtobufBroadcastPeer {
 		}
 	}
 
-	public void enque(GeneratedMessageV3 msg) {
+	public void enqueue(GeneratedMessageV3 msg) {
 		Key key = classNameToKey.get(msg.getClass().getName());
 		this.enqueue(new ProtobufMessage(key.cmp_id, key.msg_id, msg));
 	}
