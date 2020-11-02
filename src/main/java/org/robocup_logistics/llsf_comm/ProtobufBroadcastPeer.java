@@ -60,6 +60,8 @@ public class ProtobufBroadcastPeer {
 	private StopThread stop;
 	
 	private HashMap<Key, GeneratedMessageV3> msgs = new HashMap<>();
+	private HashMap<String, Key> classNameToKey = new HashMap<>();
+
 	private ProtobufMessageHandler handler;
 	
 	/**
@@ -249,6 +251,7 @@ public class ProtobufBroadcastPeer {
 			int msg_id = desc.findValueByName("MSG_TYPE").getNumber();
 			Key key = new Key(cmp_id, msg_id);
 			msgs.put(key, msg);
+			classNameToKey.put(c.getClass().getName(), key);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
@@ -273,7 +276,11 @@ public class ProtobufBroadcastPeer {
 			}	
 		}
 	}
-	
+
+	public void enque(GeneratedMessageV3 msg) {
+		Key key = classNameToKey.get(msg.getClass().getName());
+		this.enqueue(new ProtobufMessage(key.cmp_id, key.msg_id, msg));
+	}
 	/**
 	 * Puts a ProtobufMessage into the send queue in order to be sent out to the refbox.
 	 * 
