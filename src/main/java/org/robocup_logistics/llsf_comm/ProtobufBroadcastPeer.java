@@ -3,6 +3,7 @@ package org.robocup_logistics.llsf_comm;
 import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.GeneratedMessageV3;
+import lombok.extern.apachecommons.CommonsLog;
 import org.robocup_logistics.llsf_encryption.BufferDecryptor;
 import org.robocup_logistics.llsf_encryption.BufferEncryptor;
 import org.robocup_logistics.llsf_exceptions.UnknownProtocolVersionException;
@@ -37,6 +38,7 @@ import java.util.Queue;
  * ProtobufMessageHandler, incoming messages will be passed to your handler. To send and receive
  * stream messages (TCP), use the ProtobufClient.
  */
+@CommonsLog
 public class ProtobufBroadcastPeer {
 	
 	private DatagramSocket socket;
@@ -199,6 +201,7 @@ public class ProtobufBroadcastPeer {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		log.info("Started ProtobufBroadcastPeer");
 	}
 	
 	/**
@@ -214,6 +217,7 @@ public class ProtobufBroadcastPeer {
 		}
 		stop = new StopThread();
 		stop.start();
+		log.info("Stoped ProtobufBroadcastPeer");
 	}
 	
 	/**
@@ -251,7 +255,7 @@ public class ProtobufBroadcastPeer {
 			int msg_id = desc.findValueByName("MSG_TYPE").getNumber();
 			Key key = new Key(cmp_id, msg_id);
 			msgs.put(key, msg);
-			classNameToKey.put(c.getClass().getName(), key);
+			classNameToKey.put(c.getName(), key);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
@@ -369,6 +373,7 @@ public class ProtobufBroadcastPeer {
 		private boolean run = true;
 
 		public void run() {
+			log.info("Started SendThread!");
 			while (run) {
 				synchronized (act_q) {
 					if (act_q.isEmpty()) {
@@ -418,6 +423,7 @@ public class ProtobufBroadcastPeer {
 		private boolean run = true;
 
 		public void run() {
+			log.info("Started RecvThread!");
 			while (run) {
 				try {
 					byte[] receiveData = new byte[socket.getReceiveBufferSize()];
