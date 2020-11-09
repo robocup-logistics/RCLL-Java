@@ -25,7 +25,7 @@ public class RefboxConnection {
     }
 
     public <T extends GeneratedMessageV3> void add_message(Class<T> classType){
-        log.info("Adding message: " + classType.getClass().getSimpleName());
+        log.info("Adding message: " + classType.getName());
         this.peer.add_message(classType);
     }
 
