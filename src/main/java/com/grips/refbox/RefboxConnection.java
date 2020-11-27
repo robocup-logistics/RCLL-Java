@@ -10,12 +10,18 @@ import java.io.IOException;
 
 @CommonsLog
 public class RefboxConnection {
-    private final ProtobufBroadcastPeer peer;
+    private ProtobufBroadcastPeer peer;
+
+    public RefboxConnection(String ip, int sendPort, int receivePort,
+                            ProtobufMessageHandler handler, boolean encrypt, int cipher_type, String cryptoKey) {
+        log.info("Creating broadcast peer ip: " + ip + " sendPort: " + sendPort + " receivePort: " + receivePort);
+        peer = new ProtobufBroadcastPeer(ip, sendPort, receivePort, encrypt, cipher_type, cryptoKey);
+        peer.register_handler(handler);
+    }
 
     public RefboxConnection(String ip, int sendPort, int receivePort,
                             ProtobufMessageHandler handler) {
-        peer = new ProtobufBroadcastPeer(ip, sendPort, receivePort);
-        peer.register_handler(handler);
+        this(ip, sendPort, receivePort, handler, false, -1, null);
     }
 
     public void start() throws IOException {
@@ -23,7 +29,7 @@ public class RefboxConnection {
         peer.start();
     }
 
-    public <T extends GeneratedMessageV3> void add_message(Class<T> classType){
+    public <T extends GeneratedMessageV3> void add_message(Class<T> classType) {
         log.info("Adding message: " + classType.getName());
         this.peer.add_message(classType);
     }

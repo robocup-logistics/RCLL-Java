@@ -46,8 +46,8 @@ public class RefBoxConnectionManager {
                                    ProtobufMessageHandler publicHandler) {
         this.connectionConfig = connectionConfig;
         this.teamConfig = teamConfig;
-        this.teamConnection = new RefboxConnection(connectionConfig.getIp(),
-                connectionConfig.getPublicPeer().sendPort, connectionConfig.getPublicPeer().receivePort, privateHandler);
+        this.publicConnection = new RefboxConnection(connectionConfig.getIp(),
+                connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort(), privateHandler, true, cipher_type, teamConfig.getCryptoKey());
 
         if (teamConfig.getColor().equals("CYAN")) {
             usedPrivatePeer = connectionConfig.getCyanPeer();
@@ -57,8 +57,8 @@ public class RefBoxConnectionManager {
             throw new RuntimeException("Invalid team color: " + teamConfig.getColor());
         }
 
-        this.publicConnection = new RefboxConnection(connectionConfig.getIp(), usedPrivatePeer.getSendPort(),
-                usedPrivatePeer.getReceivePort(), publicHandler);
+        this.teamConnection = new RefboxConnection(connectionConfig.getIp(), usedPrivatePeer.getSendPort(),
+                usedPrivatePeer.getReceivePort(), publicHandler, true, cipher_type, teamConfig.getCryptoKey());
     }
 
     @SneakyThrows

@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PeerConfig {
-    int receivePort;
-    int sendPort;
+    private int receivePort;
+    private int sendPort;
 }
