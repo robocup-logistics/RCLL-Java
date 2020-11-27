@@ -168,7 +168,11 @@ public class MachineClient {
                 .filter(sendQueue::containsKey)
                 .forEach(x -> {
                     if (!machineStatuse.get(x).equals(MachineClientUtils.MachineState.IDLE)) {
-                        sendQueue.remove(x);
+                        if (!machineStatuse.get(x).equals(MachineClientUtils.MachineState.DOWN)) {
+                            sendQueue.remove(x);
+                        } else {
+                            log.info("Machine " + x + " is down, not removing from send queue!");
+                        }
                     }
                 });
         fetchMachinesResetting().stream()
