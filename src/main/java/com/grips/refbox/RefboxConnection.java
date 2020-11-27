@@ -1,6 +1,8 @@
 package com.grips.refbox;
 
 import com.google.protobuf.GeneratedMessageV3;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.apachecommons.CommonsLog;
 import org.robocup_logistics.llsf_comm.ProtobufBroadcastPeer;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
@@ -9,6 +11,7 @@ import org.robocup_logistics.llsf_comm.ProtobufMessageHandler;
 import java.io.IOException;
 
 @CommonsLog
+@Getter
 public class RefboxConnection {
     private ProtobufBroadcastPeer peer;
 

@@ -33,9 +33,12 @@ public class RefBoxConnectionManager {
     public final static int CIPHER_TYPE_AES_256_ECB = 3;
     public final static int CIPHER_TYPE_AES_256_CBC = 4;
 
-    private ProtobufBroadcastPeer _proto_broadcast_peer;
-    private ProtobufBroadcastPeer _proto_team_peer;
+    private RefboxConnection publicPeer;
+    private RefboxConnection privatePeer;
+
+
     RefboxConnectionConfig connectionConfig;
+
     TeamConfig teamConfig;
     PeerConfig usedPrivatePeer;
 
@@ -58,8 +61,8 @@ public class RefBoxConnectionManager {
     }
 
     private void setupPublicPeer(RefboxConnectionConfig connectionConfig) {
-        _proto_broadcast_peer = new ProtobufBroadcastPeer(connectionConfig.getIp(),
-                connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort());
+        publicPeer = new RefboxConnection(connectionConfig.getIp(),
+                connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort(), public_handler);
     }
 
     private void setupPrivatePeer(RefboxConnectionConfig connectionConfig, TeamConfig teamConfig) {
@@ -71,9 +74,8 @@ public class RefBoxConnectionManager {
             throw new RuntimeException("Invalid team color: " + teamConfig.getColor());
         }
 
-        // Setup Private Team channel
-        _proto_team_peer = new ProtobufBroadcastPeer(connectionConfig.getIp(), usedPrivatePeer.getSendPort(),
-                usedPrivatePeer.getReceivePort(), true, cipher_type, teamConfig.getCryptoKey());
+        privatePeer = new RefboxConnection(connectionConfig.getIp(), usedPrivatePeer.getSendPort(),
+                usedPrivatePeer.getReceivePort(), team_handler, true, cipher_type, teamConfig.getCryptoKey());
     }
 
     public void startServer() {
@@ -84,9 +86,9 @@ public class RefBoxConnectionManager {
 
     private void startPrivatePeer() {
         try {
-            _proto_team_peer.start();
+            privatePeer.start();
             registerTeamMsgs();
-            _proto_team_peer.register_handler(team_handler);
+            privatePeer.getPeer().register_handler(team_handler);
         } catch (IOException e) {
             throw new RuntimeException("Not able to create private peer!");
         }
@@ -94,9 +96,9 @@ public class RefBoxConnectionManager {
 
     private void startPublicPeer() {
         try {
-            _proto_broadcast_peer.start();
+            publicPeer.start();
             registerBroadcastMsgs();
-            _proto_broadcast_peer.register_handler(public_handler);
+            publicPeer.getPeer().register_handler(public_handler);
         } catch (IOException e) {
             throw new RuntimeException("Not able to create public peer!");
         }
@@ -104,32 +106,32 @@ public class RefBoxConnectionManager {
 
     public void sendPublicMsg(ProtobufMessage msg) {
         log.debug("Sending public message to Refbox: " + msg.toString());
-        _proto_broadcast_peer.enqueue(msg);
+        publicPeer.getPeer().enqueue(msg);
     }
 
     public void sendPrivateMsg(ProtobufMessage msg) {
         log.debug("Sending public message to Refbox: " + msg.toString());
-        _proto_team_peer.enqueue(msg);
+        privatePeer.getPeer().enqueue(msg);
     }
 
     private void registerBroadcastMsgs() {
-        _proto_broadcast_peer.add_message(BeaconSignalProtos.BeaconSignal.class);
-        _proto_broadcast_peer.add_message(OrderInfoProtos.OrderInfo.class);       // Not documented but sent!
-        _proto_broadcast_peer.add_message(RingInfoProtos.RingInfo.class);         // Not documented but sent!
-        _proto_broadcast_peer.add_message(GameStateProtos.GameState.class);
-        _proto_broadcast_peer.add_message(ExplorationInfoProtos.ExplorationInfo.class);
-        _proto_broadcast_peer.add_message(VersionProtos.VersionInfo.class);
-        _proto_broadcast_peer.add_message(RobotInfoProtos.RobotInfo.class);
+        publicPeer.getPeer().add_message(BeaconSignalProtos.BeaconSignal.class);
+        publicPeer.getPeer().add_message(OrderInfoProtos.OrderInfo.class);       // Not documented but sent!
+        publicPeer.getPeer().add_message(RingInfoProtos.RingInfo.class);         // Not documented but sent!
+        publicPeer.getPeer().add_message(GameStateProtos.GameState.class);
+        publicPeer.getPeer().add_message(ExplorationInfoProtos.ExplorationInfo.class);
+        publicPeer.getPeer().add_message(VersionProtos.VersionInfo.class);
+        publicPeer.getPeer().add_message(RobotInfoProtos.RobotInfo.class);
     }
 
     private void registerTeamMsgs() {
-        _proto_team_peer.add_message(BeaconSignalProtos.BeaconSignal.class);
-        _proto_team_peer.add_message(OrderInfoProtos.OrderInfo.class);
-        _proto_team_peer.add_message(RingInfoProtos.RingInfo.class);         // Not documented but sent!
-        _proto_team_peer.add_message(MachineInfoProtos.MachineInfo.class);
-        _proto_team_peer.add_message(MachineReportProtos.MachineReportInfo.class);
-        _proto_team_peer.add_message(ExplorationInfoProtos.ExplorationInfo.class);
-        _proto_team_peer.add_message(MachineInstructionProtos.PrepareMachine.class);
-        _proto_team_peer.add_message(MachineInstructionProtos.ResetMachine.class);
+        privatePeer.getPeer().add_message(BeaconSignalProtos.BeaconSignal.class);
+        privatePeer.getPeer().add_message(OrderInfoProtos.OrderInfo.class);
+        privatePeer.getPeer().add_message(RingInfoProtos.RingInfo.class);         // Not documented but sent!
+        privatePeer.getPeer().add_message(MachineInfoProtos.MachineInfo.class);
+        privatePeer.getPeer().add_message(MachineReportProtos.MachineReportInfo.class);
+        privatePeer.getPeer().add_message(ExplorationInfoProtos.ExplorationInfo.class);
+        privatePeer.getPeer().add_message(MachineInstructionProtos.PrepareMachine.class);
+        privatePeer.getPeer().add_message(MachineInstructionProtos.ResetMachine.class);
     }
 }
