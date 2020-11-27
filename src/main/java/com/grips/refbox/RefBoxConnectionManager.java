@@ -18,7 +18,6 @@
 package com.grips.refbox;
 
 import lombok.extern.apachecommons.CommonsLog;
-import org.robocup_logistics.llsf_comm.ProtobufBroadcastPeer;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_comm.ProtobufMessageHandler;
 import org.robocup_logistics.llsf_msgs.*;
@@ -42,9 +41,6 @@ public class RefBoxConnectionManager {
     TeamConfig teamConfig;
     PeerConfig usedPrivatePeer;
 
-    private ProtobufMessageHandler team_handler;
-    private ProtobufMessageHandler public_handler;
-
     private int cipher_type = RefBoxConnectionManager.CIPHER_TYPE_AES_128_CBC;
 
     public RefBoxConnectionManager(RefboxConnectionConfig connectionConfig,
@@ -53,19 +49,17 @@ public class RefBoxConnectionManager {
                                    ProtobufMessageHandler publicHandler) {
         this.connectionConfig = connectionConfig;
         this.teamConfig = teamConfig;
-        this.team_handler = privateHandler;
-        this.public_handler = publicHandler;
 
-        setupPublicPeer(connectionConfig);
-        setupPrivatePeer(connectionConfig, teamConfig);
+        setupPublicPeer(connectionConfig, publicHandler);
+        setupPrivatePeer(connectionConfig, teamConfig, privateHandler);
     }
 
-    private void setupPublicPeer(RefboxConnectionConfig connectionConfig) {
+    private void setupPublicPeer(RefboxConnectionConfig connectionConfig, ProtobufMessageHandler public_handler) {
         publicPeer = new RefboxConnection(connectionConfig.getIp(),
                 connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort(), public_handler);
     }
 
-    private void setupPrivatePeer(RefboxConnectionConfig connectionConfig, TeamConfig teamConfig) {
+    private void setupPrivatePeer(RefboxConnectionConfig connectionConfig, TeamConfig teamConfig, ProtobufMessageHandler team_handler) {
         if (teamConfig.getColor().equals("CYAN")) {
             usedPrivatePeer = connectionConfig.getCyanPeer();
         } else if (teamConfig.getColor().equals("MAGENTA")) {
@@ -88,7 +82,6 @@ public class RefBoxConnectionManager {
         try {
             privatePeer.start();
             registerTeamMsgs();
-            privatePeer.getPeer().register_handler(team_handler);
         } catch (IOException e) {
             throw new RuntimeException("Not able to create private peer!");
         }
@@ -98,7 +91,6 @@ public class RefBoxConnectionManager {
         try {
             publicPeer.start();
             registerBroadcastMsgs();
-            publicPeer.getPeer().register_handler(public_handler);
         } catch (IOException e) {
             throw new RuntimeException("Not able to create public peer!");
         }
