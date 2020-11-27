@@ -17,11 +17,13 @@
 
 package com.grips.refbox;
 
-import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
+import org.robocup_logistics.llsf_comm.ProtobufBroadcastPeer;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_comm.ProtobufMessageHandler;
 import org.robocup_logistics.llsf_msgs.*;
+
+import java.io.IOException;
 
 @CommonsLog
 public class RefBoxConnectionManager {
@@ -31,12 +33,14 @@ public class RefBoxConnectionManager {
     public final static int CIPHER_TYPE_AES_256_ECB = 3;
     public final static int CIPHER_TYPE_AES_256_CBC = 4;
 
+    private ProtobufBroadcastPeer _proto_broadcast_peer;
+    private ProtobufBroadcastPeer _proto_team_peer;
     RefboxConnectionConfig connectionConfig;
     TeamConfig teamConfig;
     PeerConfig usedPrivatePeer;
 
-    RefboxConnection teamConnection;
-    RefboxConnection publicConnection;
+    private ProtobufMessageHandler team_handler;
+    private ProtobufMessageHandler public_handler;
 
     private int cipher_type = RefBoxConnectionManager.CIPHER_TYPE_AES_128_CBC;
 
@@ -46,8 +50,8 @@ public class RefBoxConnectionManager {
                                    ProtobufMessageHandler publicHandler) {
         this.connectionConfig = connectionConfig;
         this.teamConfig = teamConfig;
-        this.publicConnection = new RefboxConnection(connectionConfig.getIp(),
-                connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort(), publicHandler);
+        this.team_handler = privateHandler;
+        this.public_handler = publicHandler;
 
         if (teamConfig.getColor().equals("CYAN")) {
             usedPrivatePeer = connectionConfig.getCyanPeer();
@@ -57,47 +61,61 @@ public class RefBoxConnectionManager {
             throw new RuntimeException("Invalid team color: " + teamConfig.getColor());
         }
 
-        this.teamConnection = new RefboxConnection(connectionConfig.getIp(), usedPrivatePeer.getSendPort(),
-                usedPrivatePeer.getReceivePort(), privateHandler, true, cipher_type, teamConfig.getCryptoKey());
+        // Setup Public Broadcast channel
+        _proto_broadcast_peer = new ProtobufBroadcastPeer(connectionConfig.getIp(),
+                connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort());
     }
 
-    @SneakyThrows
     public void startServer() {
-        publicConnection.start();
-        registerBroadcastMsgs();
-        teamConnection.start();
-        registerTeamMsgs();
-        log.info("Successfully started RefBoxConnectionManager!");
+        try {
+            _proto_broadcast_peer.start();
+            registerBroadcastMsgs();
+            _proto_broadcast_peer.register_handler(public_handler);
+        } catch (IOException e) {
+            throw new RuntimeException("Not able to create public peer!");
+        }
+
+        // Setup Private Team channel
+        _proto_team_peer = new ProtobufBroadcastPeer(connectionConfig.getIp(), usedPrivatePeer.getSendPort(),
+                usedPrivatePeer.getReceivePort(), true, cipher_type, teamConfig.getCryptoKey());
+        try {
+            _proto_team_peer.start();
+            registerTeamMsgs();
+            _proto_team_peer.register_handler(team_handler);
+        } catch (IOException e) {
+            throw new RuntimeException("Not able to create private peer!");
+        }
+        log.info("Successfully create RefBoxConnectionManager!");
     }
 
     public void sendPublicMsg(ProtobufMessage msg) {
         log.debug("Sending public message to Refbox: " + msg.toString());
-        publicConnection.enqueue(msg);
+        _proto_broadcast_peer.enqueue(msg);
     }
 
     public void sendPrivateMsg(ProtobufMessage msg) {
         log.debug("Sending public message to Refbox: " + msg.toString());
-        teamConnection.enqueue(msg);
+        _proto_team_peer.enqueue(msg);
     }
 
     private void registerBroadcastMsgs() {
-        publicConnection.add_message(BeaconSignalProtos.BeaconSignal.class);
-        publicConnection.add_message(OrderInfoProtos.OrderInfo.class);       // Not documented but sent!
-        publicConnection.add_message(RingInfoProtos.RingInfo.class);         // Not documented but sent!
-        publicConnection.add_message(GameStateProtos.GameState.class);
-        publicConnection.add_message(ExplorationInfoProtos.ExplorationInfo.class);
-        publicConnection.add_message(VersionProtos.VersionInfo.class);
-        publicConnection.add_message(RobotInfoProtos.RobotInfo.class);
+        _proto_broadcast_peer.add_message(BeaconSignalProtos.BeaconSignal.class);
+        _proto_broadcast_peer.add_message(OrderInfoProtos.OrderInfo.class);       // Not documented but sent!
+        _proto_broadcast_peer.add_message(RingInfoProtos.RingInfo.class);         // Not documented but sent!
+        _proto_broadcast_peer.add_message(GameStateProtos.GameState.class);
+        _proto_broadcast_peer.add_message(ExplorationInfoProtos.ExplorationInfo.class);
+        _proto_broadcast_peer.add_message(VersionProtos.VersionInfo.class);
+        _proto_broadcast_peer.add_message(RobotInfoProtos.RobotInfo.class);
     }
 
     private void registerTeamMsgs() {
-        teamConnection.add_message(BeaconSignalProtos.BeaconSignal.class);
-        teamConnection.add_message(OrderInfoProtos.OrderInfo.class);
-        teamConnection.add_message(RingInfoProtos.RingInfo.class);         // Not documented but sent!
-        teamConnection.add_message(MachineInfoProtos.MachineInfo.class);
-        teamConnection.add_message(MachineReportProtos.MachineReportInfo.class);
-        teamConnection.add_message(ExplorationInfoProtos.ExplorationInfo.class);
-        teamConnection.add_message(MachineInstructionProtos.PrepareMachine.class);
-        teamConnection.add_message(MachineInstructionProtos.ResetMachine.class);
+        _proto_team_peer.add_message(BeaconSignalProtos.BeaconSignal.class);
+        _proto_team_peer.add_message(OrderInfoProtos.OrderInfo.class);
+        _proto_team_peer.add_message(RingInfoProtos.RingInfo.class);         // Not documented but sent!
+        _proto_team_peer.add_message(MachineInfoProtos.MachineInfo.class);
+        _proto_team_peer.add_message(MachineReportProtos.MachineReportInfo.class);
+        _proto_team_peer.add_message(ExplorationInfoProtos.ExplorationInfo.class);
+        _proto_team_peer.add_message(MachineInstructionProtos.PrepareMachine.class);
+        _proto_team_peer.add_message(MachineInstructionProtos.ResetMachine.class);
     }
 }
