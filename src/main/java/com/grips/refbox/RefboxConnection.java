@@ -10,13 +10,12 @@ import java.io.IOException;
 
 @CommonsLog
 public class RefboxConnection {
-    private final ProtobufMessageHandler handler;
-    private ProtobufBroadcastPeer peer;
+    private final ProtobufBroadcastPeer peer;
 
     public RefboxConnection(String ip, int sendPort, int receivePort,
                             ProtobufMessageHandler handler) {
-        this.handler = handler;
         peer = new ProtobufBroadcastPeer(ip, sendPort, receivePort);
+        peer.register_handler(handler);
     }
 
     public void start() throws IOException {

@@ -59,7 +59,7 @@ public class ProtobufServer implements Runnable {
             try {
                 Socket live_socket = _server_socket.accept();
                 String robot_address = live_socket.getInetAddress().getHostAddress();
-                System.out.println("New Connection from IP: " + robot_address + ":" + live_socket.getPort() + ".");
+                log.info("New Connection from IP: " + robot_address + ":" + live_socket.getPort() + ".");
 
                 this.onNewConnection.accept(live_socket);
             } catch (IOException e) {
@@ -72,11 +72,11 @@ public class ProtobufServer implements Runnable {
 
     public void send_to_robot(long robot_id, ProtobufMessage msg) {
         if (null == msg) {
-            System.err.println("Error: msg to send is null!");
+            log.error("Error: msg to send is null!");
             return;
         }
         if (null == robotConnections.getConnection(robot_id)) {
-            System.err.println("Error: No socket for robot with id " + robot_id + " stored!");
+            log.error("Error: No socket for robot with id " + robot_id + " stored!");
             return;
         }
 
@@ -92,7 +92,7 @@ public class ProtobufServer implements Runnable {
 
     public <T extends GeneratedMessageV3> void send_to_robot(long robot_id, T msg) {
         if (null == msg) {
-            System.err.println("Error: msg to send is null!");
+            log.error("Error: msg to send is null!");
             return;
         }
 

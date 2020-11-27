@@ -65,7 +65,7 @@ public class RefBoxConnectionManager {
     public void startServer() {
         publicConnection.start();
         teamConnection.start();
-        log.info("Successfully create RefBoxConnectionManager!");
+        log.info("Successfully started RefBoxConnectionManager!");
     }
 
     public void sendPublicMsg(ProtobufMessage msg) {
