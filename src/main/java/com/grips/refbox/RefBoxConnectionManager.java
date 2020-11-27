@@ -53,10 +53,16 @@ public class RefBoxConnectionManager {
         this.team_handler = privateHandler;
         this.public_handler = publicHandler;
 
-        // Setup Public Broadcast channel
+        setupPublicPeer(connectionConfig);
+        setupPrivatePeer(connectionConfig, teamConfig);
+    }
+
+    private void setupPublicPeer(RefboxConnectionConfig connectionConfig) {
         _proto_broadcast_peer = new ProtobufBroadcastPeer(connectionConfig.getIp(),
                 connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort());
+    }
 
+    private void setupPrivatePeer(RefboxConnectionConfig connectionConfig, TeamConfig teamConfig) {
         if (teamConfig.getColor().equals("CYAN")) {
             usedPrivatePeer = connectionConfig.getCyanPeer();
         } else if (teamConfig.getColor().equals("MAGENTA")) {
@@ -68,18 +74,15 @@ public class RefBoxConnectionManager {
         // Setup Private Team channel
         _proto_team_peer = new ProtobufBroadcastPeer(connectionConfig.getIp(), usedPrivatePeer.getSendPort(),
                 usedPrivatePeer.getReceivePort(), true, cipher_type, teamConfig.getCryptoKey());
-
     }
 
     public void startServer() {
-        try {
-            _proto_broadcast_peer.start();
-            registerBroadcastMsgs();
-            _proto_broadcast_peer.register_handler(public_handler);
-        } catch (IOException e) {
-            throw new RuntimeException("Not able to create public peer!");
-        }
+        startPublicPeer();
+        startPrivatePeer();
+        log.info("Successfully create RefBoxConnectionManager!");
+    }
 
+    private void startPrivatePeer() {
         try {
             _proto_team_peer.start();
             registerTeamMsgs();
@@ -87,8 +90,16 @@ public class RefBoxConnectionManager {
         } catch (IOException e) {
             throw new RuntimeException("Not able to create private peer!");
         }
+    }
 
-        log.info("Successfully create RefBoxConnectionManager!");
+    private void startPublicPeer() {
+        try {
+            _proto_broadcast_peer.start();
+            registerBroadcastMsgs();
+            _proto_broadcast_peer.register_handler(public_handler);
+        } catch (IOException e) {
+            throw new RuntimeException("Not able to create public peer!");
+        }
     }
 
     public void sendPublicMsg(ProtobufMessage msg) {
