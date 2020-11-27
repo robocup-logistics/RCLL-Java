@@ -47,7 +47,7 @@ public class RefBoxConnectionManager {
         this.connectionConfig = connectionConfig;
         this.teamConfig = teamConfig;
         this.publicConnection = new RefboxConnection(connectionConfig.getIp(),
-                connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort(), privateHandler, true, cipher_type, teamConfig.getCryptoKey());
+                connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort(), publicHandler);
 
         if (teamConfig.getColor().equals("CYAN")) {
             usedPrivatePeer = connectionConfig.getCyanPeer();
@@ -58,13 +58,15 @@ public class RefBoxConnectionManager {
         }
 
         this.teamConnection = new RefboxConnection(connectionConfig.getIp(), usedPrivatePeer.getSendPort(),
-                usedPrivatePeer.getReceivePort(), publicHandler, true, cipher_type, teamConfig.getCryptoKey());
+                usedPrivatePeer.getReceivePort(), privateHandler, true, cipher_type, teamConfig.getCryptoKey());
     }
 
     @SneakyThrows
     public void startServer() {
         publicConnection.start();
+        registerBroadcastMsgs();
         teamConnection.start();
+        registerTeamMsgs();
         log.info("Successfully started RefBoxConnectionManager!");
     }
 

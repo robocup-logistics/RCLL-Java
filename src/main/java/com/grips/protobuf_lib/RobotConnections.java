@@ -18,6 +18,7 @@
 package com.grips.protobuf_lib;
 
 import com.grips.model.teamserver.Peer;
+import lombok.extern.apachecommons.CommonsLog;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@CommonsLog
 public class RobotConnections {
 
     private Collection<Peer> _connectedRobots = new ArrayList<>();
@@ -52,16 +54,16 @@ public class RobotConnections {
     public synchronized void addRobot(Peer robot) {
         if (!isRobotConnected(robot.getId())) {
             _connectedRobots.add(robot);
-            System.out.println("Robot with ID added " + robot.getId());
+            log.info("Robot with ID added " + robot.getId());
         } else {
-            System.out.println("Robot with this ID was already added!");
+            log.info("Robot with this ID was already added!");
         }
     }
 
     public synchronized void removeRobot(long clientId) {
         Optional<Peer> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findFirst();
         if (!robot.isPresent()) {
-            System.out.println("Robot that should be removed was not found in list!");
+            log.info("Robot that should be removed was not found in list!");
             return;
         }
 
@@ -75,7 +77,7 @@ public class RobotConnections {
     public synchronized Peer getRobot(long clientId) {
         Optional<Peer> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findFirst();
         if (!robot.isPresent()) {
-            System.out.println("Robot with ID " + clientId + " you are looking for does not exist");
+            log.info("Robot with ID " + clientId + " you are looking for does not exist");
             return null;
         }
 
@@ -85,7 +87,7 @@ public class RobotConnections {
     public synchronized void removeLostRobot(Socket socket) {
         Optional<Peer> robot = _connectedRobots.stream().filter(r -> r.getConnection().equals(socket)).findFirst();
         if (!robot.isPresent()) {
-            System.out.println("Robot to whom connection was lost, already was removed from list");
+            log.info("Robot to whom connection was lost, already was removed from list");
             return;
         } else {
             //Robot r = robot.get();
@@ -99,7 +101,7 @@ public class RobotConnections {
     public synchronized boolean isRobotActive(long clientId) {
         Optional<Peer> robot = _connectedRobots.stream().filter(r -> r.getId() == clientId).findAny();
         if (!robot.isPresent()) {
-            System.out.println("Robot that should be checked for activity was not found");
+            log.info("Robot that should be checked for activity was not found");
             return false;
         }
 

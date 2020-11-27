@@ -548,5 +548,9 @@ public class ProtobufBroadcastPeer {
 		}
 		
 	}
+
+	private String getName() {
+		return this.hostname + ":" + recvport + "- sending on: " + sendport;
+	}
 	
 }
