@@ -35,7 +35,6 @@ public class RefBoxConnectionManager {
     private RefboxConnection publicPeer;
     private RefboxConnection privatePeer;
 
-
     RefboxConnectionConfig connectionConfig;
 
     TeamConfig teamConfig;
@@ -50,16 +49,8 @@ public class RefBoxConnectionManager {
         this.connectionConfig = connectionConfig;
         this.teamConfig = teamConfig;
 
-        setupPublicPeer(connectionConfig, publicHandler);
-        setupPrivatePeer(connectionConfig, teamConfig, privateHandler);
-    }
-
-    private void setupPublicPeer(RefboxConnectionConfig connectionConfig, ProtobufMessageHandler public_handler) {
         publicPeer = new RefboxConnection(connectionConfig.getIp(),
-                connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort(), public_handler);
-    }
-
-    private void setupPrivatePeer(RefboxConnectionConfig connectionConfig, TeamConfig teamConfig, ProtobufMessageHandler team_handler) {
+                connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort(), publicHandler);
         if (teamConfig.getColor().equals("CYAN")) {
             usedPrivatePeer = connectionConfig.getCyanPeer();
         } else if (teamConfig.getColor().equals("MAGENTA")) {
@@ -69,8 +60,9 @@ public class RefBoxConnectionManager {
         }
 
         privatePeer = new RefboxConnection(connectionConfig.getIp(), usedPrivatePeer.getSendPort(),
-                usedPrivatePeer.getReceivePort(), team_handler, true, cipher_type, teamConfig.getCryptoKey());
+                usedPrivatePeer.getReceivePort(), privateHandler, true, cipher_type, teamConfig.getCryptoKey());
     }
+
 
     public void startServer() {
         startPublicPeer();
@@ -107,23 +99,23 @@ public class RefBoxConnectionManager {
     }
 
     private void registerBroadcastMsgs() {
-        publicPeer.getPeer().add_message(BeaconSignalProtos.BeaconSignal.class);
-        publicPeer.getPeer().add_message(OrderInfoProtos.OrderInfo.class);       // Not documented but sent!
-        publicPeer.getPeer().add_message(RingInfoProtos.RingInfo.class);         // Not documented but sent!
-        publicPeer.getPeer().add_message(GameStateProtos.GameState.class);
-        publicPeer.getPeer().add_message(ExplorationInfoProtos.ExplorationInfo.class);
-        publicPeer.getPeer().add_message(VersionProtos.VersionInfo.class);
-        publicPeer.getPeer().add_message(RobotInfoProtos.RobotInfo.class);
+        publicPeer.add_message(BeaconSignalProtos.BeaconSignal.class);
+        publicPeer.add_message(OrderInfoProtos.OrderInfo.class);       // Not documented but sent!
+        publicPeer.add_message(RingInfoProtos.RingInfo.class);         // Not documented but sent!
+        publicPeer.add_message(GameStateProtos.GameState.class);
+        publicPeer.add_message(ExplorationInfoProtos.ExplorationInfo.class);
+        publicPeer.add_message(VersionProtos.VersionInfo.class);
+        publicPeer.add_message(RobotInfoProtos.RobotInfo.class);
     }
 
     private void registerTeamMsgs() {
-        privatePeer.getPeer().add_message(BeaconSignalProtos.BeaconSignal.class);
-        privatePeer.getPeer().add_message(OrderInfoProtos.OrderInfo.class);
-        privatePeer.getPeer().add_message(RingInfoProtos.RingInfo.class);         // Not documented but sent!
-        privatePeer.getPeer().add_message(MachineInfoProtos.MachineInfo.class);
-        privatePeer.getPeer().add_message(MachineReportProtos.MachineReportInfo.class);
-        privatePeer.getPeer().add_message(ExplorationInfoProtos.ExplorationInfo.class);
-        privatePeer.getPeer().add_message(MachineInstructionProtos.PrepareMachine.class);
-        privatePeer.getPeer().add_message(MachineInstructionProtos.ResetMachine.class);
+        privatePeer.add_message(BeaconSignalProtos.BeaconSignal.class);
+        privatePeer.add_message(OrderInfoProtos.OrderInfo.class);
+        privatePeer.add_message(RingInfoProtos.RingInfo.class);         // Not documented but sent!
+        privatePeer.add_message(MachineInfoProtos.MachineInfo.class);
+        privatePeer.add_message(MachineReportProtos.MachineReportInfo.class);
+        privatePeer.add_message(ExplorationInfoProtos.ExplorationInfo.class);
+        privatePeer.add_message(MachineInstructionProtos.PrepareMachine.class);
+        privatePeer.add_message(MachineInstructionProtos.ResetMachine.class);
     }
 }
