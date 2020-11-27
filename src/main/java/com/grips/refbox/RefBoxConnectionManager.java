@@ -53,6 +53,10 @@ public class RefBoxConnectionManager {
         this.team_handler = privateHandler;
         this.public_handler = publicHandler;
 
+        // Setup Public Broadcast channel
+        _proto_broadcast_peer = new ProtobufBroadcastPeer(connectionConfig.getIp(),
+                connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort());
+
         if (teamConfig.getColor().equals("CYAN")) {
             usedPrivatePeer = connectionConfig.getCyanPeer();
         } else if (teamConfig.getColor().equals("MAGENTA")) {
@@ -61,9 +65,10 @@ public class RefBoxConnectionManager {
             throw new RuntimeException("Invalid team color: " + teamConfig.getColor());
         }
 
-        // Setup Public Broadcast channel
-        _proto_broadcast_peer = new ProtobufBroadcastPeer(connectionConfig.getIp(),
-                connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort());
+        // Setup Private Team channel
+        _proto_team_peer = new ProtobufBroadcastPeer(connectionConfig.getIp(), usedPrivatePeer.getSendPort(),
+                usedPrivatePeer.getReceivePort(), true, cipher_type, teamConfig.getCryptoKey());
+
     }
 
     public void startServer() {
@@ -75,9 +80,6 @@ public class RefBoxConnectionManager {
             throw new RuntimeException("Not able to create public peer!");
         }
 
-        // Setup Private Team channel
-        _proto_team_peer = new ProtobufBroadcastPeer(connectionConfig.getIp(), usedPrivatePeer.getSendPort(),
-                usedPrivatePeer.getReceivePort(), true, cipher_type, teamConfig.getCryptoKey());
         try {
             _proto_team_peer.start();
             registerTeamMsgs();
@@ -85,6 +87,7 @@ public class RefBoxConnectionManager {
         } catch (IOException e) {
             throw new RuntimeException("Not able to create private peer!");
         }
+
         log.info("Successfully create RefBoxConnectionManager!");
     }
 
