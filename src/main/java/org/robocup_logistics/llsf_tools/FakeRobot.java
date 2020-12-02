@@ -1,27 +1,22 @@
 package org.robocup_logistics.llsf_tools;
 
-import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
-import org.robocup_logistics.llsf_comm.ProtobufBroadcastPeer;
+import org.robocup_logistics.llsf_comm.ProtobufUpdBroadcastConnection;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_comm.ProtobufMessageHandler;
-import org.robocup_logistics.llsf_msgs.BeaconSignalProtos.BeaconSignal;
-import org.robocup_logistics.llsf_msgs.ExplorationInfoProtos.ExplorationInfo;
-import org.robocup_logistics.llsf_msgs.ExplorationInfoProtos.ExplorationSignal;
-import org.robocup_logistics.llsf_msgs.GameStateProtos.GameState;
-import org.robocup_logistics.llsf_msgs.MachineInfoProtos.LightSpec;
-import org.robocup_logistics.llsf_msgs.MachineInfoProtos.Machine;
-import org.robocup_logistics.llsf_msgs.MachineInfoProtos.MachineInfo;
-import org.robocup_logistics.llsf_msgs.MachineReportProtos.MachineReportInfo;
-import org.robocup_logistics.llsf_msgs.OrderInfoProtos.Order;
-import org.robocup_logistics.llsf_msgs.OrderInfoProtos.OrderInfo;
-import org.robocup_logistics.llsf_msgs.Pose2DProtos.Pose2D;
-import org.robocup_logistics.llsf_msgs.RobotInfoProtos.Robot;
-import org.robocup_logistics.llsf_msgs.RobotInfoProtos.RobotInfo;
-import org.robocup_logistics.llsf_msgs.TeamProtos.Team;
-import org.robocup_logistics.llsf_msgs.TimeProtos.Time;
-import org.robocup_logistics.llsf_msgs.VersionProtos.VersionInfo;
+import org.robocup_logistics.llsf_msgs.TeamProtos.*;
+import org.robocup_logistics.llsf_msgs.BeaconSignalProtos.*;
+import org.robocup_logistics.llsf_msgs.OrderInfoProtos.*;
+import org.robocup_logistics.llsf_msgs.GameStateProtos.*;
+import org.robocup_logistics.llsf_msgs.VersionProtos.*;
+import org.robocup_logistics.llsf_msgs.ExplorationInfoProtos.*;
+import org.robocup_logistics.llsf_msgs.MachineInfoProtos.*;
+import org.robocup_logistics.llsf_msgs.MachineReportProtos.*;
+import org.robocup_logistics.llsf_msgs.RobotInfoProtos.*;
+import org.robocup_logistics.llsf_msgs.TimeProtos.*;
+import org.robocup_logistics.llsf_msgs.Pose2DProtos.*;
+
 import org.robocup_logistics.llsf_utils.NanoSecondsTimestampProvider;
 
 import java.io.IOException;
@@ -48,8 +43,8 @@ public class FakeRobot {
 	private final static int MAGENTA_SENDPORT = 4447;
 	private final static int MAGENTA_RECVPORT = 4442;
 	
-	private static ProtobufBroadcastPeer peerPublic;
-	private static ProtobufBroadcastPeer peerPrivate;
+	private static ProtobufUpdBroadcastConnection peerPublic;
+	private static ProtobufUpdBroadcastConnection peerPrivate;
 	
 	private static boolean crypto_setup = false;
 	
@@ -95,7 +90,7 @@ public class FakeRobot {
 		
 		System.out.println("Using team color cyan for BeaconSignals");
 		
-		peerPublic = new ProtobufBroadcastPeer(HOST, local ? SENDPORT : RECVPORT, RECVPORT);
+		peerPublic = new ProtobufUpdBroadcastConnection(HOST, local ? SENDPORT : RECVPORT, RECVPORT);
 		try {
 			peerPublic.start();
 		} catch (IOException e) {
@@ -242,10 +237,10 @@ public class FakeRobot {
 						
 						switch (TEAM_COLOR) {
 						case CYAN:
-							peerPrivate = new ProtobufBroadcastPeer(HOST, local ? CYAN_SENDPORT : CYAN_RECVPORT, CYAN_RECVPORT, true, 2, ENCRYPTION_KEY);
+							peerPrivate = new ProtobufUpdBroadcastConnection(HOST, local ? CYAN_SENDPORT : CYAN_RECVPORT, CYAN_RECVPORT, true, 2, ENCRYPTION_KEY);
 							break;
 						case MAGENTA:
-							peerPrivate = new ProtobufBroadcastPeer(HOST, local ? MAGENTA_SENDPORT : MAGENTA_RECVPORT, MAGENTA_RECVPORT, true, 2, ENCRYPTION_KEY);
+							peerPrivate = new ProtobufUpdBroadcastConnection(HOST, local ? MAGENTA_SENDPORT : MAGENTA_RECVPORT, MAGENTA_RECVPORT, true, 2, ENCRYPTION_KEY);
 							break;
 						}
 					
