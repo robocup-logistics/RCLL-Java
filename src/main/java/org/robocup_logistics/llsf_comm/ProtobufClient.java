@@ -1,5 +1,6 @@
 package org.robocup_logistics.llsf_comm;
 
+import com.google.protobuf.Descriptors;
 import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.GeneratedMessageV3;
@@ -220,6 +221,20 @@ public class ProtobufClient {
 			try {
 				act_q.notifyAll();
 			} catch(IllegalMonitorStateException e) {}
+		}
+	}
+
+	public<T> void enqueue(GeneratedMessageV3 msg, Class<T> c) {
+		Method m = null;
+		try {
+			m = c.getMethod("getDefaultInstance", (Class<?>[]) null);
+			Descriptors.EnumDescriptor desc = msg.getDescriptorForType().findEnumTypeByName("CompType");
+
+			int cmp_id = desc.findValueByName("COMP_ID").getNumber();
+			int msg_id = desc.findValueByName("MSG_TYPE").getNumber();
+			this.enqueue(new ProtobufMessage(cmp_id, msg_id, msg));
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
 		}
 	}
 	
