@@ -1,11 +1,11 @@
 plugins {
     id "java"
     id "maven-publish"
-    id "com.google.protobuf" version "0.8.12"
+    id "com.google.protobuf" version "0.8.14"
 }
 
 group = 'grips'
-version = '0.0.54'
+version = '0.0.55'
 
 description = """"""
 
@@ -94,6 +94,7 @@ sourceSets {
         proto {
             // In addition to the default 'src/main/proto'
             srcDir 'rcll-refbox/src/msgs/'
+            srcDir 'rcll-refbox/src/libs/logging/llsf_log_msgs'
         }
         java {
         }
