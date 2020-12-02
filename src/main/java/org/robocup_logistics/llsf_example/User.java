@@ -1,10 +1,10 @@
 package org.robocup_logistics.llsf_example;
 
-import org.robocup_logistics.llsf_comm.ProtobufBroadcastPeer;
-import org.robocup_logistics.llsf_msgs.BeaconSignalProtos.BeaconSignal;
-import org.robocup_logistics.llsf_msgs.GameStateProtos.GameState;
-import org.robocup_logistics.llsf_msgs.RobotInfoProtos.RobotInfo;
-import org.robocup_logistics.llsf_msgs.TeamProtos.Team;
+import org.robocup_logistics.llsf_comm.ProtobufUpdBroadcastConnection;
+import org.robocup_logistics.llsf_msgs.BeaconSignalProtos;
+import org.robocup_logistics.llsf_msgs.GameStateProtos;
+import org.robocup_logistics.llsf_msgs.RobotInfoProtos;
+import org.robocup_logistics.llsf_msgs.TeamProtos;
 
 import java.io.IOException;
 
@@ -12,10 +12,10 @@ public class User {
 	
 	private final static String TEAM_NAME = "YourTeam";
 	private final static String ENCRYPTION_KEY = "YourKey";
-	private static Team TEAM_COLOR;
+	private static TeamProtos.Team TEAM_COLOR;
 	
-	private static ProtobufBroadcastPeer peerPublic;
-	private static ProtobufBroadcastPeer peerPrivate;
+	private static ProtobufUpdBroadcastConnection peerPublic;
+	private static ProtobufUpdBroadcastConnection peerPrivate;
 	
 	public static void main(String[] args) {
 		
@@ -28,16 +28,16 @@ public class User {
 		//will listen on port 4445 and send to port 4444, so your send and receive ports have
 		//to be inverted.
 		//See the Usage tutorial for more information: https://trac.fawkesrobotics.org/wiki/LLSFRefBox/Java/Usage
-		peerPublic = new ProtobufBroadcastPeer("x.x.x.255", 4445, 4444);
+		peerPublic = new ProtobufUpdBroadcastConnection("x.x.x.255", 4445, 4444);
 		try {
 			peerPublic.start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		peerPublic.add_message(RobotInfo.class);
-		peerPublic.add_message(BeaconSignal.class);
-		peerPublic.add_message(GameState.class);
+		peerPublic.add_message(RobotInfoProtos.RobotInfo.class);
+		peerPublic.add_message(BeaconSignalProtos.BeaconSignal.class);
+		peerPublic.add_message(GameStateProtos.GameState.class);
 		
 		Handler handler = new Handler();
 		peerPublic.register_handler(handler);
@@ -83,7 +83,7 @@ public class User {
 		
 	}
 	
-	public static void gameStateReceived(GameState state) {
+	public static void gameStateReceived(GameStateProtos.GameState state) {
 		/*
 		if (peerPrivate != null) {
 			return;

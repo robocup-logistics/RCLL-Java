@@ -18,7 +18,6 @@
 
 package org.robocup_logistics.llsf_example;
 
-import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.robocup_logistics.llsf_comm.ProtobufMessageHandler;
