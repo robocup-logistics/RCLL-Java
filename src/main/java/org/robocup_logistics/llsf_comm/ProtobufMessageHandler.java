@@ -11,8 +11,8 @@ import java.nio.ByteBuffer;
  * The ProtobufClient/ProtobufBroadcastPeer automatically passes incoming messages to your handler
  * if you have registered it.
  * 
- * @see ProtobufClient#register_handler(ProtobufMessageHandler)
- * @see ProtobufBroadcastPeer#register_handler(ProtobufMessageHandler handler)
+ * @see ProtobufTcpConnection#register_handler(ProtobufMessageHandler)
+ * @see ProtobufUpdBroadcastConnection#register_handler(ProtobufMessageHandler handler)
  */
 public interface ProtobufMessageHandler {
 	

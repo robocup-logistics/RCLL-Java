@@ -1,7 +1,6 @@
 package org.robocup_logistics.llsf_comm;
 
 import com.google.protobuf.Descriptors.EnumDescriptor;
-import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.GeneratedMessageV3;
 import lombok.extern.apachecommons.CommonsLog;
 import org.robocup_logistics.llsf_encryption.BufferDecryptor;
@@ -39,7 +38,7 @@ import java.util.Queue;
  * stream messages (TCP), use the ProtobufClient.
  */
 @CommonsLog
-public class ProtobufBroadcastPeer {
+public class ProtobufUpdBroadcastConnection implements ProtobufConnection {
 	
 	private DatagramSocket socket;
 	private InetAddress address;
@@ -77,7 +76,7 @@ public class ProtobufBroadcastPeer {
 	 * 			  the port to listen on for incoming messages
 	 * @see start()
 	 */
-	public ProtobufBroadcastPeer(String hostname, int sendport, int recvport) {
+	public ProtobufUpdBroadcastConnection(String hostname, int sendport, int recvport) {
 		this.hostname = hostname;
 		this.sendport = sendport;
 		this.recvport = recvport;
@@ -104,7 +103,7 @@ public class ProtobufBroadcastPeer {
 	 * 			  the encryption key as String
 	 * @see start()
 	 */
-	public ProtobufBroadcastPeer(String hostname, int sendport, int recvport, boolean encrypt, int cipher, String encryptionKey) {
+	public ProtobufUpdBroadcastConnection(String hostname, int sendport, int recvport, boolean encrypt, int cipher, String encryptionKey) {
 		this(hostname, sendport, recvport);
 		this.encrypt = encrypt;
 		
@@ -285,6 +284,7 @@ public class ProtobufBroadcastPeer {
 		Key key = classNameToKey.get(msg.getClass().getName());
 		this.enqueue(new ProtobufMessage(key.cmp_id, key.msg_id, msg));
 	}
+
 	/**
 	 * Puts a ProtobufMessage into the send queue in order to be sent out to the refbox.
 	 * 

@@ -28,7 +28,7 @@ import java.util.Queue;
  * ProtobufMessageHandler, incoming messages will be passed to your handler. To send and receive
  * broadcast messages (UDP), use the ProtobufBroadcastPeer.
  */
-public class ProtobufClient {
+public class ProtobufTcpConnection implements ProtobufConnection {
 	
 	private String hostname;
 	private int port;
@@ -43,6 +43,7 @@ public class ProtobufClient {
 	private RecvThread recv;
 	
 	private HashMap<Key, GeneratedMessageV3> msgs = new HashMap<>();
+	private HashMap<String, Key> classNameToKey = new HashMap<>();
 	private ProtobufMessageHandler handler;
 	
 	private boolean is_connected = false;
@@ -56,7 +57,7 @@ public class ProtobufClient {
 	 *            the port to which to connect
 	 * @see connect()
 	 */
-	public ProtobufClient(String hostname, int port) {
+	public ProtobufTcpConnection(String hostname, int port) {
 		this.hostname = hostname;
 		this.port = port;
 	}
@@ -183,6 +184,7 @@ public class ProtobufClient {
 			int msg_id = desc.findValueByName("MSG_TYPE").getNumber();
 			Key key = new Key(cmp_id, msg_id);
 			msgs.put(key, msg);
+			classNameToKey.put(c.getName(), key);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
@@ -207,7 +209,8 @@ public class ProtobufClient {
 			}	
 		}
 	}
-	
+
+
 	/**
 	 * Puts a ProtobufMessage into the send queue in order to be sent out to the refbox.
 	 * 
@@ -215,6 +218,7 @@ public class ProtobufClient {
 	 *            the ProtobufMessage to send
 	 * @see ProtobufMessage
 	 */
+	@Override
 	public void enqueue(ProtobufMessage msg) {
 		synchronized (act_q) {
 			act_q.add(msg);
@@ -222,6 +226,12 @@ public class ProtobufClient {
 				act_q.notifyAll();
 			} catch(IllegalMonitorStateException e) {}
 		}
+	}
+
+	@Override
+	public void enqueue(GeneratedMessageV3 msg) {
+		Key key = classNameToKey.get(msg.getClass().getName());
+		this.enqueue(new ProtobufMessage(key.cmp_id, key.msg_id, msg));
 	}
 
 	public<T> void enqueue(GeneratedMessageV3 msg, Class<T> c) {

@@ -2,9 +2,8 @@ package com.grips.refbox;
 
 import com.google.protobuf.GeneratedMessageV3;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.apachecommons.CommonsLog;
-import org.robocup_logistics.llsf_comm.ProtobufBroadcastPeer;
+import org.robocup_logistics.llsf_comm.ProtobufUpdBroadcastConnection;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_comm.ProtobufMessageHandler;
 
@@ -13,12 +12,12 @@ import java.io.IOException;
 @CommonsLog
 @Getter
 public class RefboxConnection {
-    private ProtobufBroadcastPeer peer;
+    private ProtobufUpdBroadcastConnection peer;
 
     public RefboxConnection(String ip, int sendPort, int receivePort,
                             ProtobufMessageHandler handler, boolean encrypt, int cipher_type, String cryptoKey) {
         log.info("Creating broadcast peer ip: " + ip + " sendPort: " + sendPort + " receivePort: " + receivePort);
-        peer = new ProtobufBroadcastPeer(ip, sendPort, receivePort, encrypt, cipher_type, cryptoKey);
+        peer = new ProtobufUpdBroadcastConnection(ip, sendPort, receivePort, encrypt, cipher_type, cryptoKey);
         peer.register_handler(handler);
     }
 
