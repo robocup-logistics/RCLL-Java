@@ -18,15 +18,13 @@ public class MachineClient {
     private final Map<MachineClientUtils.Machine, GeneratedMessageV3> sendQueue;
     private final Map<MachineClientUtils.Machine, MachineClientUtils.MachineState> machineStatuse;
 
-    public MachineClient (MachineClientUtils.TeamColor teamColor)
-    {
+    public MachineClient(MachineClientUtils.TeamColor teamColor) {
         this.teamColor = teamColor;
         this.sendQueue = new ConcurrentHashMap<>();
         this.machineStatuse = new ConcurrentHashMap<>();
     }
 
-    public void sendResetMachine(MachineClientUtils.Machine machine)
-    {
+    public void sendResetMachine(MachineClientUtils.Machine machine) {
         MachineInstructionProtos.ResetMachine reset = MachineInstructionProtos.ResetMachine.newBuilder()
                 .setMachine(machineNameForMsg(machine, teamColor))
                 .setTeamColor(TeamProtos.Team.valueOf(teamColor.toString()))
@@ -34,8 +32,7 @@ public class MachineClient {
         addMessageToSendQueue(machine, reset);
     }
 
-    public void sendPrepareBS(MachineClientUtils.MachineSide side, MachineClientUtils.BaseColor base_color)
-    {
+    public void sendPrepareBS(MachineClientUtils.MachineSide side, MachineClientUtils.BaseColor base_color) {
         MachineClientUtils.Machine machine = MachineClientUtils.Machine.BS;
         MachineInstructionProtos.PrepareInstructionBS bsInstruction =
                 MachineInstructionProtos.PrepareInstructionBS.newBuilder()
@@ -104,10 +101,11 @@ public class MachineClient {
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
-    public void sendPrepareSS(MachineClientUtils.Machine machine, MachineInstructionProtos.SSTask ssTask) {
+    public void sendPrepareSS(MachineClientUtils.Machine machine, int shelf, int slot) {
 
         MachineInstructionProtos.PrepareInstructionSS ssInstruction = MachineInstructionProtos.PrepareInstructionSS.newBuilder()
-                .setTask(ssTask)
+                .setShelf(shelf)
+                .setSlot(slot)
                 .build();
 
         MachineInstructionProtos.PrepareMachine prepareMachineMsg = MachineInstructionProtos.PrepareMachine.newBuilder()
@@ -236,8 +234,7 @@ public class MachineClient {
         return returner;
     }
 
-    private void addMessageToSendQueue(MachineClientUtils.Machine machine, GeneratedMessageV3 msg)
-    {
+    private void addMessageToSendQueue(MachineClientUtils.Machine machine, GeneratedMessageV3 msg) {
         sendQueue.put(machine, msg);
     }
 
