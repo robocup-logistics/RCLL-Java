@@ -25,6 +25,7 @@ public class RefboxHandler implements ProtobufMessageHandler {
     private Consumer<BeaconSignalProtos.BeaconSignal> beaconSignalCallback;
     private Consumer<OrderInfoProtos.OrderInfo> orderInfoCallback;
     private Consumer<RingInfoProtos.RingInfo> ringInfoCallback;
+    private Consumer<NavigationChallengeProtos.NavigationRoutes> navigationRoutesCallback;
 
     public RefboxHandler() {
         //setting default handler which only log a message that nothing will be don
@@ -37,6 +38,7 @@ public class RefboxHandler implements ProtobufMessageHandler {
         beaconSignalCallback = (msg) -> log.debug("beaconSignalCallback not set");
         orderInfoCallback = (msg) -> log.debug("orderInfoCallback not set");
         ringInfoCallback = (msg) -> log.debug("ringInfoCallback not set");
+        navigationRoutesCallback = (msg) -> log.debug("navigationRoutesCallback not set");
     }
 
     @Override
@@ -71,6 +73,8 @@ public class RefboxHandler implements ProtobufMessageHandler {
                 versionInfoCallback.accept(VersionProtos.VersionInfo.parseFrom(array));
             } else if (msg instanceof RobotInfoProtos.RobotInfo) {
                 robotInfoCallback.accept(RobotInfoProtos.RobotInfo.parseFrom(array));
+            } else if (msg instanceof NavigationChallengeProtos.NavigationRoutes) {
+                navigationRoutesCallback.accept(NavigationChallengeProtos.NavigationRoutes.parseFrom(array));
             } else {
                 log.error(this.getClass() + " received unkown msg!");
             }
