@@ -75,6 +75,7 @@ public class RefBoxConnectionManager {
             privatePeer.start();
             registerTeamMsgs();
         } catch (IOException e) {
+            log.error("Error starting private peer: ", e);
             throw new RuntimeException("Not able to create private peer!");
         }
     }
@@ -84,6 +85,7 @@ public class RefBoxConnectionManager {
             publicPeer.start();
             registerBroadcastMsgs();
         } catch (IOException e) {
+            log.error("Error starting public peer: ", e);
             throw new RuntimeException("Not able to create public peer!");
         }
     }
