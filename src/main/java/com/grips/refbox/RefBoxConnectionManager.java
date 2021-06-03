@@ -106,6 +106,7 @@ public class RefBoxConnectionManager {
         publicPeer.add_message(ExplorationInfoProtos.ExplorationInfo.class);
         publicPeer.add_message(VersionProtos.VersionInfo.class);
         publicPeer.add_message(RobotInfoProtos.RobotInfo.class);
+        publicPeer.add_message(NavigationChallengeProtos.NavigationRoutes.class);
     }
 
     private void registerTeamMsgs() {
@@ -117,5 +118,6 @@ public class RefBoxConnectionManager {
         privatePeer.add_message(ExplorationInfoProtos.ExplorationInfo.class);
         privatePeer.add_message(MachineInstructionProtos.PrepareMachine.class);
         privatePeer.add_message(MachineInstructionProtos.ResetMachine.class);
+        privatePeer.add_message(NavigationChallengeProtos.NavigationRoutes.class);
     }
 }
