@@ -23,6 +23,9 @@ public class MachineClientUtils {
             case "WAIT-IDLE":
                 return MachineState.WAIT_IDLE;
         }
+        if (state.equals("")) {
+            return MachineState.UNDEFINED;
+        }
         throw new IllegalArgumentException("Unkown Machine state: " + state);
     }
 
@@ -77,7 +80,8 @@ public class MachineClientUtils {
         BROKEN,
         PREPARED,
         PROCESSING,
-        PROCESSED
+        PROCESSED,
+        UNDEFINED
     }
 
     public enum CSOp {
