@@ -1,4 +1,4 @@
 [submodule "rcll-refbox"]
 	path = rcll-refbox
 	url = https://github.com/robocup-logistics/rcll-refbox.git
-    tag = 2019-beta.1
+        branch = neltester/challenges-2021
