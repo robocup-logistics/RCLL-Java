@@ -1,8 +1,11 @@
 package com.grips.model.teamserver;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class Zone {
-    TeamColor color;
-    int number;
+    final TeamColor color;
+    final int number;
 
     @Override
     public String toString() {
