@@ -48,8 +48,6 @@ public class MachineClientUtils {
         throw new IllegalArgumentException("Unkown machine: " + machine);
     }
 
-    public enum TeamColor {CYAN, MAGENTA}
-
     public enum Machine {
         BS, DS, RS1, RS2, CS1, CS2, SS;
     }

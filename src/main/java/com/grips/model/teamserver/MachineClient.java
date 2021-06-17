@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 
 @Log
 public class MachineClient {
-    private final MachineClientUtils.TeamColor teamColor;
+    private final TeamColor teamColor;
     private final Map<MachineClientUtils.Machine, GeneratedMessageV3> sendQueue;
     private final Map<MachineClientUtils.Machine, MachineClientUtils.MachineState> machineStatuse;
 
-    public MachineClient(MachineClientUtils.TeamColor teamColor) {
+    public MachineClient(TeamColor teamColor) {
         this.teamColor = teamColor;
         this.sendQueue = new ConcurrentHashMap<>();
         this.machineStatuse = new ConcurrentHashMap<>();
@@ -149,9 +149,9 @@ public class MachineClient {
 
     private void updateMachineState(MachineInfoProtos.MachineInfo info) {
         if (info.hasTeamColor()) {
-            if (TeamProtos.Team.CYAN.equals(info.getTeamColor()) && this.teamColor.equals(MachineClientUtils.TeamColor.CYAN)) {
+            if (TeamProtos.Team.CYAN.equals(info.getTeamColor()) && this.teamColor.equals(TeamColor.CYAN)) {
                 info.getMachinesList().forEach(this::updateMachineStatus);
-            } else if (TeamProtos.Team.MAGENTA.equals(info.getTeamColor()) && this.teamColor.equals(MachineClientUtils.TeamColor.MAGENTA)) {
+            } else if (TeamProtos.Team.MAGENTA.equals(info.getTeamColor()) && this.teamColor.equals(TeamColor.MAGENTA)) {
                 info.getMachinesList().forEach(this::updateMachineStatus);
             }
         } else {
@@ -203,7 +203,7 @@ public class MachineClient {
         machineStatuse.put(machine, state);
     }
 
-    private String machineNameForMsg(MachineClientUtils.Machine machine, MachineClientUtils.TeamColor color) {
+    private String machineNameForMsg(MachineClientUtils.Machine machine, TeamColor color) {
         StringBuilder returner = new StringBuilder();
         switch (color) {
             case CYAN:
