@@ -9,13 +9,14 @@ import lombok.extern.apachecommons.CommonsLog;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static com.grips.model.teamserver.TeamColor.CYAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @CommonsLog
 class MachineClientTest {
     @Test
     public void testPrepareDS() {
-        MachineClient machineClient = new MachineClient(MachineClientUtils.TeamColor.CYAN);
+        MachineClient machineClient = new MachineClient(CYAN);
         assertThat(machineClient.fetchMachinesPreparing()).isEmpty();
         assertThat(machineClient.fetchPrepareMessages()).isEmpty();
         machineClient.sendPrepareDS(123, 456);
@@ -27,7 +28,7 @@ class MachineClientTest {
     @Test
     @Disabled
     public void testPrepareCS() {
-        MachineClient machineClient = new MachineClient(MachineClientUtils.TeamColor.CYAN);
+        MachineClient machineClient = new MachineClient(CYAN);
         assertThat(machineClient.fetchMachinesPreparing()).isEmpty();
         assertThat(machineClient.fetchPrepareMessages()).isEmpty();
         machineClient.sendPrepareCS(MachineClientUtils.Machine.CS2, MachineClientUtils.CSOp.RETRIEVE_CAP);
