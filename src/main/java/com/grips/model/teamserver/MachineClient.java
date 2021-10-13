@@ -29,6 +29,7 @@ public class MachineClient {
                 .setMachine(machineNameForMsg(machine, teamColor))
                 .setTeamColor(TeamProtos.Team.valueOf(teamColor.toString()))
                 .build();
+        log.info("Sending ResetMachine: " + reset.toString());
         addMessageToSendQueue(machine, reset);
     }
 
@@ -46,7 +47,7 @@ public class MachineClient {
                         .setMachine(machineNameForMsg(machine, teamColor))
                         .setInstructionBs(bsInstruction)
                         .build();
-
+        log.info("Sending PrepareBS: " + prepareMachineMsg.toString());
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
@@ -63,7 +64,7 @@ public class MachineClient {
                         .setMachine(machineNameForMsg(machine, teamColor))
                         .setInstructionDs(dsInstruction)
                         .build();
-
+        log.info("Sending PrepareDS: " + prepareMachineMsg.toString());
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
@@ -80,7 +81,7 @@ public class MachineClient {
                         .setMachine(machineNameForMsg(machine, teamColor))
                         .setInstructionRs(rsInstruction)
                         .build();
-
+        log.info("Sending PrepareRS: " + prepareMachineMsg.toString());
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
@@ -97,7 +98,7 @@ public class MachineClient {
                         .setMachine(machineNameForMsg(machine, teamColor))
                         .setInstructionCs(csInstruction)
                         .build();
-
+        log.info("Sending PrepareCS: " + prepareMachineMsg.toString());
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
@@ -113,7 +114,7 @@ public class MachineClient {
                 .setMachine(machineNameForMsg(machine, teamColor))
                 .setInstructionSs(ssInstruction)
                 .build();
-
+        log.info("Sending PrepareSS: " + prepareMachineMsg.toString());
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
