@@ -161,7 +161,7 @@ public class ProtobufUpdBroadcastConnection implements ProtobufConnection {
 	 * @throws IOException
 	 *             Signals that the connection to the refbox cannot be established.
 	 */
-	public void start() throws IOException {
+	public void start(String threadName) throws IOException {
 		if (stop != null && stop.isAlive()) {
 			try {
 				stop.join();
@@ -171,6 +171,7 @@ public class ProtobufUpdBroadcastConnection implements ProtobufConnection {
 		}
 		
 		ConThread con = new ConThread();
+		con.setName(threadName);
 		con.start();
 		try {
 			con.join();

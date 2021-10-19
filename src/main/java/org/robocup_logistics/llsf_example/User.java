@@ -30,7 +30,7 @@ public class User {
 		//See the Usage tutorial for more information: https://trac.fawkesrobotics.org/wiki/LLSFRefBox/Java/Usage
 		peerPublic = new ProtobufUpdBroadcastConnection("x.x.x.255", 4445, 4444);
 		try {
-			peerPublic.start();
+			peerPublic.start("User");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

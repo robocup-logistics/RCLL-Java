@@ -26,9 +26,9 @@ public class RefboxConnection {
         this(ip, sendPort, receivePort, handler, false, -1, null);
     }
 
-    public void start() throws IOException {
+    public void start(String threadName) throws IOException {
         log.info("Starting Refbox Connection....");
-        peer.start();
+        peer.start(threadName);
     }
 
     public <T extends GeneratedMessageV3> void add_message(Class<T> classType) {

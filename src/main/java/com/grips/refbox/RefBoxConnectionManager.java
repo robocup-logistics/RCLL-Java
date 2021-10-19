@@ -72,7 +72,7 @@ public class RefBoxConnectionManager {
 
     private void startPrivatePeer() {
         try {
-            privatePeer.start();
+            privatePeer.start("RbcmPrivatePeer");
             registerTeamMsgs();
         } catch (IOException e) {
             log.error("Error starting private peer: ", e);
@@ -82,7 +82,7 @@ public class RefBoxConnectionManager {
 
     private void startPublicPeer() {
         try {
-            publicPeer.start();
+            publicPeer.start("RbcmPublicPeer");
             registerBroadcastMsgs();
         } catch (IOException e) {
             log.error("Error starting public peer: ", e);

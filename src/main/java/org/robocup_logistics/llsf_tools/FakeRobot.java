@@ -92,7 +92,7 @@ public class FakeRobot {
 		
 		peerPublic = new ProtobufUpdBroadcastConnection(HOST, local ? SENDPORT : RECVPORT, RECVPORT);
 		try {
-			peerPublic.start();
+			peerPublic.start("FakeRobot");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -246,7 +246,7 @@ public class FakeRobot {
 					
 						if (peerPrivate != null) {
 							try {
-								peerPrivate.start();
+								peerPrivate.start("FakeRobot1");
 							} catch (IOException e) {
 								e.printStackTrace();
 							}

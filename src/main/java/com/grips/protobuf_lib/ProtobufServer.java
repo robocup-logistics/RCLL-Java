@@ -45,12 +45,14 @@ public class ProtobufServer implements Runnable {
     }
 
     public void start() throws IOException {
+        log.error("Called start of the protobuf server");
         _server_socket = new ServerSocket(listenPort);
         new Thread(this).start();
     }
 
     @Override
     public void run() {
+        log.info("The serversockt hast listenport " + listenPort);
         if (_server_socket == null) {
             log.error("_server_socket is null, did you call start()");
             return;
