@@ -2,6 +2,7 @@ package com.grips.model.teamserver;
 
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.GeneratedMessageV3;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.grips.protobuf_lib.RobotMessageRegister;
 import lombok.extern.java.Log;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
@@ -86,7 +87,17 @@ public class MachineClient {
     }
 
     public void sendPrepareCS(MachineClientUtils.Machine machine, MachineClientUtils.CSOp operation) {
-        MachineDescriptionProtos.CSOp refbox_operation = MachineDescriptionProtos.CSOp.valueOf(operation.ordinal() + 1);
+        MachineDescriptionProtos.CSOp refbox_operation;
+        switch (operation) {
+            case RETRIEVE_CAP:
+                refbox_operation = MachineDescriptionProtos.CSOp.RETRIEVE_CAP;
+                break;
+            case MOUNT_CAP:
+                refbox_operation = MachineDescriptionProtos.CSOp.MOUNT_CAP;
+                break;
+            default:
+                throw new RuntimeException("Unsupported CS command: " + operation);
+        };
         MachineInstructionProtos.PrepareInstructionCS csInstruction =
                 MachineInstructionProtos.PrepareInstructionCS.newBuilder()
                         .setOperation(refbox_operation)
@@ -100,6 +111,16 @@ public class MachineClient {
                         .build();
         log.info("Sending PrepareCS: " + prepareMachineMsg.toString());
         log.info("ByteStringSize: " + prepareMachineMsg.getSerializedSize());
+        log.info("ByteString: " + prepareMachineMsg.toByteString().toStringUtf8());
+        try {
+            MachineInstructionProtos.PrepareMachine parsed = MachineInstructionProtos.PrepareMachine.parseFrom(prepareMachineMsg.toByteArray());
+            log.info("Parsed Sending PrepareCS: " + prepareMachineMsg.toString());
+            log.info("Parsed ByteStringSize: " + prepareMachineMsg.getSerializedSize());
+            log.info("Parsed ByteString: " + prepareMachineMsg.toByteString().toStringUtf8());
+        } catch (InvalidProtocolBufferException e) {
+            log.throwing("Error on deserialization: ", "Here1", e);
+            e.printStackTrace();
+        }
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
