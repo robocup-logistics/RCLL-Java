@@ -99,6 +99,7 @@ public class MachineClient {
                         .setInstructionCs(csInstruction)
                         .build();
         log.info("Sending PrepareCS: " + prepareMachineMsg.toString());
+        log.info("ByteStringSize: " + prepareMachineMsg.getSerializedSize());
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
