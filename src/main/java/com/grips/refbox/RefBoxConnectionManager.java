@@ -17,12 +17,16 @@
 
 package com.grips.refbox;
 
+import com.grips.protobuf_lib.RobotMessageRegister;
 import lombok.extern.apachecommons.CommonsLog;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_comm.ProtobufMessageHandler;
 import org.robocup_logistics.llsf_msgs.*;
+import org.robocup_logistics.llsf_utils.Key;
+import org.robocup_logistics.llsf_utils.NanoSecondsTimestampProvider;
 
 import java.io.IOException;
+import java.util.List;
 
 @CommonsLog
 public class RefBoxConnectionManager {
@@ -35,10 +39,9 @@ public class RefBoxConnectionManager {
     private RefboxConnection publicPeer;
     private RefboxConnection privatePeer;
 
-    RefboxConnectionConfig connectionConfig;
-
-    TeamConfig teamConfig;
-    PeerConfig usedPrivatePeer;
+    private final RefboxConnectionConfig connectionConfig;
+    private final TeamConfig teamConfig;
+    private final PeerConfig usedPrivatePeer;
 
     private int cipher_type = RefBoxConnectionManager.CIPHER_TYPE_AES_128_CBC;
 
@@ -98,6 +101,21 @@ public class RefBoxConnectionManager {
     public void sendPrivateMsg(ProtobufMessage msg) {
         log.debug("Sending public message to Refbox: " + msg.toString());
         privatePeer.getPeer().enqueue(msg);
+    }
+
+    public void sendRobotBeaconMsg(BeaconSignalProtos.BeaconSignal bs) {
+        Key key = RobotMessageRegister.getInstance().get_msg_key_from_class(BeaconSignalProtos.BeaconSignal.class);
+        this.sendPublicMsg(new ProtobufMessage(key.cmp_id, key.msg_id, bs));
+    }
+
+    public void sendExploreMachine(List<MachineReportProtos.MachineReportEntry> machineReports, TeamProtos.Team team) {
+        MachineReportProtos.MachineReport msg = MachineReportProtos.MachineReport.newBuilder()
+                .addAllMachines(machineReports)
+                .setTeamColor(team).build();
+
+        Key key = RobotMessageRegister.getInstance().get_msg_key_from_class(MachineReportProtos.MachineReport.class);
+
+        this.sendPrivateMsg(new ProtobufMessage(key.cmp_id, key.msg_id, msg));
     }
 
     private void registerBroadcastMsgs() {
