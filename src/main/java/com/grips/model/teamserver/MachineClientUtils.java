@@ -22,6 +22,8 @@ public class MachineClientUtils {
                 return MachineState.PROCESSED;
             case "WAIT-IDLE":
                 return MachineState.WAIT_IDLE;
+            case "AVAILABLE":
+                return MachineState.AVAILABLE;
         }
         if (state.equals("")) {
             return MachineState.UNDEFINED;
@@ -79,6 +81,7 @@ public class MachineClientUtils {
         PREPARED,
         PROCESSING,
         PROCESSED,
+        AVAILABLE,
         UNDEFINED
     }
 
