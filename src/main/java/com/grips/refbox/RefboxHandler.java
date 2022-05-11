@@ -2,6 +2,7 @@ package com.grips.refbox;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.apachecommons.CommonsLog;
@@ -14,6 +15,7 @@ import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
 @Setter
+@Getter
 @CommonsLog
 public class RefboxHandler implements ProtobufMessageHandler {
     private Consumer<MachineInfoProtos.MachineInfo> machineInfoCallback;

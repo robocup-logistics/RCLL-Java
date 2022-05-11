@@ -47,8 +47,8 @@ public class RefBoxConnectionManager {
 
     public RefBoxConnectionManager(RefboxConnectionConfig connectionConfig,
                                    TeamConfig teamConfig,
-                                   ProtobufMessageHandler privateHandler,
-                                   ProtobufMessageHandler publicHandler) {
+                                   RefboxHandler privateHandler,
+                                   RefboxHandler publicHandler) {
         this.connectionConfig = connectionConfig;
         this.teamConfig = teamConfig;
 
