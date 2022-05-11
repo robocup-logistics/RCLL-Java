@@ -13,6 +13,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+//todo move to refbox folder!
 @Log
 public class MachineClient {
     private final TeamColor teamColor;

@@ -1,5 +1,7 @@
 package com.grips.model.teamserver;
 
+import org.robocup_logistics.llsf_msgs.TeamProtos;
+
 public enum TeamColor {
     CYAN,
     MAGENTA;

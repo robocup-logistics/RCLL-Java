@@ -103,21 +103,6 @@ public class RefBoxConnectionManager {
         privatePeer.getPeer().enqueue(msg);
     }
 
-    public void sendRobotBeaconMsg(BeaconSignalProtos.BeaconSignal bs) {
-        Key key = RobotMessageRegister.getInstance().get_msg_key_from_class(BeaconSignalProtos.BeaconSignal.class);
-        this.sendPublicMsg(new ProtobufMessage(key.cmp_id, key.msg_id, bs));
-    }
-
-    public void sendExploreMachine(List<MachineReportProtos.MachineReportEntry> machineReports, TeamProtos.Team team) {
-        MachineReportProtos.MachineReport msg = MachineReportProtos.MachineReport.newBuilder()
-                .addAllMachines(machineReports)
-                .setTeamColor(team).build();
-
-        Key key = RobotMessageRegister.getInstance().get_msg_key_from_class(MachineReportProtos.MachineReport.class);
-
-        this.sendPrivateMsg(new ProtobufMessage(key.cmp_id, key.msg_id, msg));
-    }
-
     private void registerBroadcastMsgs() {
         publicPeer.add_message(BeaconSignalProtos.BeaconSignal.class);
         publicPeer.add_message(OrderInfoProtos.OrderInfo.class);       // Not documented but sent!
