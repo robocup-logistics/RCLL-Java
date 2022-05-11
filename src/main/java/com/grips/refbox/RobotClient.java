@@ -1,30 +1,38 @@
 package com.grips.refbox;
 
-import com.google.protobuf.GeneratedMessageV3;
-import com.grips.model.teamserver.MachineClientUtils;
 import com.grips.model.teamserver.TeamColor;
 import com.grips.protobuf_lib.RobotMessageRegister;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_msgs.BeaconSignalProtos;
-import org.robocup_logistics.llsf_msgs.RobotInfoProtos;
+import org.robocup_logistics.llsf_msgs.Pose2DProtos;
+import org.robocup_logistics.llsf_msgs.TeamProtos;
 import org.robocup_logistics.llsf_utils.Key;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class RobotClient {
     private final Map<Integer, BeaconSignalProtos.BeaconSignal> sendQueue;
+    private final TeamColor team;
 
-    public RobotClient() {
+    public RobotClient(TeamColor team) {
+        this.team = team;
         this.sendQueue = new ConcurrentHashMap<>();
     }
-
-    //todo introduce new, more simple model for beacon signal.
-    public void sendRobotBeaconMsg(BeaconSignalProtos.BeaconSignal bs) {
+    public void sendRobotBeaconMsg(int robotNumber, String robotName,
+                                   float x, float y, float yaw) {
+        BeaconSignalProtos.BeaconSignal bs = BeaconSignalProtos.BeaconSignal.newBuilder()
+                .setNumber(robotNumber)
+                .setTeamColor(TeamProtos.Team.valueOf(team.toString()))
+                .setPeerName(robotName)
+                .setPose(Pose2DProtos.Pose2D.newBuilder()
+                        .setX(x)
+                        .setY(y)
+                        .setOri(yaw)
+                        .build())
+                .build();
         this.sendQueue.put(bs.getNumber(), bs);
     }
 

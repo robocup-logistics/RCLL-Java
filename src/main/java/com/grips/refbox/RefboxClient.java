@@ -16,9 +16,7 @@ import java.util.function.Consumer;
 public class RefboxClient {
     private final RefBoxConnectionManager rbcm;
     private final MachineClient machineClient;
-
     private final RobotClient robotClient;
-
     private final ExplorationClient explorationClient;
     public RefboxClient(@NonNull RefboxConnectionConfig connectionConfig,
                         @NonNull TeamConfig teamConfig,
@@ -27,7 +25,7 @@ public class RefboxClient {
                         int sendIntervalInMs) {
         machineClient = new MachineClient(TeamColor.fromString(teamConfig.getColor()));
         explorationClient = new ExplorationClient(TeamColor.fromString(teamConfig.getColor()));
-        robotClient = new RobotClient();
+        robotClient = new RobotClient(TeamColor.fromString(teamConfig.getColor()));
         Consumer<MachineInfoProtos.MachineInfo> oldCallback = publicHandler.getMachineInfoCallback();
         publicHandler.setMachineInfoCallback(machineInfo -> {
             machineClient.update(machineInfo);
@@ -42,7 +40,7 @@ public class RefboxClient {
                 machineClient.fetchResetMessages().forEach(rbcm::sendPrivateMsg);
                 robotClient.fetchBeaconSignals().forEach(rbcm::sendPrivateMsg);
                 robotClient.clearBeaconSignals();
-                explorationClient.fetchExplorationMsgs().forEach(rbcm::sendPrivateMsg);
+                explorationClient.fetchExplorationMsg().forEach(rbcm::sendPrivateMsg);
                 explorationClient.clearExploraionMsgs();
             }
         }, 0, sendIntervalInMs);
