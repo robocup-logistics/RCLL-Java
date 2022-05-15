@@ -45,4 +45,9 @@ public class RefboxClient {
             }
         }, 0, sendIntervalInMs);
     }
+
+    public void startServer() {
+        this.rbcm.startServer();
+        log.info("Started RefboxPeer connection!");
+    }
 }
