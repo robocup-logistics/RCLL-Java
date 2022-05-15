@@ -1,11 +1,11 @@
 package com.grips.refbox;
 
-import com.grips.model.teamserver.MachineClient;
-import com.grips.model.teamserver.TeamColor;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.grips.model.teamserver.*;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.apachecommons.CommonsLog;
-import org.robocup_logistics.llsf_msgs.MachineInfoProtos;
+import org.robocup_logistics.llsf_msgs.*;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,6 +18,7 @@ public class RefboxClient {
     private final MachineClient machineClient;
     private final RobotClient robotClient;
     private final ExplorationClient explorationClient;
+
     public RefboxClient(@NonNull RefboxConnectionConfig connectionConfig,
                         @NonNull TeamConfig teamConfig,
                         @NonNull RefboxHandler privateHandler,
@@ -49,5 +50,38 @@ public class RefboxClient {
     public void startServer() {
         this.rbcm.startServer();
         log.info("Started RefboxPeer connection!");
+    }
+
+    public void sendBeaconSignal(int robotNumber, String robotName,
+                                 float x, float y, float yaw) {
+        this.robotClient.sendRobotBeaconMsg(robotNumber, robotName, x, y, yaw);
+    }
+
+    public void sendReportMachine(MachineName machineName, ZoneName zone, int rotation) {
+        this.explorationClient.sendExploreMachine(machineName, zone, rotation);
+    }
+
+    public void sendResetMachine(MachineClientUtils.Machine machine) {
+        this.machineClient.sendResetMachine(machine);
+    }
+
+    public void sendPrepareBS(MachineClientUtils.MachineSide side, MachineClientUtils.BaseColor base_color) {
+        this.machineClient.sendPrepareBS(side, base_color);
+    }
+
+    public void sendPrepareDS(int gate, int orderId) {
+        this.machineClient.sendPrepareDS(gate, orderId);
+    }
+
+    public void sendPrepareRS(MachineClientUtils.Machine machine, MachineClientUtils.RingColor ringColor) {
+        this.machineClient.sendPrepareRS(machine, ringColor);
+    }
+
+    public void sendPrepareCS(MachineClientUtils.Machine machine, MachineClientUtils.CSOp operation) {
+        this.machineClient.sendPrepareCS(machine, operation);
+    }
+
+    public void sendPrepareSS(MachineClientUtils.Machine machine, int shelf, int slot) {
+        this.machineClient.sendPrepareSS(machine, shelf, slot);
     }
 }
