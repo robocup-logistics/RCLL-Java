@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class RobotClient {
+class RobotClient {
     private final Map<Integer, BeaconSignalProtos.BeaconSignal> sendQueue;
     private final TeamColor team;
 

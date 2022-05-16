@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 
 //todo move to refbox folder!
 @Log
-public class MachineClient {
+public
+class MachineClient {
     private final TeamColor teamColor;
     private final Map<MachineClientUtils.Machine, GeneratedMessageV3> sendQueue;
     private final Map<MachineClientUtils.Machine, MachineClientUtils.MachineState> machineStatuse;
@@ -171,7 +172,7 @@ public class MachineClient {
         log.info("States after update: " + machineStatuse.toString());
     }
 
-    private void updateMachineState(MachineInfoProtos.MachineInfo info) {
+    public void updateMachineState(MachineInfoProtos.MachineInfo info) {
         if (info.hasTeamColor()) {
             if (TeamProtos.Team.CYAN.equals(info.getTeamColor()) && this.teamColor.equals(TeamColor.CYAN)) {
                 info.getMachinesList().forEach(this::updateMachineStatus);
@@ -184,7 +185,7 @@ public class MachineClient {
     }
 
     //todo check if remove conditions are correct!.
-    private void updateMessages() {
+    public void updateMessages() {
         fetchMachinesPreparing().stream()
                 .filter(machineStatuse::containsKey)
                 .filter(sendQueue::containsKey)

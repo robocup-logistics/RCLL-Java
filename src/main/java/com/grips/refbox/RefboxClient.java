@@ -12,7 +12,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
-@Getter
 @CommonsLog
 public class RefboxClient {
     private final RefBoxConnectionManager rbcm;
@@ -88,5 +87,10 @@ public class RefboxClient {
 
     public Optional<MachineClientUtils.MachineState> getStateForMachine(MachineClientUtils.Machine machine) {
         return this.machineClient.getStateForMachine(machine);
+    }
+
+    public void updateMachineStates(MachineInfoProtos.MachineInfo info) {
+        this.machineClient.updateMachineState(info);
+        this.machineClient.updateMessages();
     }
 }
