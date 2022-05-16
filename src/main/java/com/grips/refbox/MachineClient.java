@@ -1,8 +1,10 @@
-package com.grips.model.teamserver;
+package com.grips.refbox;
 
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.grips.model.teamserver.MachineClientUtils;
+import com.grips.model.teamserver.TeamColor;
 import com.grips.protobuf_lib.RobotMessageRegister;
 import lombok.extern.java.Log;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
@@ -15,7 +17,6 @@ import java.util.stream.Collectors;
 
 //todo move to refbox folder!
 @Log
-public
 class MachineClient {
     private final TeamColor teamColor;
     private final Map<MachineClientUtils.Machine, GeneratedMessageV3> sendQueue;

@@ -1,8 +1,6 @@
 package com.grips.refbox;
 
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.grips.model.teamserver.*;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.apachecommons.CommonsLog;
 import org.robocup_logistics.llsf_msgs.*;
@@ -26,7 +24,7 @@ public class RefboxClient {
                         int sendIntervalInMs) {
         machineClient = new MachineClient(TeamColor.fromString(teamConfig.getColor()));
         explorationClient = new ExplorationClient(TeamColor.fromString(teamConfig.getColor()));
-        robotClient = new RobotClient(TeamColor.fromString(teamConfig.getColor()));
+        robotClient = new RobotClient(TeamColor.fromString(teamConfig.getColor()), teamConfig.getName());
         Consumer<MachineInfoProtos.MachineInfo> oldCallback = publicHandler.getMachineInfoCallback();
         publicHandler.setMachineInfoCallback(machineInfo -> {
             machineClient.update(machineInfo);

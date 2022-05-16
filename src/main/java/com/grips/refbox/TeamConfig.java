@@ -12,4 +12,5 @@ import lombok.Setter;
 public class TeamConfig {
     private String cryptoKey;
     private String color;
+    private String name;
 }

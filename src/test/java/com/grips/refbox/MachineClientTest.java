@@ -1,9 +1,7 @@
-package com.grips.model.teamserver;
+package com.grips.refbox;
 
-import com.grips.refbox.PeerConfig;
-import com.grips.refbox.RefBoxConnectionManager;
-import com.grips.refbox.RefboxConnectionConfig;
-import com.grips.refbox.TeamConfig;
+import com.grips.model.teamserver.MachineClientUtils;
+import com.grips.refbox.*;
 import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
 import org.junit.jupiter.api.Disabled;
@@ -40,7 +38,7 @@ class MachineClientTest {
                                 new PeerConfig(4444, 4445),
                                 new PeerConfig(4441, 4446),
                                 new PeerConfig(4442, 4447)),
-                        new TeamConfig("randomkey", "CYAN"),
+                        new TeamConfig("randomkey", "CYAN", "GRIPS"),
                         null,
                         null);
         try {
