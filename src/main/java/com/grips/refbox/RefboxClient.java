@@ -7,6 +7,7 @@ import lombok.NonNull;
 import lombok.extern.apachecommons.CommonsLog;
 import org.robocup_logistics.llsf_msgs.*;
 
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
@@ -83,5 +84,9 @@ public class RefboxClient {
 
     public void sendPrepareSS(MachineClientUtils.Machine machine, int shelf, int slot) {
         this.machineClient.sendPrepareSS(machine, shelf, slot);
+    }
+
+    public Optional<MachineClientUtils.MachineState> getStateForMachine(MachineClientUtils.Machine machine) {
+        return this.machineClient.getStateForMachine(machine);
     }
 }
