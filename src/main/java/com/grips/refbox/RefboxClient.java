@@ -22,6 +22,17 @@ public class RefboxClient {
                         @NonNull RefboxHandler privateHandler,
                         @NonNull RefboxHandler publicHandler,
                         int sendIntervalInMs) {
+        this(connectionConfig, teamConfig, privateHandler, publicHandler, sendIntervalInMs,
+                new RefBoxConnectionManager(connectionConfig, teamConfig, privateHandler, publicHandler));
+    }
+
+    RefboxClient(@NonNull RefboxConnectionConfig connectionConfig,
+                        @NonNull TeamConfig teamConfig,
+                        @NonNull RefboxHandler privateHandler,
+                        @NonNull RefboxHandler publicHandler,
+                        int sendIntervalInMs,
+                        RefBoxConnectionManager rbcm) {
+        this.rbcm = rbcm;
         machineClient = new MachineClient(TeamColor.fromString(teamConfig.getColor()));
         explorationClient = new ExplorationClient(TeamColor.fromString(teamConfig.getColor()));
         robotClient = new RobotClient(TeamColor.fromString(teamConfig.getColor()), teamConfig.getName());
@@ -30,7 +41,6 @@ public class RefboxClient {
             machineClient.update(machineInfo);
             oldCallback.accept(machineInfo);
         });
-        rbcm = new RefBoxConnectionManager(connectionConfig, teamConfig, privateHandler, publicHandler);
         t = new Timer();
         t.schedule(new TimerTask() {
             @Override

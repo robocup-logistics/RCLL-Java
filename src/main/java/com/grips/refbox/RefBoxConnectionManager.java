@@ -99,7 +99,7 @@ public class RefBoxConnectionManager {
     }
 
     public void sendPrivateMsg(ProtobufMessage msg) {
-        log.debug("Sending public message to Refbox: " + msg.toString());
+        log.debug("Sending private message to Refbox: " + msg.toString());
         privatePeer.getPeer().enqueue(msg);
     }
 
