@@ -310,7 +310,7 @@ public class ProtobufUpdBroadcastConnection implements ProtobufConnection {
 				e.printStackTrace();
 			}
 		} else {
-			System.err.println("Socket not yet created!");
+			log.error("Socket not yet created!");
 		}
 	}
 	

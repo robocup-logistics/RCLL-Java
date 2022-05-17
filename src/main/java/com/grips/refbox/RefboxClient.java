@@ -16,7 +16,7 @@ public class RefboxClient {
     private final MachineClient machineClient;
     private final RobotClient robotClient;
     private final ExplorationClient explorationClient;
-
+    private final Timer t;
     public RefboxClient(@NonNull RefboxConnectionConfig connectionConfig,
                         @NonNull TeamConfig teamConfig,
                         @NonNull RefboxHandler privateHandler,
@@ -31,7 +31,7 @@ public class RefboxClient {
             oldCallback.accept(machineInfo);
         });
         rbcm = new RefBoxConnectionManager(connectionConfig, teamConfig, privateHandler, publicHandler);
-        Timer t = new Timer();
+        t = new Timer();
         t.schedule(new TimerTask() {
             @Override
             public void run() {
