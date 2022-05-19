@@ -34,6 +34,9 @@ class ExplorationClient {
     }
 
     public List<ProtobufMessage> fetchExplorationMsg() {
+        if (this.sendQueue.isEmpty()) {
+            return Collections.emptyList();
+        }
         MachineReportProtos.MachineReport msg = MachineReportProtos.MachineReport.newBuilder()
                 .addAllMachines(this.sendQueue.values())
                 .setTeamColor(TeamProtos.Team.valueOf(team.toString())).build();
