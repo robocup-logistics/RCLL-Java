@@ -1,13 +1,13 @@
 package com.grips.refbox;
 
+import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Level;
 import org.junit.jupiter.api.Test;
-import org.mockito.verification.VerificationMode;
 
-import static com.grips.model.teamserver.TeamColor.CYAN;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@Log4j2
 public class RefboxClientTest {
     @Test
     public void testSendBeaconSignal() throws InterruptedException {
@@ -21,6 +21,11 @@ public class RefboxClientTest {
                 new RefboxHandler(),
                 new RefboxHandler(),
                 100, rbcm);
+        log.debug("DEBUG123");
+        log.info("INFO123");
+        log.warn("WARN123");
+        log.error("ERROR123");
+        System.out.println("TEST123");
         verify(rbcm, times(0)).sendPrivateMsg(any());
         refboxClient.sendBeaconSignal(1, "name", 1.0f, 2.0f, 90f);
         Thread.sleep(500);

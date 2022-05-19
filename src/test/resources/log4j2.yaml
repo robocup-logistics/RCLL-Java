@@ -1,0 +1,41 @@
+Configuration:
+  status: warn
+  name: GripsJava
+  properties:
+    property:
+      name: filename
+      value: build/test-yaml.log
+  thresholdFilter:
+    level: debug
+  appenders:
+    Console:
+      name: STDOUT
+      target: SYSTEM_OUT
+      PatternLayout:
+        Pattern: "%m%n"
+    File:
+      name: File
+      fileName: ${filename}
+      PatternLayout:
+        Pattern: "%d %p %C{1.} [%t] %m%n"
+      Filters:
+        ThresholdFilter:
+          level: debug
+
+  Loggers:
+    logger:
+      -
+        name: org.grips
+        level: debug
+        additivity: false
+        ThreadContextMapFilter:
+          KeyValuePair:
+            key: test
+            value: 123
+        AppenderRef:
+          ref: File
+    Root:
+      level: debug
+      AppenderRef:
+       - ref: File
+       - ref: STDOUT

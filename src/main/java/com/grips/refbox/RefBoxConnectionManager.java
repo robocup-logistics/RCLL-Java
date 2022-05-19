@@ -17,16 +17,11 @@
 
 package com.grips.refbox;
 
-import com.grips.protobuf_lib.RobotMessageRegister;
 import lombok.extern.apachecommons.CommonsLog;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
-import org.robocup_logistics.llsf_comm.ProtobufMessageHandler;
 import org.robocup_logistics.llsf_msgs.*;
-import org.robocup_logistics.llsf_utils.Key;
-import org.robocup_logistics.llsf_utils.NanoSecondsTimestampProvider;
 
 import java.io.IOException;
-import java.util.List;
 
 @CommonsLog
 public class RefBoxConnectionManager {

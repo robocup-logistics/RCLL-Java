@@ -3,6 +3,7 @@ package com.grips.refbox;
 import com.grips.model.teamserver.*;
 import lombok.NonNull;
 import lombok.extern.apachecommons.CommonsLog;
+import lombok.extern.log4j.Log4j2;
 import org.robocup_logistics.llsf_msgs.*;
 
 import java.util.Optional;
@@ -10,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
-@CommonsLog
+@Log4j2
 public class RefboxClient {
     private final RefBoxConnectionManager rbcm;
     private final MachineClient machineClient;
@@ -45,7 +46,7 @@ public class RefboxClient {
         t.schedule(new TimerTask() {
             @Override
             public void run() {
-                log.info("Sending data....");
+                log.debug("Sending data....");
                 machineClient.fetchPrepareMessages().forEach(rbcm::sendPrivateMsg);
                 machineClient.fetchResetMessages().forEach(rbcm::sendPrivateMsg);
                 robotClient.fetchBeaconSignals().forEach(rbcm::sendPrivateMsg);
