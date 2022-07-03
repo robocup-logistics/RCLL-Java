@@ -4,6 +4,7 @@ import com.grips.model.teamserver.MachineName;
 import com.grips.model.teamserver.TeamColor;
 import com.grips.model.teamserver.ZoneName;
 import com.grips.protobuf_lib.RobotMessageRegister;
+import lombok.extern.log4j.Log4j2;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_msgs.MachineReportProtos;
 import org.robocup_logistics.llsf_msgs.TeamProtos;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Log4j2
 class ExplorationClient {
     private final Map<MachineName, MachineReportProtos.MachineReportEntry> sendQueue;
     private final TeamColor team;
@@ -40,6 +42,7 @@ class ExplorationClient {
         MachineReportProtos.MachineReport msg = MachineReportProtos.MachineReport.newBuilder()
                 .addAllMachines(this.sendQueue.values())
                 .setTeamColor(TeamProtos.Team.valueOf(team.toString())).build();
+        log.info("ExplorationMessages: " + msg.toString());
         Key key = RobotMessageRegister.getInstance().get_msg_key_from_class(MachineReportProtos.MachineReport.class);
         return Collections.singletonList(new ProtobufMessage(key.cmp_id, key.msg_id, msg));
     }
