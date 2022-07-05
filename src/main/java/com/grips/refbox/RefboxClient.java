@@ -18,6 +18,9 @@ public class RefboxClient {
     private final RobotClient robotClient;
     private final ExplorationClient explorationClient;
     private final Timer t;
+
+    boolean inProduction;
+
     public RefboxClient(@NonNull RefboxConnectionConfig connectionConfig,
                         @NonNull TeamConfig teamConfig,
                         @NonNull RefboxHandler privateHandler,
@@ -25,14 +28,15 @@ public class RefboxClient {
                         int sendIntervalInMs) {
         this(connectionConfig, teamConfig, privateHandler, publicHandler, sendIntervalInMs,
                 new RefBoxConnectionManager(connectionConfig, teamConfig, privateHandler, publicHandler));
+        inProduction = false;
     }
 
     RefboxClient(@NonNull RefboxConnectionConfig connectionConfig,
-                        @NonNull TeamConfig teamConfig,
-                        @NonNull RefboxHandler privateHandler,
-                        @NonNull RefboxHandler publicHandler,
-                        int sendIntervalInMs,
-                        RefBoxConnectionManager rbcm) {
+                 @NonNull TeamConfig teamConfig,
+                 @NonNull RefboxHandler privateHandler,
+                 @NonNull RefboxHandler publicHandler,
+                 int sendIntervalInMs,
+                 RefBoxConnectionManager rbcm) {
         this.rbcm = rbcm;
         machineClient = new MachineClient(TeamColor.fromString(teamConfig.getColor()));
         explorationClient = new ExplorationClient(TeamColor.fromString(teamConfig.getColor()));
@@ -41,6 +45,7 @@ public class RefboxClient {
         publicHandler.setMachineInfoCallback(machineInfo -> {
             machineClient.update(machineInfo);
             oldCallback.accept(machineInfo);
+            inProduction = true;
         });
         t = new Timer();
         t.schedule(new TimerTask() {
@@ -51,8 +56,9 @@ public class RefboxClient {
                 machineClient.fetchResetMessages().forEach(rbcm::sendPrivateMsg);
                 robotClient.fetchBeaconSignals().forEach(rbcm::sendPrivateMsg);
                 robotClient.clearBeaconSignals();
-                explorationClient.fetchExplorationMsg().forEach(rbcm::sendPrivateMsg);
-                explorationClient.clearExploraionMsgs();
+                if (!inProduction) {
+                    explorationClient.fetchExplorationMsg().forEach(rbcm::sendPrivateMsg);
+                }
             }
         }, 0, sendIntervalInMs);
     }
