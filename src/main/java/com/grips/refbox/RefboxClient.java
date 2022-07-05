@@ -51,7 +51,7 @@ public class RefboxClient {
         t.schedule(new TimerTask() {
             @Override
             public void run() {
-                log.info("Sending data....");
+                log.debug("Sending data....");
                 machineClient.fetchPrepareMessages().forEach(rbcm::sendPrivateMsg);
                 machineClient.fetchResetMessages().forEach(rbcm::sendPrivateMsg);
                 robotClient.fetchBeaconSignals().forEach(rbcm::sendPrivateMsg);
