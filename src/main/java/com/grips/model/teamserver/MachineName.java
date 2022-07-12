@@ -37,12 +37,28 @@ public class MachineName {
         return this.rawMachineName.contains("CS");
     }
 
+    public boolean isCapStation1() {
+        return this.rawMachineName.contains("CS1");
+    }
+
+    public boolean isCapStation2() {
+        return this.rawMachineName.contains("CS2");
+    }
+
     public boolean isBaseStation() {
         return this.rawMachineName.contains("BS");
     }
 
     public boolean isRingStation() {
         return this.rawMachineName.contains("RS");
+    }
+
+    public boolean isRingStation1() {
+        return this.rawMachineName.contains("RS1");
+    }
+
+    public boolean isRingStation2() {
+        return this.rawMachineName.contains("RS2");
     }
 
     public boolean isDeliveryStation() {
