@@ -42,7 +42,7 @@ class ExplorationClient {
         MachineReportProtos.MachineReport msg = MachineReportProtos.MachineReport.newBuilder()
                 .addAllMachines(this.sendQueue.values())
                 .setTeamColor(TeamProtos.Team.valueOf(team.toString())).build();
-        log.info("ExplorationMessages: " + msg.toString());
+        log.debug("ExplorationMessages: " + msg.toString());
         Key key = RobotMessageRegister.getInstance().get_msg_key_from_class(MachineReportProtos.MachineReport.class);
         return Collections.singletonList(new ProtobufMessage(key.cmp_id, key.msg_id, msg));
     }
