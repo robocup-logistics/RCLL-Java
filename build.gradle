@@ -4,8 +4,8 @@ plugins {
     id "com.google.protobuf" version "0.8.14"
 }
 
-group = 'grips'
-version = '0.0.87'
+group = 'rcll-java'
+version = '0.1.0'
 
 description = """"""
 
@@ -13,51 +13,45 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-     maven { url "https://gitlab.com/api/v4/projects/14813135/packages/maven" }
-     maven { url "https://repo.maven.apache.org/maven2" }
+    maven { url "https://repo.maven.apache.org/maven2" }
 }
 dependencies {
-    compile group: 'com.google.protobuf', name: 'protobuf-java', version:'3.11.4'
-    compile 'org.apache.logging.log4j:log4j-api:2.17.2'
-    compile 'org.apache.logging.log4j:log4j-core:2.17.2'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.3'
-    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.10.3'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
+    implementation group: 'com.google.protobuf', name: 'protobuf-java', version:'3.11.4'
+    implementation 'org.apache.logging.log4j:log4j-api:2.17.2'
+    implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.3'
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.10.3'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
 
     // https://mvnrepository.com/artifact/commons-logging/commons-logging
-    compile group: 'commons-logging', name: 'commons-logging', version: '1.1.1'
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:'5.5.2'
-    testCompile group: 'org.assertj', name: 'assertj-core', version:'3.15.0'
+    implementation group: 'commons-logging', name: 'commons-logging', version: '1.1.1'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:'5.5.2'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version:'3.15.0'
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
-    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testImplementation 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
     // https://mvnrepository.com/artifact/org.assertj/assertj-core
-    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.15.0'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.15.0'
 
 }
 
 publishing {
-    publications {
-        mavenJava(MavenPublication) { from project.components.java }
-    }
     repositories {
         maven {
-            url "https://gitlab.com/api/v4/projects/14813135/packages/maven"
-            credentials(HttpHeaderCredentials) {
-                if (project.hasProperty('jobToken')) {
-                    name = "Job-Token"
-                    value = project.property('jobToken')
-                } else {
-                    name = "Private-Token"
-                    value = "REPLACE_WITH_YOUR_PERSONAL_ACCESS_TOKEN"
-                }
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/pkohout/rcll-java")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
             }
-            authentication {
-                header(HttpHeaderAuthentication)
-            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
         }
     }
 }
@@ -90,7 +84,7 @@ sourceSets {
         java {
             srcDir 'src/generated/main/java'
             dependencies {
-                compile group: 'com.google.protobuf', name: 'protobuf-java', version:'3.11.4'
+                implementation group: 'com.google.protobuf', name: 'protobuf-java', version:'3.11.4'
             }
         }
     }
@@ -109,14 +103,6 @@ sourceSets {
         }
     }
 }
-
-tasks.build.doFirst {delete2014Folder}
-task delete2014Folder(type:Exec) {
-    println "Deleting: " + new File(".").absolutePath + "/rcll-refbox/src/msgs/2014"
-    delete (new File(".").absolutePath + "/rcll-refbox/src/msgs/2014/")
-    println "Finished delete2014Folder"
-}
-
 
 tasks.clean.doFirst {deleteGeneratedSourceSet}
 task deleteGeneratedSourceSet {
