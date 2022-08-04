@@ -7,7 +7,7 @@ plugins {
 group = 'rcll-java'
 version = '0.1.0'
 
-description = """"""
+description = ""
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
