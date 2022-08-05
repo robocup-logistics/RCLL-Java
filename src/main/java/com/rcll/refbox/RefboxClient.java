@@ -1,6 +1,5 @@
 package com.rcll.refbox;
 
-import com.grips.model.teamserver.*;
 import com.rcll.domain.MachineClientUtils;
 import com.rcll.domain.MachineName;
 import com.rcll.domain.TeamColor;
