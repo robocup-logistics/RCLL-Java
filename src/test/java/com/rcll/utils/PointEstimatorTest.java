@@ -1,6 +1,6 @@
 package com.rcll.utils;
 
-import com.rcll.java.model.teamserver.Base;
+import com.rcll.domain.Base;
 import com.rcll.domain.Cap;
 import com.rcll.domain.Order;
 import com.rcll.domain.ProductionPointsConfig;
