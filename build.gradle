@@ -4,7 +4,7 @@ plugins {
     id "com.google.protobuf" version "0.8.14"
 }
 
-group = 'rcll'
+group = 'io.github.robocup-logistics'
 version = '0.1.0'
 
 description = ""
