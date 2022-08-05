@@ -9,8 +9,8 @@ version = '0.1.0'
 
 description = ""
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
 
 repositories {
     maven { url "https://repo.maven.apache.org/maven2" }
@@ -61,7 +61,7 @@ protobuf {
     generatedFilesBaseDir = "$projectDir/src/generated"
     protoc {
         // Download from repositories
-        artifact = 'com.google.protobuf:protoc:3.11.4'
+        artifact = 'com.google.protobuf:protoc:3.16.1'
     }
     generateProtoTasks {
         all().each { task ->
@@ -84,7 +84,7 @@ sourceSets {
         java {
             srcDir 'src/generated/main/java'
             dependencies {
-                implementation group: 'com.google.protobuf', name: 'protobuf-java', version:'3.16.1'
+                compile group: 'com.google.protobuf', name: 'protobuf-java', version:'3.16.1'
             }
         }
     }

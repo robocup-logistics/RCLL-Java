@@ -37,11 +37,11 @@ class MachineClientTest {
                                 new PeerConfig(4444, 4445),
                                 new PeerConfig(4441, 4446),
                                 new PeerConfig(4442, 4447)),
-                        new TeamConfig("randomkey", "CYAN", "GRIPS"),
+                        new TeamConfig("randomkey", "GRIPS"),
                         null,
                         null);
         try {
-            rbcm.startServer();
+            rbcm.startPublicServer();
             log.info("Started RefBoxConnectionManager Servers!");
         } catch (Exception e) {
             log.error("Error starting RefboxConnectionManager - is the refbox running?", e);

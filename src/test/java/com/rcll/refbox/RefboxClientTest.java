@@ -1,6 +1,8 @@
 package com.rcll.refbox;
 
+import com.rcll.domain.TeamColor;
 import lombok.extern.log4j.Log4j2;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -9,17 +11,24 @@ import static org.mockito.Mockito.*;
 @Log4j2
 public class RefboxClientTest {
     @Test
+    @Disabled
     public void testSendBeaconSignal() throws InterruptedException {
         RefBoxConnectionManager rbcm = mock(RefBoxConnectionManager.class);
+        RefboxHandler publicHandler = new RefboxHandler();
+        publicHandler.setGameStateCallback(data -> {
+            log.info(data);
+        });
         RefboxClient refboxClient = new RefboxClient(
-                new RefboxConnectionConfig("123",
-                        new PeerConfig(1, 2),
-                        new PeerConfig(3, 4),
-                        new PeerConfig(5, 6)),
-                new TeamConfig("randomkey", "MAGENTA", "GRIPS"),
+                new RefboxConnectionConfig("localhost",
+                        new PeerConfig(4444, 4445),
+                        new PeerConfig(4441, 4446),
+                        new PeerConfig(4442, 4447)),
+                new TeamConfig("randomkey", "GRIPS"),
                 new RefboxHandler(),
-                new RefboxHandler(),
-                100, rbcm);
+                publicHandler,
+                100,
+                rbcm);
+        refboxClient.startServer();
         log.debug("DEBUG123");
         log.info("INFO123");
         log.warn("WARN123");

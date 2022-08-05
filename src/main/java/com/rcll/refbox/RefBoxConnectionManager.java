@@ -17,6 +17,7 @@
 
 package com.rcll.refbox;
 
+import com.rcll.domain.TeamColor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_msgs.*;
@@ -35,9 +36,8 @@ public class RefBoxConnectionManager {
     private RefboxConnection privatePeer;
 
     private final RefboxConnectionConfig connectionConfig;
+    private final RefboxHandler privateHandler;
     private final TeamConfig teamConfig;
-    private final PeerConfig usedPrivatePeer;
-
     private int cipher_type = RefBoxConnectionManager.CIPHER_TYPE_AES_128_CBC;
 
     public RefBoxConnectionManager(RefboxConnectionConfig connectionConfig,
@@ -45,27 +45,35 @@ public class RefBoxConnectionManager {
                                    RefboxHandler privateHandler,
                                    RefboxHandler publicHandler) {
         this.connectionConfig = connectionConfig;
+        this.privateHandler = privateHandler;
         this.teamConfig = teamConfig;
 
         publicPeer = new RefboxConnection(connectionConfig.getIp(),
                 connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort(), publicHandler);
-        if (teamConfig.getColor().equals("CYAN")) {
-            usedPrivatePeer = connectionConfig.getCyanPeer();
-        } else if (teamConfig.getColor().equals("MAGENTA")) {
-            usedPrivatePeer = connectionConfig.getMagentaPeer();
-        } else {
-            throw new RuntimeException("Invalid team color: " + teamConfig.getColor());
-        }
-
-        privatePeer = new RefboxConnection(connectionConfig.getIp(), usedPrivatePeer.getSendPort(),
-                usedPrivatePeer.getReceivePort(), privateHandler, true, cipher_type, teamConfig.getCryptoKey());
     }
 
 
-    public void startServer() {
+    public void startPublicServer() {
         startPublicPeer();
+        log.info("Successfully started public Peer!");
+    }
+
+    public void startPrivateServer(TeamColor color) {
+        PeerConfig usedPrivatePeer;
+        switch (color) {
+            case CYAN:
+                usedPrivatePeer = connectionConfig.getCyanPeer();
+                break;
+            case MAGENTA:
+                usedPrivatePeer = connectionConfig.getMagentaPeer();
+                break;
+            default:
+                throw new RuntimeException("Invalid team color: " + color);
+        }
+        privatePeer = new RefboxConnection(connectionConfig.getIp(), usedPrivatePeer.getSendPort(),
+                usedPrivatePeer.getReceivePort(), privateHandler, true, cipher_type, teamConfig.getCryptoKey());
         startPrivatePeer();
-        log.info("Successfully create RefBoxConnectionManager!");
+        log.info("Successfully started private Peer for color: [" + color + "]!");
     }
 
     private void startPrivatePeer() {

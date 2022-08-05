@@ -1,5 +1,6 @@
 package com.rcll.refbox;
 
+import com.rcll.domain.TeamColor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TeamConfig {
     private String cryptoKey;
-    private String color;
     private String name;
 }
