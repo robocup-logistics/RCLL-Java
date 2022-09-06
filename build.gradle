@@ -54,8 +54,6 @@ publishing {
                 username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
                 password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
             }
-            groupId = 'io.github.robocup-logistics'
-            artifactId = 'rcll-java'
         }
     }
     publications {
@@ -72,11 +70,11 @@ uploadArchives {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
             repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: kohout, password: Hvnkeh1994)
+                authentication(userName: ossrhUsername, password: ossrhPassword)
             }
 
             snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: kohout, password: Hvnkeh194)
+                authentication(userName: ossrhUsername, password: ossrhPassword)
             }
 
             pom.project {
