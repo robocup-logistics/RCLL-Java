@@ -2,9 +2,12 @@ plugins {
     id "java"
     id "maven-publish"
     id "com.google.protobuf" version "0.8.14"
+    id "maven"
+    id "signing"
 }
 
 group = 'io.github.robocup-logistics'
+archivesBaseName = "java-sdk"
 version = '0.1.0'
 
 description = ""
@@ -38,6 +41,10 @@ dependencies {
 
 }
 
+signing {
+    sign publishing.publications
+}
+
 publishing {
     repositories {
         maven {
@@ -47,11 +54,59 @@ publishing {
                 username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
                 password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
             }
+            groupId = 'io.github.robocup-logistics'
+            artifactId = 'rcll-java'
         }
     }
     publications {
         gpr(MavenPublication) {
             from(components.java)
+        }
+    }
+}
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: kohout, password: Hvnkeh1994)
+            }
+
+            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: kohout, password: Hvnkeh194)
+            }
+
+            pom.project {
+                name 'java-sdk'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'A Java Library for the RoboCup Logistis Leauge.'
+                url 'https://ll.robocup.org/'
+
+                scm {
+                    connection 'scm:svn:http://foo.googlecode.com/svn/trunk/'
+                    developerConnection 'scm:svn:https://foo.googlecode.com/svn/trunk/'
+                    url 'http://foo.googlecode.com/svn/trunk/'
+                }
+
+                licenses {
+                    license {
+                        name 'GNU General Public License 3'
+                        url 'https://www.gnu.org/licenses/gpl-3.0.de.html'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'Kohout'
+                        name 'Peter Kohout'
+                        email 'peter.kohout@student.tugraz.at'
+                    }
+                }
+            }
         }
     }
 }
