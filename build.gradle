@@ -1,8 +1,8 @@
 plugins {
     id "java"
-    id "maven-publish"
     id "com.google.protobuf" version "0.8.14"
     id "maven"
+    id "maven-publish"
     id "signing"
 }
 
@@ -47,6 +47,7 @@ signing {
 
 publishing {
     repositories {
+        /*
         maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/robocup-logistics/rcll-java")
@@ -55,54 +56,51 @@ publishing {
                 password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
             }
         }
+        */
+        maven {
+            name = "Staging"
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
+        }
+/*
+        maven {
+            name = "Snapshot"
+            url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
+        }*/
     }
     publications {
         gpr(MavenPublication) {
             from(components.java)
         }
-    }
-}
-
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            pom.project {
-                name 'java-sdk'
-                packaging 'jar'
-                // optionally artifactId can be defined here
-                description 'A Java Library for the RoboCup Logistis Leauge.'
-                url 'https://ll.robocup.org/'
-
-                scm {
-                    connection 'scm:svn:http://foo.googlecode.com/svn/trunk/'
-                    developerConnection 'scm:svn:https://foo.googlecode.com/svn/trunk/'
-                    url 'http://foo.googlecode.com/svn/trunk/'
-                }
-
+        mavenJava(MavenPublication) {
+            pom {
+                name = 'Java SDK'
+                description = 'Java SDK for the RoboCup Logistics League'
+                url = 'https://ll.robocup.org/'
                 licenses {
                     license {
-                        name 'GNU General Public License 3'
-                        url 'https://www.gnu.org/licenses/gpl-3.0.de.html'
+                        name = 'GNU General Public License 3'
+                        url = 'https://www.gnu.org/licenses/gpl-3.0.de.html'
                     }
                 }
-
                 developers {
                     developer {
-                        id 'Kohout'
-                        name 'Peter Kohout'
-                        email 'peter.kohout@student.tugraz.at'
+                        id = 'pkohout'
+                        name = 'Peter Kohout'
+                        email = 'peter.kohout@student.tugraz.at'
                     }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com:grips-robocup/aruco_ros.git'
+                    developerConnection = 'scm:git:ssh://github.com:grips-robocup/aruco_ros.git'
+                    url = 'https://github.com/robocup-logistics/rcll-java'
                 }
             }
         }
@@ -166,4 +164,10 @@ task deleteGeneratedSourceSet {
 
 test {
     useJUnitPlatform()
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
 }
