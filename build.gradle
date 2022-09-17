@@ -28,10 +28,10 @@ dependencies {
 
     // https://mvnrepository.com/artifact/commons-logging/commons-logging
     implementation group: 'commons-logging', name: 'commons-logging', version: '1.1.1'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:'5.5.2'
-    testImplementation group: 'org.assertj', name: 'assertj-core', version:'3.15.0'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.15.0'
 
-    compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.18.12'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testImplementation 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
@@ -42,7 +42,9 @@ dependencies {
 }
 
 signing {
-    sign publishing.publications
+    if (project.hasProperty("signing.keyId")) {
+        sign publishing.publications
+    }
 }
 
 publishing {
@@ -59,8 +61,8 @@ publishing {
             name = "Staging"
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
-                username = ossrhUsername
-                password = ossrhPassword
+                username = project.findProperty("ossrhUsername")
+                password = project.findProperty("ossrhPassword")
             }
         }
 /*
@@ -133,7 +135,7 @@ sourceSets {
         java {
             srcDir 'src/generated/main/java'
             dependencies {
-                compile group: 'com.google.protobuf', name: 'protobuf-java', version:'3.16.1'
+                compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.16.1'
             }
         }
     }
@@ -153,7 +155,7 @@ sourceSets {
     }
 }
 
-tasks.clean.doFirst {deleteGeneratedSourceSet}
+tasks.clean.doFirst { deleteGeneratedSourceSet }
 task deleteGeneratedSourceSet {
     println "Deleting: " + new File(".").absolutePath + "/src/generated/"
     delete new File(".").absolutePath + "/src/generated/"
@@ -165,7 +167,7 @@ test {
 }
 
 javadoc {
-    if(JavaVersion.current().isJava9Compatible()) {
+    if (JavaVersion.current().isJava9Compatible()) {
         options.addBooleanOption('html5', true)
     }
 }
