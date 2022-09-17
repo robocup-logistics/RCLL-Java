@@ -66,10 +66,10 @@ public class MachineClientUtils {
     }
 
     public enum RingColor {
-        RING_BLUE,
-        RING_GREEN,
-        RING_ORANGE,
-        RING_YELLOW
+        Blue,
+        Green,
+        Orange,
+        Yellow
     }
 
     public enum MachineState {

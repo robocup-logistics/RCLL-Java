@@ -20,11 +20,9 @@ class ExplorationClient {
     private final Map<MachineName, MachineReportProtos.MachineReportEntry> sendQueue;
     private final TeamColor team;
 
-    private MachineReportProtos.MachineReport msg;
     public ExplorationClient(TeamColor team) {
         this.team = team;
         this.sendQueue = new ConcurrentHashMap<>();
-        msg = null;
     }
     public void sendExploreMachine(MachineName machineName, ZoneName zone, int rotation) {
         MachineReportProtos.MachineReportEntry msg = MachineReportProtos.MachineReportEntry.newBuilder()

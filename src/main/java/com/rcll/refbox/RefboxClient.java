@@ -1,14 +1,11 @@
 package com.rcll.refbox;
 
-import com.rcll.domain.MachineClientUtils;
-import com.rcll.domain.MachineName;
-import com.rcll.domain.TeamColor;
-import com.rcll.domain.ZoneName;
+import com.rcll.domain.*;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.robocup_logistics.llsf_msgs.*;
 
-import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,6 +17,7 @@ public class RefboxClient {
     private Optional<MachineClient> machineClient;
     private Optional<RobotClient> robotClient;
     private Optional<ExplorationClient> explorationClient;
+    private Optional<OrderService> orderService;
     private final Timer t;
 
     boolean inProduction;
@@ -48,13 +46,24 @@ public class RefboxClient {
         this.machineClient = Optional.empty();
         this.robotClient = Optional.empty();
         this.explorationClient = Optional.empty();
+        this.orderService = Optional.empty();
         Consumer<MachineInfoProtos.MachineInfo> oldMachineInfoCallback = publicHandler.getMachineInfoCallback();
         publicHandler.setMachineInfoCallback(machineInfo -> {
             machineClient.ifPresent(m -> m.update(machineInfo));
             oldMachineInfoCallback.accept(machineInfo);
             inProduction = true;
         });
+        Consumer<OrderInfoProtos.OrderInfo> oldOrderInfoCallback = publicHandler.getOrderInfoCallback();
+        publicHandler.setOrderInfoCallback(orderInfo -> {
+            this.orderService.ifPresent(o -> o.update(orderInfo));
+            oldOrderInfoCallback.accept(orderInfo);
+        });
 
+        Consumer<RingInfoProtos.RingInfo> oldRingInfoCallback = publicHandler.getRingInfoCallback();
+        publicHandler.setRingInfoCallback(ringInfo -> {
+            this.machineClient.ifPresent(m ->m.updateRingInfo(ringInfo));
+            oldRingInfoCallback.accept(ringInfo);
+        });
         Consumer<GameStateProtos.GameState> oldGameStateCallback = publicHandler.getGameStateCallback();
         publicHandler.setGameStateCallback(gameState -> {
             if (!privateServerStarted) {
@@ -72,6 +81,7 @@ public class RefboxClient {
                     machineClient = Optional.of(new MachineClient(color));
                     explorationClient = Optional.of(new ExplorationClient(color));
                     robotClient = Optional.of(new RobotClient(color, teamConfig.getName()));
+                    orderService = Optional.of(new OrderService(machineClient.get(), color));
                 }
             }
             oldGameStateCallback.accept(gameState);
@@ -194,5 +204,13 @@ public class RefboxClient {
         if (!this.publicServerStarted) {
             log.warn("Public Server not yet started! Did you forget to call startServer on RefboxClient?");
         }
+    }
+
+    public Order getOrderById(int orderId) {
+        return orderService.orElseThrow().getOrder(orderId);
+    }
+
+    public List<Order> getAllOrders() {
+        return orderService.orElseThrow().getOrders();
     }
 }
