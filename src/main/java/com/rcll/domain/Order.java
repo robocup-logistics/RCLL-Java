@@ -21,4 +21,17 @@ public class Order {
     private Ring ring3;
     private Base base;
     private boolean competitive;
+
+    public Complexity getComplexity() {
+        if (ring3 != null) {
+            return Complexity.C3;
+        }
+        if (ring2 != null) {
+            return Complexity.C2;
+        }
+        if (ring1 != null) {
+            return Complexity.C1;
+        }
+        return Complexity.C0;
+    }
 }
