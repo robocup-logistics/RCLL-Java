@@ -59,8 +59,8 @@ public class RefboxClient {
             oldOrderInfoCallback.accept(orderInfo);
         });
 
-        Consumer<RingInfoProtos.RingInfo> oldRingInfoCallback = publicHandler.getRingInfoCallback();
-        publicHandler.setRingInfoCallback(ringInfo -> {
+        Consumer<RingInfoProtos.RingInfo> oldRingInfoCallback = privateHandler.getRingInfoCallback();
+        privateHandler.setRingInfoCallback(ringInfo -> {
             this.machineClient.ifPresent(m ->m.updateRingInfo(ringInfo));
             oldRingInfoCallback.accept(ringInfo);
         });

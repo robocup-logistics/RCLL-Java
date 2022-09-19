@@ -18,15 +18,15 @@ import java.util.function.Consumer;
 @Getter
 @CommonsLog
 public class RefboxHandler implements ProtobufMessageHandler {
-    private Consumer<MachineInfoProtos.MachineInfo> machineInfoCallback;
+    private Consumer<MachineInfoProtos.MachineInfo> machineInfoCallback; //public peer
     private Consumer<GameStateProtos.GameState> gameStateCallback;
     private Consumer<ExplorationInfoProtos.ExplorationInfo> explorationInfoCallback;
     private Consumer<VersionProtos.VersionInfo> versionInfoCallback;
     private Consumer<RobotInfoProtos.RobotInfo> robotInfoCallback;
     private Consumer<MachineReportProtos.MachineReportInfo> machineReportInfoCallback;
-    private Consumer<BeaconSignalProtos.BeaconSignal> beaconSignalCallback;
-    private Consumer<OrderInfoProtos.OrderInfo> orderInfoCallback;
-    private Consumer<RingInfoProtos.RingInfo> ringInfoCallback;
+    private Consumer<BeaconSignalProtos.BeaconSignal> beaconSignalCallback; //public peer
+    private Consumer<OrderInfoProtos.OrderInfo> orderInfoCallback; //public peer
+    private Consumer<RingInfoProtos.RingInfo> ringInfoCallback; //private peer
     private Consumer<NavigationChallengeProtos.NavigationRoutes> navigationRoutesCallback;
 
     public RefboxHandler() {
