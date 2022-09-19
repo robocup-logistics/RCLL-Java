@@ -5,11 +5,9 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.robocup_logistics.llsf_msgs.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Log4j2
 public class RefboxClient {
@@ -216,5 +214,11 @@ public class RefboxClient {
 
     public Ring getRingByColor(MachineClientUtils.RingColor ringColor) {
         return machineClient.orElseThrow().getRingForColor(ringColor);
+    }
+
+    public List<Ring> getAllRings() {
+        return Arrays.stream(MachineClientUtils.RingColor.values())
+                .map(this::getRingByColor)
+                .collect(Collectors.toList());
     }
 }
