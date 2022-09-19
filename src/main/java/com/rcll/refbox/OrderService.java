@@ -93,6 +93,6 @@ public class OrderService {
         if (protoOrder.getRingColorsCount() <= index) {
             return null;
         }
-        return machineClient.getRingForProtoRing(protoOrder.getRingColors(index));
+        return machineClient.getRingForColor(machineClient.fromRefboxRingColor(protoOrder.getRingColors(index)));
     }
 }

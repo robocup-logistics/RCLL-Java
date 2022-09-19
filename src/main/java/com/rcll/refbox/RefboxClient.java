@@ -213,4 +213,8 @@ public class RefboxClient {
     public List<Order> getAllOrders() {
         return orderService.orElseThrow().getOrders();
     }
+
+    public Ring getRingByColor(MachineClientUtils.RingColor ringColor) {
+        return machineClient.orElseThrow().getRingForColor(ringColor);
+    }
 }

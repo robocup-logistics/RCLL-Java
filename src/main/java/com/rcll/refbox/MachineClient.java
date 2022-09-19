@@ -216,7 +216,7 @@ class MachineClient {
                 });
     }
 
-    private RingColor toRefboxRingColor(MachineClientUtils.RingColor ringColor) {
+    public RingColor toRefboxRingColor(MachineClientUtils.RingColor ringColor) {
         switch (ringColor) {
             case Blue:
                 return RingColor.RING_BLUE;
@@ -230,7 +230,7 @@ class MachineClient {
         throw new IllegalArgumentException("RingColor not mapped: " + ringColor);
     }
 
-    private MachineClientUtils.RingColor fromRefboxRingColor(RingColor ringColor) {
+    public MachineClientUtils.RingColor fromRefboxRingColor(RingColor ringColor) {
         switch (ringColor) {
             case RING_BLUE:
                 return MachineClientUtils.RingColor.Blue;
@@ -254,8 +254,7 @@ class MachineClient {
         machineStates.put(machine, state);
     }
 
-    public Ring getRingForProtoRing(RingColor protoRingColor) {
-        var ringColor = fromRefboxRingColor(protoRingColor);
+    public Ring getRingForColor(MachineClientUtils.RingColor ringColor) {
         if (!ringColorToMachine.containsKey(ringColor)) {
             throw new RuntimeException("Don't know which machine Ring is at: " + ringColor);
         }
