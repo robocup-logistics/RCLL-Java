@@ -42,9 +42,11 @@ dependencies {
 }
 
 signing {
-    if (project.hasProperty("signing.keyId")) {
+    if (project.findProperty("signing.keyId") != "") {
+        println("Using signing from gradle.properties!")
         sign publishing.publications
-    } else (System.getenv("SIGNINGKEYID")) {
+    } else {
+        println("Setting signing params!")
         project.setProperty("signing.keyId", System.getenv("SIGNINGKEYID"))
         project.setProperty("signing.password", System.getenv("SIGNINGPASSWORD"))
         project.setProperty("signing.secretKeyRingFile", "/home/runner/work/rcll-java/rcll-java/.gnupg/secring.gpg")
@@ -58,16 +60,16 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/robocup-logistics/rcll-java")
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
+                username = project.findProperty("gpr.user") != "" ? project.findProperty("gpr.user") : System.getenv("USERNAME")
+                password = project.findProperty("gpr.token") != "" ? project.findProperty("gpr.user") : System.getenv("TOKEN")
             }
         }
         maven {
             name = "Staging"
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
-                username = project.findProperty("ossrhUsername") ?: System.getenv("OSSRHUSERNAME")
-                password = project.findProperty("ossrhPassword") ?: System.getenv("OSSRHPASSWORD")
+                username = project.findProperty("ossrhUsername") != "" ? project.findProperty("ossrhUsername") : System.getenv("OSSRHUSERNAME")
+                password = project.findProperty("ossrhPassword") != "" ? project.findProperty("ossrhPassword"): System.getenv("OSSRHPASSWORD")
             }
         }
     }

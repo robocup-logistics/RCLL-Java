@@ -39,3 +39,5 @@ jobs:
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SIGNINGKEYID: ${{ secrets.SIGNINGKEYID }}
+        SIGNINGPASSWORD: ${{ secrets.SIGNINGPASSWORD }}
