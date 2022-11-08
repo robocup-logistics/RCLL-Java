@@ -8,7 +8,7 @@ plugins {
 
 group = 'io.github.robocup-logistics'
 archivesBaseName = "java-sdk"
-version = '0.1.5'
+version = '0.1.6'
 
 description = ""
 
@@ -65,7 +65,7 @@ publishing {
             }
         }
         maven {
-            name = "Staging"
+            name = "SonarStaging"
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
                 username = project.findProperty("ossrhUsername") != "" ? project.findProperty("ossrhUsername") : System.getenv("OSSRHUSERNAME")
