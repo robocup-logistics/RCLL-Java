@@ -32,10 +32,19 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
-    - name: Publish Packages
+    - name: Publish GitHub Packages
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
-        arguments: publish
+        arguments: publishGprPublicationToGitHubPackagesRepository
+      env:
+        USERNAME: ${{ github.actor }}
+        TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SIGNINGKEYID: ${{ secrets.SIGNINGKEYID }}
+        SIGNINGPASSWORD: ${{ secrets.SIGNINGPASSWORD }}
+    - name: Publish Sonar Staging
+      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      with:
+        arguments: publishGprPublicationToSonarStagingRepository
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.GITHUB_TOKEN }}
