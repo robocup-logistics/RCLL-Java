@@ -10,8 +10,6 @@ name: publish
 on:
   release:
     types: [created]
-# push:
-#   branches: [ "master" ]
 jobs:
   deploy:
     environment: publishing
@@ -32,19 +30,10 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
-    - name: Publish GitHub Packages
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
-        arguments: publishMavenJavaPublicationToGitHubPackagesRepository
-      env:
-        USERNAME: ${{ github.actor }}
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SIGNINGKEYID: ${{ secrets.SIGNINGKEYID }}
-        SIGNINGPASSWORD: ${{ secrets.SIGNINGPASSWORD }}
     - name: Publish Sonar Staging
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
-        arguments: publishMavenJavaPublicationToStagingRepository
+        arguments: publishMavenJavaPublicationToSonarStagingRepository
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.GITHUB_TOKEN }}
