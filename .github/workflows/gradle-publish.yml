@@ -10,8 +10,8 @@ name: publish
 on:
   release:
     types: [created]
-  push:
-    branches: [ "master" ]
+# push:
+#   branches: [ "master" ]
 jobs:
   deploy:
     environment: publishing
@@ -35,7 +35,7 @@ jobs:
     - name: Publish GitHub Packages
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
-        arguments: publishGprPublicationToGitHubPackagesRepository
+        arguments: publishMavenJavaPublicationToGitHubPackagesRepository
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,7 +44,7 @@ jobs:
     - name: Publish Sonar Staging
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
-        arguments: publishGprPublicationToSonarStagingRepository
+        arguments: publishMavenJavaPublicationToStagingRepository
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.GITHUB_TOKEN }}
