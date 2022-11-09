@@ -8,7 +8,7 @@ plugins {
 
 group = 'io.github.robocup-logistics'
 archivesBaseName = "java-sdk"
-version = '0.1.8'
+version = '0.1.8.1'
 
 description = ""
 
@@ -60,8 +60,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/robocup-logistics/rcll-java")
             credentials {
-                username = System.getenv("USERNAME")
-                password =  System.getenv("TOKEN")
+                username = project.findProperty("gprUser") != "" ? project.findProperty("gprUser") : System.getenv("USERNAME")
+                password = project.findProperty("gprToken") != "" ? project.findProperty("gprToken"): System.getenv("TOKEN")
             }
         }
         maven {
@@ -74,10 +74,8 @@ publishing {
         }
     }
     publications {
-        gpr(MavenPublication) {
-            from(components.java)
-        }
         mavenJava(MavenPublication) {
+            from(components.java)
             pom {
                 name = 'Java SDK'
                 description = 'Java SDK for the RoboCup Logistics League'
