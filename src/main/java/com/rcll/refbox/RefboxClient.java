@@ -229,4 +229,12 @@ public class RefboxClient {
     public Optional<TeamColor> getTeamColor() {
         return Optional.ofNullable(teamColor);
     }
+
+    public boolean isMagenta() {
+        return TeamColor.MAGENTA.equals(teamColor);
+    }
+
+    public boolean isCyan() {
+        return TeamColor.CYAN.equals(teamColor);
+    }
 }
