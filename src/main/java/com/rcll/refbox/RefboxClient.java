@@ -3,9 +3,11 @@ package com.rcll.refbox;
 import com.rcll.domain.*;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
-import org.robocup_logistics.llsf_msgs.*;
+import org.robocup_logistics.llsf_msgs.GameStateProtos;
+import org.robocup_logistics.llsf_msgs.MachineInfoProtos;
+import org.robocup_logistics.llsf_msgs.OrderInfoProtos;
+import org.robocup_logistics.llsf_msgs.RingInfoProtos;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
