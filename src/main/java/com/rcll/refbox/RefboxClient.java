@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.robocup_logistics.llsf_msgs.*;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ public class RefboxClient {
     private Optional<RobotClient> robotClient;
     private Optional<ExplorationClient> explorationClient;
     private Optional<OrderService> orderService;
+    private TeamColor teamColor;
     private final Timer t;
 
     boolean inProduction;
@@ -38,6 +40,7 @@ public class RefboxClient {
                  @NonNull RefboxHandler publicHandler,
                  int sendIntervalInMs,
                  RefBoxConnectionManager rbcm) {
+        this.teamColor = null;
         inProduction = false;
         this.publicServerStarted = false;
         this.rbcm = rbcm;
@@ -65,21 +68,20 @@ public class RefboxClient {
         Consumer<GameStateProtos.GameState> oldGameStateCallback = publicHandler.getGameStateCallback();
         publicHandler.setGameStateCallback(gameState -> {
             if (!privateServerStarted) {
-                TeamColor color = null;
                 if (teamConfig.getName().equals(gameState.getTeamCyan())) {
-                    color = TeamColor.CYAN;
+                    teamColor = TeamColor.CYAN;
                 } else if (teamConfig.getName().equals(gameState.getTeamMagenta())) {
-                    color = TeamColor.MAGENTA;
+                    teamColor = TeamColor.MAGENTA;
                 } else {
                     log.warn("No Team is configured to be: " + teamConfig.getName());
                 }
-                if (color != null) {
-                    rbcm.startPrivateServer(color);
+                if (teamColor != null) {
+                    rbcm.startPrivateServer(teamColor);
                     this.privateServerStarted = true;
-                    machineClient = Optional.of(new MachineClient(color));
-                    explorationClient = Optional.of(new ExplorationClient(color));
-                    robotClient = Optional.of(new RobotClient(color, teamConfig.getName()));
-                    orderService = Optional.of(new OrderService(machineClient.get(), color));
+                    machineClient = Optional.of(new MachineClient(teamColor));
+                    explorationClient = Optional.of(new ExplorationClient(teamColor));
+                    robotClient = Optional.of(new RobotClient(teamColor, teamConfig.getName()));
+                    orderService = Optional.of(new OrderService(machineClient.get(), teamColor));
                 }
             }
             oldGameStateCallback.accept(gameState);
@@ -220,5 +222,9 @@ public class RefboxClient {
         return Arrays.stream(MachineClientUtils.RingColor.values())
                 .map(this::getRingByColor)
                 .collect(Collectors.toList());
+    }
+
+    public Optional<TeamColor> getTeamColor() {
+        return Optional.ofNullable(teamColor);
     }
 }
