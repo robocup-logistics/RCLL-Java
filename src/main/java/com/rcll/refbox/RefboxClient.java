@@ -2,6 +2,7 @@ package com.rcll.refbox;
 
 import com.rcll.domain.*;
 import lombok.NonNull;
+import lombok.Synchronized;
 import lombok.extern.log4j.Log4j2;
 import org.robocup_logistics.llsf_msgs.GameStateProtos;
 import org.robocup_logistics.llsf_msgs.MachineInfoProtos;
@@ -26,6 +27,8 @@ public class RefboxClient {
 
     boolean publicServerStarted;
     boolean privateServerStarted;
+
+    GameStateProtos.GameState lastGameState = null;
 
     public RefboxClient(@NonNull RefboxConnectionConfig connectionConfig,
                         @NonNull TeamConfig teamConfig,
@@ -69,6 +72,7 @@ public class RefboxClient {
         });
         Consumer<GameStateProtos.GameState> oldGameStateCallback = publicHandler.getGameStateCallback();
         publicHandler.setGameStateCallback(gameState -> {
+            updateGameState(gameState);
             if (!privateServerStarted) {
                 if (teamConfig.getName().equals(gameState.getTeamCyan())) {
                     teamColor = TeamColor.CYAN;
@@ -103,6 +107,11 @@ public class RefboxClient {
                 }
             }
         }, 0, sendIntervalInMs);
+    }
+
+    @Synchronized
+    private void updateGameState(GameStateProtos.GameState gameState) {
+        this.lastGameState = gameState;
     }
 
     public void startServer() {
@@ -236,5 +245,13 @@ public class RefboxClient {
 
     public boolean isCyan() {
         return TeamColor.CYAN.equals(teamColor);
+    }
+
+    @Synchronized
+    public Long getLatestGameTimeInSeconds() {
+        if (lastGameState == null) {
+            return 0L;
+        }
+        return lastGameState.getGameTime().getSec();
     }
 }
