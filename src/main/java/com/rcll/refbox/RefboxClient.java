@@ -254,4 +254,56 @@ public class RefboxClient {
         }
         return lastGameState.getGameTime().getSec();
     }
+
+    @Synchronized
+    public GamePhase getGamePhase() {
+        if (lastGameState == null) {
+            return GamePhase.PreGame;
+        }
+        switch (lastGameState.getPhase()) {
+            case PRE_GAME:
+                return GamePhase.PreGame;
+            case SETUP:
+                return GamePhase.Setup;
+            case EXPLORATION:
+                return GamePhase.Exploration;
+            case PRODUCTION:
+                return GamePhase.Production;
+            case POST_GAME:
+                return GamePhase.PostGame;
+        }
+        throw new IllegalArgumentException("GamePhase not handled: " + lastGameState.getPhase());
+    }
+
+    @Synchronized
+    public GameState getGameState() {
+        if (lastGameState == null) {
+            return GameState.Init;
+        }
+        switch (lastGameState.getState()) {
+            case INIT:
+                return GameState.Init;
+            case WAIT_START:
+                return GameState.WaitStart;
+            case RUNNING:
+                return GameState.Running;
+            case PAUSED:
+                return GameState.Paused;
+        }
+        throw new IllegalArgumentException("GameState not handled: " + lastGameState.getPhase());
+    }
+
+    @Synchronized
+    public Integer getCurrentPoint() {
+        if (teamColor == null) {
+            return 0;
+        }
+        switch (teamColor) {
+            case CYAN:
+                return lastGameState.getPointsCyan();
+            case MAGENTA:
+                return lastGameState.getPointsMagenta();
+        }
+        throw new IllegalArgumentException("Unkown teamColor: " + teamColor);
+    }
 }
