@@ -15,6 +15,7 @@ public class Order {
     private int delivered;
     private int deliveryPeriodBegin;
     private int deliveryPeriodEnd;
+    private int deliveryGate;
     private Cap cap;
     private Ring ring1;
     private Ring ring2;

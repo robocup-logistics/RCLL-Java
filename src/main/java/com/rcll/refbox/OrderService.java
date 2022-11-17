@@ -85,8 +85,8 @@ public class OrderService {
         Ring ring2 = ringForIndex(protoOrder, 1);
         Ring ring3 = ringForIndex(protoOrder, 2);
         return new Order(protoOrder.getId(), protoOrder.getQuantityRequested(), delivered,
-                protoOrder.getDeliveryPeriodBegin(), protoOrder.getDeliveryPeriodEnd(), cap,
-                ring1, ring2, ring3, base, protoOrder.getCompetitive());
+                protoOrder.getDeliveryPeriodBegin(), protoOrder.getDeliveryPeriodEnd(),
+                protoOrder.getDeliveryGate(), cap, ring1, ring2, ring3, base, protoOrder.getCompetitive());
     }
 
     private Ring ringForIndex(OrderInfoProtos.Order protoOrder, int index) {
