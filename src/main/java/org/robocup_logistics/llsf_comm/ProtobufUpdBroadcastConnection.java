@@ -255,14 +255,18 @@ public class ProtobufUpdBroadcastConnection implements ProtobufConnection {
 
     private void handle_message(int cmp_id, int msg_id, ByteBuffer in_msg) {
         if (handler != null) {
+            boolean wasHandeled = false;
             for (Map.Entry<Key, GeneratedMessageV3> e : msgs.entrySet()) {
                 Key key = e.getKey();
                 if (key.cmp_id == cmp_id && key.msg_id == msg_id) {
                     handler.handle_message(in_msg, e.getValue());
+                    wasHandeled = true;
                     break;
                 }
             }
-            log.warn("Message ignored since it is not registered: cmd_id: " + cmp_id + " msg_id: " + msg_id);
+            if (!wasHandeled) {
+                log.warn("Message ignored since it is not registered: cmd_id: " + cmp_id + " msg_id: " + msg_id);
+            }
         }
     }
 
