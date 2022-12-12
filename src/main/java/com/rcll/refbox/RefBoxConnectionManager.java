@@ -25,7 +25,7 @@ import org.robocup_logistics.llsf_msgs.*;
 import java.io.IOException;
 
 @CommonsLog
-public class RefBoxConnectionManager {
+class RefBoxConnectionManager {
     public final static int CIPHER_TYPE_NO_CIPHER = 0;
     public final static int CIPHER_TYPE_AES_128_ECB = 1;
     public final static int CIPHER_TYPE_AES_128_CBC = 2;

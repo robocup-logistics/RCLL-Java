@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class Ring {
-    MachineClientUtils.Machine machine;
-    MachineClientUtils.RingColor color;
+    Machine machine;
+    RingColor color;
     int rawMaterial;
 }

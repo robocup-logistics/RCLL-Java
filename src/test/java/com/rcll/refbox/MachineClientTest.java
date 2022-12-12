@@ -1,6 +1,7 @@
 package com.rcll.refbox;
 
-import com.rcll.domain.MachineClientUtils;
+import com.rcll.domain.CapStationInstruction;
+import com.rcll.domain.Machine;
 import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
 import org.junit.jupiter.api.Disabled;
@@ -28,7 +29,7 @@ class MachineClientTest {
         MachineClient machineClient = new MachineClient(CYAN);
         assertThat(machineClient.fetchMachinesPreparing()).isEmpty();
         assertThat(machineClient.fetchPrepareMessages()).isEmpty();
-        machineClient.sendPrepareCS(MachineClientUtils.Machine.CS2, MachineClientUtils.CSOp.RETRIEVE_CAP);
+        machineClient.sendPrepareCS(Machine.CS2, CapStationInstruction.RetrieveCap);
 
         RefBoxConnectionManager rbcm =
                 new RefBoxConnectionManager(

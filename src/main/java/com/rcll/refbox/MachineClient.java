@@ -2,9 +2,8 @@ package com.rcll.refbox;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.rcll.domain.MachineClientUtils;
-import com.rcll.domain.Ring;
-import com.rcll.domain.TeamColor;
+import com.rcll.domain.*;
+import com.rcll.domain.RingColor;
 import com.rcll.protobuf_lib.RobotMessageRegister;
 import lombok.extern.java.Log;
 import org.robocup_logistics.llsf_comm.ProtobufMessage;
@@ -21,10 +20,10 @@ import static org.robocup_logistics.llsf_msgs.ProductColorProtos.*;
 @Log
 class MachineClient {
     private final TeamColor teamColor;
-    private final Map<MachineClientUtils.Machine, GeneratedMessageV3> sendQueue;
-    private final Map<MachineClientUtils.Machine, MachineClientUtils.MachineState> machineStates;
-    private final Map<MachineClientUtils.RingColor, MachineClientUtils.Machine> ringColorToMachine;
-    private final Map<MachineClientUtils.RingColor, Integer> ringColorToCost;
+    private final Map<Machine, GeneratedMessageV3> sendQueue;
+    private final Map<Machine, MachineState> machineStates;
+    private final Map<RingColor, Machine> ringColorToMachine;
+    private final Map<RingColor, Integer> ringColorToCost;
 
     public MachineClient(TeamColor teamColor) {
         this.teamColor = teamColor;
@@ -34,7 +33,7 @@ class MachineClient {
         this.ringColorToCost = new ConcurrentHashMap<>();
     }
 
-    public void sendResetMachine(MachineClientUtils.Machine machine) {
+    public void sendResetMachine(Machine machine) {
         MachineInstructionProtos.ResetMachine reset = MachineInstructionProtos.ResetMachine.newBuilder()
                 .setMachine(machineNameForMsg(machine, teamColor))
                 .setTeamColor(TeamProtos.Team.valueOf(teamColor.toString()))
@@ -43,12 +42,12 @@ class MachineClient {
         addMessageToSendQueue(machine, reset);
     }
 
-    public void sendPrepareBS(MachineClientUtils.MachineSide side, MachineClientUtils.BaseColor base_color) {
-        MachineClientUtils.Machine machine = MachineClientUtils.Machine.BS;
+    public void sendPrepareBS(MachineSide side, Base base_color) {
+        Machine machine = Machine.BS;
         MachineInstructionProtos.PrepareInstructionBS bsInstruction =
                 MachineInstructionProtos.PrepareInstructionBS.newBuilder()
                         //.setSide(task.getSide() == SubProductionTask.MachineSide.INPUT ? MachineDescriptionProtos.MachineSide.INPUT : MachineDescriptionProtos.MachineSide.OUTPUT)
-                        .setSide(side == MachineClientUtils.MachineSide.Input ? MachineInstructionProtos.MachineSide.INPUT : MachineInstructionProtos.MachineSide.OUTPUT)
+                        .setSide(side == MachineSide.Input ? MachineInstructionProtos.MachineSide.INPUT : MachineInstructionProtos.MachineSide.OUTPUT)
                         .setColor(BaseColor.valueOf(base_color.toString()))
                         .build();
         MachineInstructionProtos.PrepareMachine prepareMachineMsg =
@@ -62,7 +61,7 @@ class MachineClient {
     }
 
     public void sendPrepareDS(int gate, int orderId) {
-        MachineClientUtils.Machine machine = MachineClientUtils.Machine.DS;
+        Machine machine = Machine.DS;
         MachineInstructionProtos.PrepareInstructionDS dsInstruction =
                 MachineInstructionProtos.PrepareInstructionDS.newBuilder()
                         //.setGate(gate)
@@ -78,8 +77,8 @@ class MachineClient {
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
-    public void sendPrepareRS(MachineClientUtils.Machine machine, MachineClientUtils.RingColor ringColor) {
-        RingColor refbox_color = toRefboxRingColor(ringColor);
+    public void sendPrepareRS(Machine machine, RingColor ringColor) {
+        ProductColorProtos.RingColor refbox_color = toRefboxRingColor(ringColor);
         MachineInstructionProtos.PrepareInstructionRS rsInstruction =
                 MachineInstructionProtos.PrepareInstructionRS.newBuilder()
                         .setRingColor(refbox_color)
@@ -95,13 +94,13 @@ class MachineClient {
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
-    public void sendPrepareCS(MachineClientUtils.Machine machine, MachineClientUtils.CSOp operation) {
+    public void sendPrepareCS(Machine machine, CapStationInstruction operation) {
         MachineDescriptionProtos.CSOp refbox_operation;
         switch (operation) {
-            case RETRIEVE_CAP:
+            case RetrieveCap:
                 refbox_operation = MachineDescriptionProtos.CSOp.RETRIEVE_CAP;
                 break;
-            case MOUNT_CAP:
+            case MountCap:
                 refbox_operation = MachineDescriptionProtos.CSOp.MOUNT_CAP;
                 break;
             default:
@@ -134,7 +133,7 @@ class MachineClient {
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
-    public void sendPrepareSS(MachineClientUtils.Machine machine, int shelf, int slot) {
+    public void sendPrepareSS(Machine machine, int shelf, int slot) {
 
         MachineInstructionProtos.PrepareInstructionSS ssInstruction = MachineInstructionProtos.PrepareInstructionSS.newBuilder()
                 .setShelf(shelf)
@@ -150,7 +149,7 @@ class MachineClient {
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
-    public void stopMessageForMachine(MachineClientUtils.Machine machine) {
+    public void stopMessageForMachine(Machine machine) {
         sendQueue.remove(machine);
     }
 
@@ -162,15 +161,15 @@ class MachineClient {
         return fetchMsgForType(MachineInstructionProtos.ResetMachine.class);
     }
 
-    public Set<MachineClientUtils.Machine> fetchMachinesPreparing() {
+    public Set<Machine> fetchMachinesPreparing() {
         return fetchMachinesForType(MachineInstructionProtos.PrepareMachine.class);
     }
 
-    public Set<MachineClientUtils.Machine> fetchMachinesResetting() {
+    public Set<Machine> fetchMachinesResetting() {
         return fetchMachinesForType(MachineInstructionProtos.ResetMachine.class);
     }
 
-    public Optional<MachineClientUtils.MachineState> getStateForMachine(MachineClientUtils.Machine machine) {
+    public Optional<MachineState> getStateForMachine(Machine machine) {
         return Optional.ofNullable(this.machineStates.get(machine));
     }
 
@@ -198,8 +197,8 @@ class MachineClient {
                 .filter(machineStates::containsKey)
                 .filter(sendQueue::containsKey)
                 .forEach(x -> {
-                    if (!machineStates.get(x).equals(MachineClientUtils.MachineState.IDLE)) {
-                        if (!machineStates.get(x).equals(MachineClientUtils.MachineState.DOWN)) {
+                    if (!machineStates.get(x).equals(MachineState.IDLE)) {
+                        if (!machineStates.get(x).equals(MachineState.DOWN)) {
                             sendQueue.remove(x);
                         } else {
                             log.info("Machine " + x + " is down, not removing from send queue!");
@@ -210,51 +209,51 @@ class MachineClient {
                 .filter(machineStates::containsKey)
                 .filter(sendQueue::containsKey)
                 .forEach(x -> {
-                    if (machineStates.get(x).equals(MachineClientUtils.MachineState.BROKEN)) {
+                    if (machineStates.get(x).equals(MachineState.BROKEN)) {
                         sendQueue.remove(x);
                     }
                 });
     }
 
-    public RingColor toRefboxRingColor(MachineClientUtils.RingColor ringColor) {
+    public ProductColorProtos.RingColor toRefboxRingColor(RingColor ringColor) {
         switch (ringColor) {
             case Blue:
-                return RingColor.RING_BLUE;
+                return ProductColorProtos.RingColor.RING_BLUE;
             case Green:
-                return RingColor.RING_GREEN;
+                return ProductColorProtos.RingColor.RING_GREEN;
             case Orange:
-                return RingColor.RING_ORANGE;
+                return ProductColorProtos.RingColor.RING_ORANGE;
             case Yellow:
-                return RingColor.RING_YELLOW;
+                return ProductColorProtos.RingColor.RING_YELLOW;
         }
         throw new IllegalArgumentException("RingColor not mapped: " + ringColor);
     }
 
-    public MachineClientUtils.RingColor fromRefboxRingColor(RingColor ringColor) {
+    public RingColor fromRefboxRingColor(ProductColorProtos.RingColor ringColor) {
         switch (ringColor) {
             case RING_BLUE:
-                return MachineClientUtils.RingColor.Blue;
+                return RingColor.Blue;
             case RING_GREEN:
-                return MachineClientUtils.RingColor.Green;
+                return RingColor.Green;
             case RING_ORANGE:
-                return MachineClientUtils.RingColor.Orange;
+                return RingColor.Orange;
             case RING_YELLOW:
-                return MachineClientUtils.RingColor.Yellow;
+                return RingColor.Yellow;
         }
         throw new IllegalArgumentException("RingColor not mapped: " + ringColor);
     }
 
     private void updateMachineStatus(MachineInfoProtos.Machine machineInfo) {
-        MachineClientUtils.Machine machine = MachineClientUtils.parseMachineWithColor(machineInfo.getName());
-        MachineClientUtils.MachineState state = MachineClientUtils.parseMachineState(machineInfo.getState());
-        if (machine == MachineClientUtils.Machine.RS1 || machine == MachineClientUtils.Machine.RS2) {
+        Machine machine = parseMachineWithColor(machineInfo.getName());
+        MachineState state = parseMachineState(machineInfo.getState());
+        if (machine == Machine.RS1 || machine == Machine.RS2) {
             this.ringColorToMachine.put(fromRefboxRingColor(machineInfo.getRingColors(0)), machine);
             this.ringColorToMachine.put(fromRefboxRingColor(machineInfo.getRingColors(1)), machine);
         }
         machineStates.put(machine, state);
     }
 
-    public Ring getRingForColor(MachineClientUtils.RingColor ringColor) {
+    public Ring getRingForColor(RingColor ringColor) {
         if (!ringColorToMachine.containsKey(ringColor)) {
             throw new RuntimeException("Don't know which machine Ring is at: " + ringColor);
         }
@@ -264,7 +263,7 @@ class MachineClient {
         return new Ring(ringColorToMachine.get(ringColor),ringColor, ringColorToCost.get(ringColor));
     }
 
-    private String machineNameForMsg(MachineClientUtils.Machine machine, TeamColor color) {
+    private String machineNameForMsg(Machine machine, TeamColor color) {
         StringBuilder returner = new StringBuilder();
         switch (color) {
             case CYAN:
@@ -285,8 +284,8 @@ class MachineClient {
                 .collect(Collectors.toList());
     }
 
-    private Set<MachineClientUtils.Machine> fetchMachinesForType(Class<? extends GeneratedMessageV3> clazz) {
-        Set<MachineClientUtils.Machine> returner = new HashSet<>();
+    private Set<Machine> fetchMachinesForType(Class<? extends GeneratedMessageV3> clazz) {
+        Set<Machine> returner = new HashSet<>();
         this.sendQueue.forEach((machine, msg) -> {
             if (msg.getClass().equals(clazz)) {
                 returner.add(machine);
@@ -295,7 +294,7 @@ class MachineClient {
         return returner;
     }
 
-    private void addMessageToSendQueue(MachineClientUtils.Machine machine, GeneratedMessageV3 msg) {
+    private void addMessageToSendQueue(Machine machine, GeneratedMessageV3 msg) {
         sendQueue.put(machine, msg);
     }
 
@@ -305,5 +304,51 @@ class MachineClient {
 
     private void updateRingInfo(RingInfoProtos.Ring ring) {
         ringColorToCost.put(fromRefboxRingColor(ring.getRingColor()), ring.getRawMaterial());
+    }
+
+    private MachineState parseMachineState(String state) {
+        switch (state) {
+            case "READY-AT-OUTPUT":
+                return MachineState.READY_AT_OUTPUT;
+            case "IDLE":
+                return MachineState.IDLE;
+            case "DOWN":
+                return MachineState.DOWN;
+            case "BROKEN":
+                return MachineState.BROKEN;
+            case "PREPARED":
+                return MachineState.PREPARED;
+            case "PROCESSING":
+                return MachineState.PROCESSING;
+            case "PROCESSED":
+                return MachineState.PROCESSED;
+            case "WAIT-IDLE":
+                return MachineState.WAIT_IDLE;
+            case "AVAILABLE":
+                return MachineState.AVAILABLE;
+        }
+        if (state.equals("")) {
+            return MachineState.UNDEFINED;
+        }
+        throw new IllegalArgumentException("Unkown Machine state: " + state);
+    }
+
+    private Machine parseMachineWithColor(String machine) {
+        if (machine.contains("BS")) {
+            return Machine.BS;
+        } else if (machine.contains("DS")) {
+            return Machine.DS;
+        } else if (machine.contains("CS1")) {
+            return Machine.CS1;
+        } else if (machine.contains("CS2")) {
+            return Machine.CS2;
+        } else if (machine.contains("RS1")) {
+            return Machine.RS1;
+        } else if (machine.contains("RS2")) {
+            return Machine.RS2;
+        } else if (machine.contains("SS")) {
+            return Machine.SS;
+        }
+        throw new IllegalArgumentException("Unkown machine: " + machine);
     }
 }

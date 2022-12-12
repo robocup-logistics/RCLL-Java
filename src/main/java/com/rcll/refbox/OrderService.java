@@ -7,7 +7,7 @@ import org.robocup_logistics.llsf_msgs.OrderInfoProtos;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OrderService {
+class OrderService {
     private OrderInfoProtos.OrderInfo orderInfo;
     private final MachineClient machineClient;
     private final TeamColor team;

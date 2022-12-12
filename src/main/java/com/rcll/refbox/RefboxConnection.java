@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @CommonsLog
 @Getter
-public class RefboxConnection {
+class RefboxConnection {
     private ProtobufUpdBroadcastConnection peer;
 
     public RefboxConnection(String ip, int sendPort, int receivePort,

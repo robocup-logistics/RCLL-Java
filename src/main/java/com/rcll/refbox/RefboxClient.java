@@ -139,7 +139,7 @@ public class RefboxClient {
         }
     }
 
-    public void sendResetMachine(MachineClientUtils.Machine machine) {
+    public void sendResetMachine(Machine machine) {
         checkIfPublicStarted();
         if (privateServerStarted) {
             this.machineClient.orElseThrow().sendResetMachine(machine);
@@ -148,7 +148,7 @@ public class RefboxClient {
         }
     }
 
-    public void sendPrepareBS(MachineClientUtils.MachineSide side, MachineClientUtils.BaseColor base_color) {
+    public void sendPrepareBS(MachineSide side, Base base_color) {
         checkIfPublicStarted();
         if (privateServerStarted) {
             this.machineClient.orElseThrow().sendPrepareBS(side, base_color);
@@ -166,7 +166,7 @@ public class RefboxClient {
         }
     }
 
-    public void sendPrepareRS(MachineClientUtils.Machine machine, MachineClientUtils.RingColor ringColor) {
+    public void sendPrepareRS(Machine machine, RingColor ringColor) {
         checkIfPublicStarted();
         if (privateServerStarted) {
             this.machineClient.orElseThrow().sendPrepareRS(machine, ringColor);
@@ -175,7 +175,7 @@ public class RefboxClient {
         }
     }
 
-    public void sendPrepareCS(MachineClientUtils.Machine machine, MachineClientUtils.CSOp operation) {
+    public void sendPrepareCS(Machine machine, CapStationInstruction operation) {
         checkIfPublicStarted();
         if (privateServerStarted) {
             this.machineClient.orElseThrow().sendPrepareCS(machine, operation);
@@ -184,7 +184,7 @@ public class RefboxClient {
         }
     }
 
-    public void sendPrepareSS(MachineClientUtils.Machine machine, int shelf, int slot) {
+    public void sendPrepareSS(Machine machine, int shelf, int slot) {
         checkIfPublicStarted();
         if (privateServerStarted) {
             this.machineClient.orElseThrow().sendPrepareSS(machine, shelf, slot);
@@ -193,7 +193,7 @@ public class RefboxClient {
         }
     }
 
-    public Optional<MachineClientUtils.MachineState> getStateForMachine(MachineClientUtils.Machine machine) {
+    public Optional<MachineState> getStateForMachine(Machine machine) {
         if (privateServerStarted) {
             return this.machineClient.orElseThrow().getStateForMachine(machine);
         } else {
@@ -225,12 +225,12 @@ public class RefboxClient {
         return orderService.orElseThrow().getOrders();
     }
 
-    public Ring getRingByColor(MachineClientUtils.RingColor ringColor) {
+    public Ring getRingByColor(RingColor ringColor) {
         return machineClient.orElseThrow().getRingForColor(ringColor);
     }
 
     public List<Ring> getAllRings() {
-        return Arrays.stream(MachineClientUtils.RingColor.values())
+        return Arrays.stream(RingColor.values())
                 .map(this::getRingByColor)
                 .collect(Collectors.toList());
     }

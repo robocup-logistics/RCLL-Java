@@ -23,16 +23,16 @@ public class Order {
     private Base base;
     private boolean competitive;
 
-    public Complexity getComplexity() {
+    public ProductComplexity getComplexity() {
         if (ring3 != null) {
-            return Complexity.C3;
+            return ProductComplexity.C3;
         }
         if (ring2 != null) {
-            return Complexity.C2;
+            return ProductComplexity.C2;
         }
         if (ring1 != null) {
-            return Complexity.C1;
+            return ProductComplexity.C1;
         }
-        return Complexity.C0;
+        return ProductComplexity.C0;
     }
 }

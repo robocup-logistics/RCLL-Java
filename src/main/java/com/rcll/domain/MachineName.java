@@ -69,31 +69,31 @@ public class MachineName {
         return this.rawMachineName.contains("SS");
     }
 
-    public MachineClientUtils.Machine asMachineEnum() {
+    public Machine asMachineEnum() {
         if (isBaseStation()) {
-            return MachineClientUtils.Machine.BS;
+            return Machine.BS;
         }
         if (isDeliveryStation()) {
-            return MachineClientUtils.Machine.DS;
+            return Machine.DS;
         }
         if (isRingStation()) {
             if (this.rawMachineName.contains("1")) {
-                return MachineClientUtils.Machine.RS1;
+                return Machine.RS1;
             }
             if (this.rawMachineName.contains("2")) {
-                return MachineClientUtils.Machine.RS2;
+                return Machine.RS2;
             }
         }
         if (isCapStation()) {
             if (this.rawMachineName.contains("1")) {
-                return MachineClientUtils.Machine.CS1;
+                return Machine.CS1;
             }
             if (this.rawMachineName.contains("2")) {
-                return MachineClientUtils.Machine.CS2;
+                return Machine.CS2;
             }
         }
         if (isStorageStation()) {
-            return MachineClientUtils.Machine.SS;
+            return Machine.SS;
         }
         throw new RuntimeException("Unkonwn Machine: " + this.rawMachineName);
     }
