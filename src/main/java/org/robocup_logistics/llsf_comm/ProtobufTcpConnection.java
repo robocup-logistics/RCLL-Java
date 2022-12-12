@@ -163,7 +163,7 @@ public class ProtobufTcpConnection implements ProtobufConnection {
      * Adds and registers a new protobuf message type. This is required to instantiate the correct
      * protobuf message object when a message is received from the refbox. For example, if you want
      * the client to be able to receive and process a GameState message, call
-     * client.&ltGameState&gtadd_message(GameState.class).
+     * client.&lt;GameState&gt;add_message(GameState.class).
      *
      * @param <T> the type of the protobuf message to register, has to extend from GeneratedMessage
      * @param c   the class object of the same protobuf message
