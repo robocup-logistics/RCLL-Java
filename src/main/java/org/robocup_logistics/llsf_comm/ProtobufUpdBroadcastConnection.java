@@ -71,7 +71,7 @@ public class ProtobufUpdBroadcastConnection implements ProtobufConnection {
      * @param hostname the IP address of the refbox
      * @param sendport the port to which to send
      * @param recvport the port to listen on for incoming messages
-     * @see start()
+     * @see  #start(String)
      */
     public ProtobufUpdBroadcastConnection(String hostname, int sendport, int recvport) {
         this.hostname = hostname;
@@ -92,7 +92,7 @@ public class ProtobufUpdBroadcastConnection implements ProtobufConnection {
      * @param encrypt       enables or disables encryption
      * @param cipher        the cipher as defined in the refbox integration manual in section 2.2.1
      * @param encryptionKey the encryption key as String
-     * @see start()
+     * @see  #start(String)
      */
     public ProtobufUpdBroadcastConnection(String hostname, int sendport, int recvport, boolean encrypt, int cipher, String encryptionKey) {
         this(hostname, sendport, recvport);
@@ -223,7 +223,7 @@ public class ProtobufUpdBroadcastConnection implements ProtobufConnection {
      * Adds and registers a new protobuf message type. This is required to instantiate the correct
      * protobuf message object when a message is received from the refbox. For example, if you want
      * the client to be able to receive and process a GameState message, call
-     * client.<GameState>add_message(GameState.class).
+     * client.&lt;GameState&gt;add_message(GameState.class).
      *
      * @param <T> the type of the protobuf message to register, has to extend from GeneratedMessage
      * @param c   the class object of the same protobuf message

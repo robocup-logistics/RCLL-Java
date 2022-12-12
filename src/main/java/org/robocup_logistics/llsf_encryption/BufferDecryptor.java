@@ -57,7 +57,7 @@ public class BufferDecryptor {
 	}
 	
 	/**
-	 * Decrypts an incoming message. This method is called by the {@link ProtobufBroadcastPeer}.
+	 * Decrypts an incoming message. This method is called by the {@link org.robocup_logistics.llsf_comm.ProtobufUpdBroadcastConnection}.
 	 * 
 	 * @param cipher The cipher as defined in the refbox integration manual in section 2.2.1
 	 * @param toDecrypt Encrypted model as byte array

@@ -77,7 +77,7 @@ public class BufferEncryptor {
 	}
 	
 	/**
-	 * Encrypts the given message. This method is called by the {@link ProtobufMessage}.
+	 * Encrypts the given message. This method is called by the {@link org.robocup_logistics.llsf_comm.ProtobufMessage}.
 	 * 
 	 * @param toEncrypt Message to encrypt as ByteBuffer
 	 * @return Encrypted model as byte array
