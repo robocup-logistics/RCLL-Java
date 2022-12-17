@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.apachecommons.CommonsLog;
-import org.robocup_logistics.llsf_comm.ProtobufMessageHandler;
+import com.rcll.llsf_comm.ProtobufMessageHandler;
 import org.robocup_logistics.llsf_msgs.*;
 
 import java.io.BufferedOutputStream;

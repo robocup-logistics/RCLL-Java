@@ -1,4 +1,4 @@
-package org.robocup_logistics.llsf_comm;
+package com.rcll.llsf_comm;
 
 import com.google.protobuf.GeneratedMessageV3;
 

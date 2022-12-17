@@ -5,10 +5,10 @@ import com.rcll.domain.TeamColor;
 import com.rcll.domain.ZoneName;
 import com.rcll.protobuf_lib.RobotMessageRegister;
 import lombok.extern.log4j.Log4j2;
-import org.robocup_logistics.llsf_comm.ProtobufMessage;
+import com.rcll.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_msgs.MachineReportProtos;
 import org.robocup_logistics.llsf_msgs.TeamProtos;
-import org.robocup_logistics.llsf_utils.Key;
+import com.rcll.llsf_utils.Key;
 
 import java.util.Collections;
 import java.util.List;

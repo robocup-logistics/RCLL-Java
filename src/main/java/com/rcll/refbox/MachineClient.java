@@ -6,9 +6,9 @@ import com.rcll.domain.*;
 import com.rcll.domain.RingColor;
 import com.rcll.protobuf_lib.RobotMessageRegister;
 import lombok.extern.java.Log;
-import org.robocup_logistics.llsf_comm.ProtobufMessage;
+import com.rcll.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_msgs.*;
-import org.robocup_logistics.llsf_utils.Key;
+import com.rcll.llsf_utils.Key;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

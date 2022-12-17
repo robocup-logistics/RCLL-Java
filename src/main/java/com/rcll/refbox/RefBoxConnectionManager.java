@@ -19,7 +19,7 @@ package com.rcll.refbox;
 
 import com.rcll.domain.TeamColor;
 import lombok.extern.apachecommons.CommonsLog;
-import org.robocup_logistics.llsf_comm.ProtobufMessage;
+import com.rcll.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_msgs.*;
 
 import java.io.IOException;

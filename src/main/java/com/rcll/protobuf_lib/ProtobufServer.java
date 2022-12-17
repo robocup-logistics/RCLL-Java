@@ -19,8 +19,8 @@ package com.rcll.protobuf_lib;
 
 import com.google.protobuf.GeneratedMessageV3;
 import lombok.extern.apachecommons.CommonsLog;
-import org.robocup_logistics.llsf_comm.ProtobufMessage;
-import org.robocup_logistics.llsf_utils.Key;
+import com.rcll.llsf_comm.ProtobufMessage;
+import com.rcll.llsf_utils.Key;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

@@ -1,8 +1,7 @@
-package org.robocup_logistics.llsf_comm;
+package com.rcll.llsf_comm;
 
-import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.GeneratedMessageV3;
-import org.robocup_logistics.llsf_encryption.BufferEncryptor;
+import com.rcll.llsf_encryption.BufferEncryptor;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;

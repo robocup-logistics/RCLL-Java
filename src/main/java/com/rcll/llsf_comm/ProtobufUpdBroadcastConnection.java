@@ -1,12 +1,12 @@
-package org.robocup_logistics.llsf_comm;
+package com.rcll.llsf_comm;
 
 import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.GeneratedMessageV3;
 import lombok.extern.apachecommons.CommonsLog;
-import org.robocup_logistics.llsf_encryption.BufferDecryptor;
-import org.robocup_logistics.llsf_encryption.BufferEncryptor;
-import org.robocup_logistics.llsf_exceptions.UnknownProtocolVersionException;
-import org.robocup_logistics.llsf_utils.Key;
+import com.rcll.llsf_encryption.BufferDecryptor;
+import com.rcll.llsf_encryption.BufferEncryptor;
+import com.rcll.llsf_exceptions.UnknownProtocolVersionException;
+import com.rcll.llsf_utils.Key;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;

@@ -2,13 +2,13 @@ package com.rcll.refbox;
 
 import com.rcll.domain.TeamColor;
 import com.rcll.protobuf_lib.RobotMessageRegister;
-import org.robocup_logistics.llsf_comm.ProtobufMessage;
+import com.rcll.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_msgs.BeaconSignalProtos;
 import org.robocup_logistics.llsf_msgs.Pose2DProtos;
 import org.robocup_logistics.llsf_msgs.TeamProtos;
 import org.robocup_logistics.llsf_msgs.TimeProtos;
-import org.robocup_logistics.llsf_utils.Key;
-import org.robocup_logistics.llsf_utils.NanoSecondsTimestampProvider;
+import com.rcll.llsf_utils.Key;
+import com.rcll.llsf_utils.NanoSecondsTimestampProvider;
 
 import java.util.HashMap;
 import java.util.List;

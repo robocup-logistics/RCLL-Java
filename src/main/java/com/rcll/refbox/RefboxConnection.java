@@ -3,9 +3,9 @@ package com.rcll.refbox;
 import com.google.protobuf.GeneratedMessageV3;
 import lombok.Getter;
 import lombok.extern.apachecommons.CommonsLog;
-import org.robocup_logistics.llsf_comm.ProtobufUpdBroadcastConnection;
-import org.robocup_logistics.llsf_comm.ProtobufMessage;
-import org.robocup_logistics.llsf_comm.ProtobufMessageHandler;
+import com.rcll.llsf_comm.ProtobufUpdBroadcastConnection;
+import com.rcll.llsf_comm.ProtobufMessage;
+import com.rcll.llsf_comm.ProtobufMessageHandler;
 
 import java.io.IOException;
 

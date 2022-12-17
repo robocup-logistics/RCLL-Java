@@ -1,12 +1,11 @@
-package org.robocup_logistics.llsf_comm;
+package com.rcll.llsf_comm;
 
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Descriptors.EnumDescriptor;
-import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.GeneratedMessageV3;
-import org.robocup_logistics.llsf_exceptions.EncryptedStreamMessageException;
-import org.robocup_logistics.llsf_exceptions.UnknownProtocolVersionException;
-import org.robocup_logistics.llsf_utils.Key;
+import com.rcll.llsf_exceptions.EncryptedStreamMessageException;
+import com.rcll.llsf_exceptions.UnknownProtocolVersionException;
+import com.rcll.llsf_utils.Key;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
