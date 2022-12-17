@@ -44,11 +44,25 @@ class MachineClient {
 
     public void sendPrepareBS(MachineSide side, Base base_color) {
         Machine machine = Machine.BS;
+        BaseColor bColor = null;
+        switch (base_color) {
+            case Red:
+                bColor = BaseColor.BASE_RED;
+                break;
+            case Silver:
+                bColor = BaseColor.BASE_SILVER;
+                break;
+            case Black:
+                bColor = BaseColor.BASE_BLACK;
+                break;
+            default:
+                throw new IllegalArgumentException("Not mapped baseColor: " + base_color);
+        }
         MachineInstructionProtos.PrepareInstructionBS bsInstruction =
                 MachineInstructionProtos.PrepareInstructionBS.newBuilder()
                         //.setSide(task.getSide() == SubProductionTask.MachineSide.INPUT ? MachineDescriptionProtos.MachineSide.INPUT : MachineDescriptionProtos.MachineSide.OUTPUT)
                         .setSide(side == MachineSide.Input ? MachineInstructionProtos.MachineSide.INPUT : MachineInstructionProtos.MachineSide.OUTPUT)
-                        .setColor(BaseColor.valueOf(base_color.toString()))
+                        .setColor(bColor)
                         .build();
         MachineInstructionProtos.PrepareMachine prepareMachineMsg =
                 MachineInstructionProtos.PrepareMachine.newBuilder()
