@@ -256,6 +256,14 @@ public class RefboxClient {
     }
 
     @Synchronized
+    public Long getLatestGameTimeInNanoSeconds() {
+        if (lastGameState == null) {
+            return 0L;
+        }
+        return lastGameState.getGameTime().getNsec();
+    }
+
+    @Synchronized
     public GamePhase getGamePhase() {
         if (lastGameState == null) {
             return GamePhase.PreGame;
