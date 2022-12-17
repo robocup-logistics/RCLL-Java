@@ -7,8 +7,7 @@ import org.robocup_logistics.llsf_msgs.BeaconSignalProtos;
 import org.robocup_logistics.llsf_msgs.Pose2DProtos;
 import org.robocup_logistics.llsf_msgs.TeamProtos;
 import org.robocup_logistics.llsf_msgs.TimeProtos;
-import com.rcll.llsf_utils.Key;
-import com.rcll.llsf_utils.NanoSecondsTimestampProvider;
+import com.rcll.llsf_comm.Key;
 
 import java.util.HashMap;
 import java.util.List;

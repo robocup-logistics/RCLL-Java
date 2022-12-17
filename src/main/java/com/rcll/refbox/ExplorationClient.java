@@ -8,7 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import com.rcll.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_msgs.MachineReportProtos;
 import org.robocup_logistics.llsf_msgs.TeamProtos;
-import com.rcll.llsf_utils.Key;
+import com.rcll.llsf_comm.Key;
 
 import java.util.Collections;
 import java.util.List;

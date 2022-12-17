@@ -1,6 +1,5 @@
-package com.rcll.llsf_encryption;
+package com.rcll.llsf_comm;
 
-import com.rcll.llsf_comm.ProtobufMessage;
 import com.rcll.llsf_exceptions.UnknownEncryptionMethodException;
 
 import javax.crypto.BadPaddingException;
@@ -20,7 +19,7 @@ import java.util.Random;
 /**
  * The BufferEncryptor is responsible for encrypting messages.
  */
-public class BufferEncryptor {
+class BufferEncryptor {
 	
 	private int cipher;
 	

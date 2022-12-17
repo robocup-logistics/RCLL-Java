@@ -1,9 +1,9 @@
-package com.rcll.llsf_utils;
+package com.rcll.refbox;
 
 /**
  * The Class NanoSecondsTimestampProvider provides a timestamp in nanoseconds.
  */
-public class NanoSecondsTimestampProvider {
+class NanoSecondsTimestampProvider {
 
 	private long nanoSecondsOffset;
 

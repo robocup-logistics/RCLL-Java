@@ -15,9 +15,8 @@
  *
  */
 
-package com.rcll.llsf_encryption;
+package com.rcll.llsf_comm;
 
-import com.rcll.llsf_comm.ProtobufUpdBroadcastConnection;
 import com.rcll.llsf_exceptions.UnknownEncryptionMethodException;
 
 import javax.crypto.BadPaddingException;
@@ -35,7 +34,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * The BufferDecryptor is responsible for decrypting incoming messages.
  */
-public class BufferDecryptor {
+class BufferDecryptor {
 	
 	private byte[] keyBytes;
 	

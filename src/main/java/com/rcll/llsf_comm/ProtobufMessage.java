@@ -1,7 +1,6 @@
 package com.rcll.llsf_comm;
 
 import com.google.protobuf.GeneratedMessageV3;
-import com.rcll.llsf_encryption.BufferEncryptor;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;

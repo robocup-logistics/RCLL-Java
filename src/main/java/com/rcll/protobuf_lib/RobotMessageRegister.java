@@ -19,7 +19,7 @@ package com.rcll.protobuf_lib;
 
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.GeneratedMessageV3;
-import com.rcll.llsf_utils.Key;
+import com.rcll.llsf_comm.Key;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

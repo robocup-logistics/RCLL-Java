@@ -8,7 +8,7 @@ import com.rcll.protobuf_lib.RobotMessageRegister;
 import lombok.extern.java.Log;
 import com.rcll.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_msgs.*;
-import com.rcll.llsf_utils.Key;
+import com.rcll.llsf_comm.Key;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

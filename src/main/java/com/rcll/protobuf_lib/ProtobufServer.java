@@ -20,7 +20,7 @@ package com.rcll.protobuf_lib;
 import com.google.protobuf.GeneratedMessageV3;
 import lombok.extern.apachecommons.CommonsLog;
 import com.rcll.llsf_comm.ProtobufMessage;
-import com.rcll.llsf_utils.Key;
+import com.rcll.llsf_comm.Key;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

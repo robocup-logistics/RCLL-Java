@@ -1,4 +1,4 @@
-package com.rcll.llsf_encryption;
+package com.rcll.llsf_comm;
 
 import java.security.MessageDigest;
 
@@ -7,7 +7,7 @@ import java.security.MessageDigest;
  * used by the algorithm. Besides it creates the first initialization vector.
  *
  */
-public class KeyConverter {
+class KeyConverter {
 
 	/**
 	 * Thanks go to Ola Bini for releasing this source on his blog. The source was obtained from
