@@ -26,11 +26,9 @@ import java.net.Socket;
 @Setter
 public class Peer {
     private long id;
-    private boolean waiting;
     private long lastActive;
     private long timeLastTaskAssignment;
     private PeerState robotState;
-    private int waitingTime;
     private Socket connection;
 
     public boolean equals(Object other) {
