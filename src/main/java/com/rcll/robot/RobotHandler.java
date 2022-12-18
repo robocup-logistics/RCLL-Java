@@ -86,7 +86,6 @@ public class RobotHandler implements Runnable {
             try {
                 handle(_socket.getInputStream());
             } catch (IOException e) {
-                //robotConnections.removeConnection(_socket);
                 robotConnections.removeLostRobot(_socket);
                 log.error("Connection to Robot lost");
                 break;
@@ -94,7 +93,6 @@ public class RobotHandler implements Runnable {
         }
         log.warn("after while");
         try {
-            //robotConnections.removeConnection(_socket);
             robotConnections.removeLostRobot(_socket);
             _socket.close();
             log.error("Closing socket from " + _socket.getInetAddress().getHostAddress() + ":" + _socket.getPort() + ".");

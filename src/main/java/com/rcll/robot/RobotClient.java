@@ -3,7 +3,6 @@ package com.rcll.robot;
 import com.google.protobuf.GeneratedMessageV3;
 import com.rcll.domain.MachineName;
 import com.rcll.domain.MachineSide;
-import com.rcll.protobuf_lib.ProtobufServer;
 import com.rcll.protobuf_lib.RobotConnections;
 import com.rcll.protobuf_lib.RobotMessageRegister;
 import lombok.NonNull;
@@ -15,19 +14,15 @@ public class RobotClient {
 
     private boolean robotsStopped;
 
-    private final ProtobufServer protobufServer;
     private final RobotTaskCreator robotTaskCreator;
     private final RobotConnections robotConnections;
 
-    public RobotClient(ProtobufServer protobufServer,
-                       RobotTaskCreator robotTaskCreator,
+    public RobotClient(RobotTaskCreator robotTaskCreator,
                        RobotConnections robotConnections) {
-        this.protobufServer = protobufServer;
         this.robotTaskCreator = robotTaskCreator;
         this.robotConnections = robotConnections;
         RobotMessageRegister.getInstance().add_message(BeaconSignalProtos.BeaconSignal.class);
         RobotMessageRegister.getInstance().add_message(AgentTasksProtos.AgentTask.class);
-        new Thread(protobufServer).start();
         this.robotsStopped = false;
     }
 
@@ -118,7 +113,7 @@ public class RobotClient {
     }
 
     public <T extends GeneratedMessageV3> void sendToRobot(long robot_id, @NonNull T msg) {
-        protobufServer.send_to_robot(robot_id, msg);
+        robotConnections.send_to_robot(robot_id, msg);
     }
 
     public void sendPrsTaskToRobot(AgentTasksProtos.AgentTask task) {

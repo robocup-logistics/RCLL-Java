@@ -18,11 +18,11 @@
 package com.rcll.protobuf_lib;
 
 import com.google.protobuf.GeneratedMessageV3;
+import com.rcll.llsf_comm.Key;
+import com.rcll.llsf_comm.ProtobufMessage;
 import com.rcll.robot.IRobotMessageThreadFactory;
 import com.rcll.robot.RobotHandler;
 import lombok.extern.apachecommons.CommonsLog;
-import com.rcll.llsf_comm.ProtobufMessage;
-import com.rcll.llsf_comm.Key;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -31,7 +31,6 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 @CommonsLog
 public class ProtobufServer implements Runnable {
@@ -83,36 +82,5 @@ public class ProtobufServer implements Runnable {
         handler.set_socket(liveSocket);
         this.robotHandlerList.add(handler);
         new Thread(handler).start();
-    }
-
-    public void send_to_robot(long robot_id, ProtobufMessage msg) {
-        if (null == msg) {
-            log.error("Error: msg to send is null!");
-            return;
-        }
-        if (null == robotConnections.getConnection(robot_id)) {
-            log.error("Error: No socket for robot with id " + robot_id + " stored!");
-            return;
-        }
-
-        ByteBuffer serialized_msg = msg.serialize(false, null);
-        try {
-            DataOutputStream data_out = new DataOutputStream(robotConnections.getConnection(robot_id).getOutputStream());
-            data_out.write(serialized_msg.array());
-            data_out.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public <T extends GeneratedMessageV3> void send_to_robot(long robot_id, T msg) {
-        if (null == msg) {
-            log.error("Error: msg to send is null!");
-            return;
-        }
-
-        Key key = RobotMessageRegister.getInstance().get_msg_key_from_class(msg.getClass());
-        ProtobufMessage proto_msg = new ProtobufMessage(key.cmp_id, key.msg_id, msg);
-        send_to_robot(robot_id, proto_msg);
     }
 }

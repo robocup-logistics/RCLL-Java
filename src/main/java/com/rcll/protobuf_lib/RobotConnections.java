@@ -17,10 +17,16 @@
 
 package com.rcll.protobuf_lib;
 
+import com.google.protobuf.GeneratedMessageV3;
 import com.rcll.domain.Peer;
+import com.rcll.llsf_comm.Key;
+import com.rcll.llsf_comm.ProtobufMessage;
 import lombok.extern.apachecommons.CommonsLog;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -116,5 +122,36 @@ public class RobotConnections {
 
     public ArrayList<Peer> getRobots() {
         return new ArrayList<>(_connectedRobots);
+    }
+
+    public void send_to_robot(long robot_id, ProtobufMessage msg) {
+        if (null == msg) {
+            log.error("Error: msg to send is null!");
+            return;
+        }
+        if (null == getConnection(robot_id)) {
+            log.error("Error: No socket for robot with id " + robot_id + " stored!");
+            return;
+        }
+
+        ByteBuffer serialized_msg = msg.serialize(false, null);
+        try {
+            DataOutputStream data_out = new DataOutputStream(getConnection(robot_id).getOutputStream());
+            data_out.write(serialized_msg.array());
+            data_out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public <T extends GeneratedMessageV3> void send_to_robot(long robot_id, T msg) {
+        if (null == msg) {
+            log.error("Error: msg to send is null!");
+            return;
+        }
+
+        Key key = RobotMessageRegister.getInstance().get_msg_key_from_class(msg.getClass());
+        ProtobufMessage proto_msg = new ProtobufMessage(key.cmp_id, key.msg_id, msg);
+        send_to_robot(robot_id, proto_msg);
     }
 }
