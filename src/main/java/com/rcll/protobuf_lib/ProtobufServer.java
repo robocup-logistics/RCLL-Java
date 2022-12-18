@@ -17,24 +17,21 @@
 
 package com.rcll.protobuf_lib;
 
-import com.google.protobuf.GeneratedMessageV3;
-import com.rcll.llsf_comm.Key;
-import com.rcll.llsf_comm.ProtobufMessage;
 import com.rcll.robot.IRobotMessageThreadFactory;
 import com.rcll.robot.RobotHandler;
 import lombok.extern.apachecommons.CommonsLog;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 @CommonsLog
 public class ProtobufServer implements Runnable {
 
+    Consumer<Integer> robotAddedHandler;
     private RobotConnections robotConnections;
     private List<RobotHandler> robotHandlerList;
     private ServerSocket _server_socket;
@@ -43,11 +40,13 @@ public class ProtobufServer implements Runnable {
     private final IRobotMessageThreadFactory threadFactory;
 
     public ProtobufServer(int listenPort, RobotConnections robotConnections,
-                          IRobotMessageThreadFactory threadFactory) {
+                          IRobotMessageThreadFactory threadFactory,
+                          Consumer<Integer> robotAddedHandler) {
         this.robotConnections = robotConnections;
         this.listenPort = listenPort;
         this.threadFactory = threadFactory;
         this.robotHandlerList = new ArrayList<>();
+        this.robotAddedHandler = robotAddedHandler;
     }
 
     public void start() throws IOException {
@@ -68,7 +67,7 @@ public class ProtobufServer implements Runnable {
                 Socket live_socket = _server_socket.accept();
                 String robot_address = live_socket.getInetAddress().getHostAddress();
                 log.info("New Connection from IP: " + robot_address + ":" + live_socket.getPort() + ".");
-                this.createHandlerForNewRobot(live_socket, threadFactory);
+                this.createHandlerForNewRobot(live_socket, threadFactory, robotAddedHandler);
             } catch (IOException e) {
                 log.error("IOException: ", e);
             } catch (Exception e) {
@@ -77,8 +76,9 @@ public class ProtobufServer implements Runnable {
         }
     }
 
-    private void createHandlerForNewRobot(Socket liveSocket, IRobotMessageThreadFactory threadFactory) {
-        RobotHandler handler = new RobotHandler(robotConnections, threadFactory);
+    private void createHandlerForNewRobot(Socket liveSocket, IRobotMessageThreadFactory threadFactory,
+                                          Consumer<Integer> robotAddedHandler) {
+        RobotHandler handler = new RobotHandler(robotConnections, threadFactory, robotAddedHandler);
         handler.set_socket(liveSocket);
         this.robotHandlerList.add(handler);
         new Thread(handler).start();

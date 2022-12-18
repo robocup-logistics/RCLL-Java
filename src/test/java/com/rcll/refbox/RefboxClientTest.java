@@ -26,8 +26,7 @@ public class RefboxClientTest {
                 new TeamConfig("randomkey", "GRIPS"),
                 new RefboxHandler(),
                 publicHandler,
-                100,
-                rbcm);
+                100);
         refboxClient.startServer();
         log.debug("DEBUG123");
         log.info("INFO123");

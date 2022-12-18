@@ -48,8 +48,11 @@ class RefBoxConnectionManager {
         this.privateHandler = privateHandler;
         this.teamConfig = teamConfig;
 
-        publicPeer = new RefboxConnection(connectionConfig.getIp(),
-                connectionConfig.getPublicPeer().getSendPort(), connectionConfig.getPublicPeer().getReceivePort(), publicHandler);
+        publicPeer = new RefboxConnection(
+                connectionConfig.getIp(),
+                connectionConfig.getPublicPeer().getSendPort(),
+                connectionConfig.getPublicPeer().getReceivePort(),
+                publicHandler);
     }
 
 

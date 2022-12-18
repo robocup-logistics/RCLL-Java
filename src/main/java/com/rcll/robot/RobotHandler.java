@@ -18,9 +18,11 @@
 package com.rcll.robot;
 
 import com.google.protobuf.GeneratedMessageV3;
+import com.rcll.domain.Peer;
 import com.rcll.protobuf_lib.RobotConnections;
 import com.rcll.protobuf_lib.RobotMessageRegister;
 import lombok.extern.apachecommons.CommonsLog;
+import org.robocup_logistics.llsf_msgs.BeaconSignalProtos;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +31,7 @@ import java.nio.ByteBuffer;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 @CommonsLog
 public class RobotHandler implements Runnable {
@@ -47,12 +50,16 @@ public class RobotHandler implements Runnable {
 
     private final List<Thread> threads;
 
+    private final Consumer<Integer> robotAddedHandler;
+
     private Socket _socket;
     private boolean received_invalid_packet = false;
 
     public RobotHandler(RobotConnections robotConnections,
-                        IRobotMessageThreadFactory factory) {
+                        IRobotMessageThreadFactory factory,
+                        Consumer<Integer> robotAddedHandler) {
         this.robotConnections = robotConnections;
+        this.robotAddedHandler = robotAddedHandler;
         this.factory = factory;
         this.threads = new ArrayList<>();
     }
@@ -75,10 +82,28 @@ public class RobotHandler implements Runnable {
         }
 
         Thread thread = factory.create(_socket, msg);
+
+        if (msg.getKey() instanceof BeaconSignalProtos.BeaconSignal) {
+            BeaconSignalProtos.BeaconSignal beaconSignal = BeaconSignalProtos.BeaconSignal.parseFrom(msg.getValue());
+            updateRobotNetworkActivity(beaconSignal);
+        }
+
         this.threads.add(thread);
         thread.start();
     }
 
+    private void updateRobotNetworkActivity(BeaconSignalProtos.BeaconSignal beaconSignal) {
+        if (!robotConnections.isRobotConnected(beaconSignal.getNumber())) {
+            Peer robot = new Peer();
+            robot.setId(beaconSignal.getNumber());
+            robot.setLastActive(System.currentTimeMillis());
+            robot.setConnection(_socket);
+            robotConnections.addRobot(robot);
+            this.robotAddedHandler.accept(beaconSignal.getNumber());
+        } else {
+            robotConnections.getRobot(beaconSignal.getNumber()).setLastActive(System.currentTimeMillis());
+        }
+    }
 
     @Override
     public void run() {

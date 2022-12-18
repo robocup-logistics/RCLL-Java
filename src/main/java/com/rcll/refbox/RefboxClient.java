@@ -35,12 +35,11 @@ public class RefboxClient {
                         @NonNull RefboxHandler privateHandler,
                         @NonNull RefboxHandler publicHandler,
                         int sendIntervalInMs) {
-        this(connectionConfig, teamConfig, privateHandler, publicHandler, sendIntervalInMs,
+        this(teamConfig, privateHandler, publicHandler, sendIntervalInMs,
                 new RefBoxConnectionManager(connectionConfig, teamConfig, privateHandler, publicHandler));
     }
 
-    RefboxClient(@NonNull RefboxConnectionConfig connectionConfig,
-                 @NonNull TeamConfig teamConfig,
+    RefboxClient(@NonNull TeamConfig teamConfig,
                  @NonNull RefboxHandler privateHandler,
                  @NonNull RefboxHandler publicHandler,
                  int sendIntervalInMs,
