@@ -18,6 +18,8 @@
 package com.rcll.protobuf_lib;
 
 import com.google.protobuf.GeneratedMessageV3;
+import com.rcll.robot.IRobotMessageThreadFactory;
+import com.rcll.robot.RobotHandler;
 import lombok.extern.apachecommons.CommonsLog;
 import com.rcll.llsf_comm.ProtobufMessage;
 import com.rcll.llsf_comm.Key;
@@ -27,20 +29,26 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 @CommonsLog
 public class ProtobufServer implements Runnable {
 
     private RobotConnections robotConnections;
+    private List<RobotHandler> robotHandlerList;
     private ServerSocket _server_socket;
-    private Consumer<Socket> onNewConnection;
     private int listenPort;
 
-    public ProtobufServer(int listenPort, RobotConnections robotConnections, Consumer<Socket> onNewConnection) {
-        this.onNewConnection = onNewConnection;
+    private final IRobotMessageThreadFactory threadFactory;
+
+    public ProtobufServer(int listenPort, RobotConnections robotConnections,
+                          IRobotMessageThreadFactory threadFactory) {
         this.robotConnections = robotConnections;
         this.listenPort = listenPort;
+        this.threadFactory = threadFactory;
+        this.robotHandlerList = new ArrayList<>();
     }
 
     public void start() throws IOException {
@@ -61,14 +69,20 @@ public class ProtobufServer implements Runnable {
                 Socket live_socket = _server_socket.accept();
                 String robot_address = live_socket.getInetAddress().getHostAddress();
                 log.info("New Connection from IP: " + robot_address + ":" + live_socket.getPort() + ".");
-
-                this.onNewConnection.accept(live_socket);
+                this.createHandlerForNewRobot(live_socket, threadFactory);
             } catch (IOException e) {
                 log.error("IOException: ", e);
             } catch (Exception e) {
                 log.error("Exeption: ", e);
             }
         }
+    }
+
+    private void createHandlerForNewRobot(Socket liveSocket, IRobotMessageThreadFactory threadFactory) {
+        RobotHandler handler = new RobotHandler(robotConnections, threadFactory);
+        handler.set_socket(liveSocket);
+        this.robotHandlerList.add(handler);
+        new Thread(handler).start();
     }
 
     public void send_to_robot(long robot_id, ProtobufMessage msg) {
