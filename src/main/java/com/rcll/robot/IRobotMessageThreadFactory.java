@@ -6,5 +6,5 @@ import java.net.Socket;
 import java.util.AbstractMap;
 
 public interface IRobotMessageThreadFactory {
-    Thread create(Socket _socket, AbstractMap.SimpleEntry<GeneratedMessageV3, byte[]> msg);
+    HandleRobotMessageThread create(Socket _socket, AbstractMap.SimpleEntry<GeneratedMessageV3, byte[]> msg);
 }

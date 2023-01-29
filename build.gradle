@@ -8,7 +8,7 @@ plugins {
 
 group = 'io.github.robocup-logistics'
 archivesBaseName = "java-sdk"
-version = '0.1.11.6'
+version = '0.1.12'
 
 description = ""
 
