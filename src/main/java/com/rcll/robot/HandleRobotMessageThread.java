@@ -11,6 +11,7 @@ import org.robocup_logistics.llsf_msgs.BeaconSignalProtos;
 import java.net.Socket;
 import java.util.AbstractMap;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 @CommonsLog
 public class HandleRobotMessageThread extends Thread {
@@ -19,6 +20,8 @@ public class HandleRobotMessageThread extends Thread {
     private final Consumer<Integer> robotAddedHandler;
     private final Consumer<BeaconSignalProtos.BeaconSignal> beaconMsgHandler;
     private final Consumer<AgentTasksProtos.AgentTask> prsTaskMsgHandler;
+
+    private final Predicate<AbstractMap.SimpleEntry<GeneratedMessageV3, byte[]>> unknownMsgHandler;
     private final Socket socket;
 
     private AbstractMap.SimpleEntry<GeneratedMessageV3, byte[]> msg;
@@ -28,12 +31,14 @@ public class HandleRobotMessageThread extends Thread {
                                     Consumer<Integer> robotAddedHandler,
                                     Consumer<BeaconSignalProtos.BeaconSignal> beaconMsgHandler,
                                     Consumer<AgentTasksProtos.AgentTask> prsTaskMsgHandler,
+                                    Predicate<AbstractMap.SimpleEntry<GeneratedMessageV3, byte[]>> unknownMsgHandler,
                                     AbstractMap.SimpleEntry<GeneratedMessageV3, byte[]> msg) {
         this.socket = socket;
         this.robotConnections = robotConnections;
         this.robotAddedHandler = robotAddedHandler;
         this.beaconMsgHandler = beaconMsgHandler;
         this.prsTaskMsgHandler = prsTaskMsgHandler;
+        this.unknownMsgHandler = unknownMsgHandler;
         this.msg = msg;
     }
 
@@ -48,10 +53,12 @@ public class HandleRobotMessageThread extends Thread {
                 BeaconSignalProtos.BeaconSignal beaconSignal = BeaconSignalProtos.BeaconSignal.parseFrom(msg.getValue());
                 updateRobotNetworkActivity(beaconSignal);
                 beaconMsgHandler.accept(beaconSignal);
-            } else if(msg.getKey() instanceof AgentTasksProtos.AgentTask) {
-                prsTaskMsgHandler.accept(AgentTasksProtos.AgentTask .parseFrom(msg.getValue()));
+            } else if (msg.getKey() instanceof AgentTasksProtos.AgentTask) {
+                prsTaskMsgHandler.accept(AgentTasksProtos.AgentTask.parseFrom(msg.getValue()));
             } else {
-                log.error("Unknown message in RobotHandler! " + msg.getKey().getClass().getSimpleName());
+                if (!unknownMsgHandler.test(msg)) {
+                    log.warn("Unknown message in RobotHandler! " + msg.getKey().getClass().getSimpleName());
+                }
             }
         } catch (InvalidProtocolBufferException e) {
             log.error("Can't parse msg in RobotHandler!", e);
