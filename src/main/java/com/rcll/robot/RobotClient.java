@@ -26,6 +26,15 @@ public class RobotClient {
         this.robotsStopped = false;
     }
 
+    public RobotClient(RobotTaskCreator robotTaskCreator,
+                       int robotConnectionTimeout) {
+        this(robotTaskCreator, new RobotConnections(robotConnectionTimeout));
+    }
+
+    public RobotClient(int robotConnectionTimeout) {
+        this(new RobotTaskCreator(), robotConnectionTimeout);
+    }
+
     public boolean isRobotsStopped() {
         return this.robotsStopped;
     }
