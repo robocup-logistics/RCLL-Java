@@ -12,10 +12,10 @@ import org.robocup_logistics.llsf_msgs.*;
 @CommonsLog
 public class RobotClient {
 
-    private boolean robotsStopped;
+    protected boolean robotsStopped;
 
-    private final RobotTaskCreator robotTaskCreator;
-    private final RobotConnections robotConnections;
+    protected final RobotTaskCreator robotTaskCreator;
+    protected final RobotConnections robotConnections;
 
     public RobotClient(RobotTaskCreator robotTaskCreator,
                        RobotConnections robotConnections) {
