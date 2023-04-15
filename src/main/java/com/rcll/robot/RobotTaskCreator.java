@@ -187,13 +187,6 @@ public class RobotTaskCreator {
                 .setTaskId(taskId).build();
     }
 
-    public AgentTasksProtos.AgentTask createGraspingChallenge(@NonNull Long robotId) {
-        return AgentTasksProtos.AgentTask.newBuilder()
-                .setRobotId(robotId.intValue())
-                //.setGraspingChallenge(true) todo this is missing!!!
-                .setTaskId(uniqueTaskId.getAndIncrement()).build();
-    }
-
     //todo check with jakob!
     private String convertSideToprovidingType(MachineSide side) {
         switch (side) {
