@@ -55,13 +55,11 @@ public class RobotClient {
     }
 
     public void sendDeliverTaskToRobot(@NonNull Long robotId,
-                                       @NonNull Long taskId,
                                        @NonNull String machine,
                                        @NonNull MachineSide side,
                                        Integer machineCount) {
         AgentTasksProtos.AgentTask deliverPrsTask = robotTaskCreator.createDeliverWorkPieceTask(
                 robotId,
-                taskId,
                 machine,
                 side,
                 convertSideToShelfSlide(side, machineCount));
@@ -75,13 +73,11 @@ public class RobotClient {
     }
 
     public void sendGetTaskToRobot(@NonNull Long robotId,
-                                   @NonNull Long taskId,
                                    @NonNull String machine,
                                    MachineSide side,
                                    Integer machineCount) {
         AgentTasksProtos.AgentTask getPrsTask = robotTaskCreator.createGetWorkPieceTask(
                 robotId,
-                taskId,
                 machine,
                 side,
                 convertSideToShelfSlide(side, machineCount));
@@ -141,23 +137,22 @@ public class RobotClient {
         }
     }
 
-    public void sendBufferCap(Long robotId, Long taskId, MachineName machine, Integer shelf) {
+    public void sendBufferCap(Long robotId, MachineName machine, Integer shelf) {
         AgentTasksProtos.AgentTask getPrsTask = robotTaskCreator.createBufferCapTask(
                 robotId,
-                taskId.intValue(),
                 machine,
                 shelf);
         sendPrsTaskToRobot(getPrsTask);
     }
 
-    public void sendMoveTask(Long robotId, Long taskId, MachineName machineName, MachineSide side) {
-        AgentTasksProtos.AgentTask getPrsTask = robotTaskCreator.createMoveToMachineTask(robotId, taskId.intValue(),
+    public void sendMoveTask(Long robotId, MachineName machineName, MachineSide side) {
+        AgentTasksProtos.AgentTask getPrsTask = robotTaskCreator.createMoveToMachineTask(robotId,
                 machineName, side);
         sendPrsTaskToRobot(getPrsTask);
     }
 
-    public void sendMoveToZoneTask(Long robotId, Long taskId, String zone) {
-        AgentTasksProtos.AgentTask getPrsTask = robotTaskCreator.createMoveToWaypointTask(robotId, taskId.intValue(), zone);
+    public void sendMoveToZoneTask(Long robotId, String zone) {
+        AgentTasksProtos.AgentTask getPrsTask = robotTaskCreator.createMoveToWaypointTask(robotId, zone);
         sendPrsTaskToRobot(getPrsTask);
     }
 }

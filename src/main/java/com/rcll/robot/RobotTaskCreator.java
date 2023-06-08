@@ -29,14 +29,13 @@ public class RobotTaskCreator {
     }
 
     public AgentTasksProtos.AgentTask createMoveToWaypointTask(@NonNull Long robotId,
-                                                               @NonNull Integer taskId,
                                                                @NonNull String waypoint) {
         AgentTasksProtos.Move moveToWayPointTask = AgentTasksProtos.Move.newBuilder()
                 .setWaypoint(waypoint)
                 .build();
 
         return AgentTasksProtos.AgentTask.newBuilder()
-                .setTaskId(taskId)
+                .setTaskId(uniqueTaskId.getAndIncrement())
                 .setTeamColor(TeamProtos.Team.CYAN) //TODO WHY DO WE NEED TEAM COLOR!!
                 .setRobotId(robotId.intValue())
                 .setMove(moveToWayPointTask).build();
@@ -44,11 +43,10 @@ public class RobotTaskCreator {
 
     //MachinePointSHelf not working!
     public AgentTasksProtos.AgentTask createMoveToMachineTask(@NonNull Long robotId,
-                                                              @NonNull Integer taskId,
                                                               @NonNull MachineName machine,
                                                               @NonNull MachineSide side) {
 
-        return this.createMoveToWaypointTask(robotId, taskId, machine.getRawMachineName() + side.toString().toLowerCase() + "_move_base");
+        return this.createMoveToWaypointTask(robotId, machine.getRawMachineName() + side.toString().toLowerCase() + "_move_base");
     }
 
     public AgentTasksProtos.AgentTask createDummyTask(@NonNull Long robotId,
@@ -118,20 +116,18 @@ public class RobotTaskCreator {
 
     //todo refactor and replace magic String constants with ENUMs
     public AgentTasksProtos.AgentTask createGetWorkPieceTask(@NonNull Long robotId,
-                                                             @NonNull Long taskId,
                                                              @NonNull String machine,
                                                              MachineSide side,
                                                              String shelfslide) {
         if (shelfslide != null) {
-            return createGetWorkPieceTaskNew(robotId, taskId, machine, shelfslide);
+            return createGetWorkPieceTaskNew(robotId, machine, shelfslide);
         } else {
             String providingType = convertSideToprovidingType(side);
-            return createGetWorkPieceTaskNew(robotId, taskId, machine, providingType);
+            return createGetWorkPieceTaskNew(robotId, machine, providingType);
         }
     }
 
     public AgentTasksProtos.AgentTask createGetWorkPieceTaskNew(@NonNull Long robotId,
-                                                                @NonNull Long taskId,
                                                                 @NonNull String machine,
                                                                 @NonNull String machinePoint) {
         AgentTasksProtos.Retrieve getWorkPieceTask = AgentTasksProtos.Retrieve.newBuilder()
@@ -142,25 +138,23 @@ public class RobotTaskCreator {
                 .setRetrieve(getWorkPieceTask)
                 .setTeamColor(TeamProtos.Team.CYAN)//TODO WHY DO WE NEED TEAM COLOR!!
                 .setRobotId(robotId.intValue())
-                .setTaskId(taskId.intValue()).build();
+                .setTaskId(uniqueTaskId.getAndIncrement()).build();
     }
 
     //todo refactor and replace magic String constants with ENUMs
     public AgentTasksProtos.AgentTask createDeliverWorkPieceTask(@NonNull Long robotId,
-                                                                 @NonNull Long taskId,
                                                                  @NonNull String machine,
                                                                  MachineSide side,
                                                                  String shelfslide) {
         if (shelfslide != null) {
-            return createDeliverWorkPieceTaskNew(robotId, taskId, machine, shelfslide);
+            return createDeliverWorkPieceTaskNew(robotId, machine, shelfslide);
         } else {
             String providingType = convertSideToprovidingType(side);
-            return createDeliverWorkPieceTaskNew(robotId, taskId, machine, providingType);
+            return createDeliverWorkPieceTaskNew(robotId, machine, providingType);
         }
     }
 
     public AgentTasksProtos.AgentTask createDeliverWorkPieceTaskNew(@NonNull Long robotId,
-                                                                    @NonNull Long taskId,
                                                                     @NonNull String machine,
                                                                     @NonNull String machinePoint) {
         AgentTasksProtos.Deliver deliverWorkPieceTask = AgentTasksProtos.Deliver.newBuilder()
@@ -171,10 +165,10 @@ public class RobotTaskCreator {
                 .setDeliver(deliverWorkPieceTask)
                 .setTeamColor(TeamProtos.Team.CYAN)//TODO WHY DO WE NEED TEAM COLOR!!
                 .setRobotId(robotId.intValue())
-                .setTaskId(taskId.intValue()).build();
+                .setTaskId(uniqueTaskId.getAndIncrement()).build();
     }
 
-    public AgentTasksProtos.AgentTask createBufferCapTask(@NonNull Long robotId, @NonNull Integer taskId,
+    public AgentTasksProtos.AgentTask createBufferCapTask(@NonNull Long robotId,
                                                           MachineName machineName, Integer shelf) {
         AgentTasksProtos.BufferStation bufferCapTask = AgentTasksProtos.BufferStation.newBuilder()
                 .setMachineId(machineName.getRawMachineName())
@@ -184,7 +178,7 @@ public class RobotTaskCreator {
                 .setBuffer(bufferCapTask)
                 .setTeamColor(TeamProtos.Team.CYAN)//TODO WHY DO WE NEED TEAM COLOR!!
                 .setRobotId(robotId.intValue())
-                .setTaskId(taskId).build();
+                .setTaskId(uniqueTaskId.getAndIncrement()).build();
     }
 
     //todo check with jakob!
