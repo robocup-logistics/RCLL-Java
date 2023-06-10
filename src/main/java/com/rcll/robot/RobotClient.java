@@ -150,14 +150,14 @@ public class RobotClient {
         sendPrsTaskToRobot(getPrsTask);
     }
 
-    public void sendMoveTask(Long robotId, MachineName machineName, MachineSide side) {
+    public void sendMoveTask(Long robotId, Long taskId, MachineName machineName, MachineSide side) {
         AgentTasksProtos.AgentTask getPrsTask = robotTaskCreator.createMoveToMachineTask(robotId,
-                machineName, side);
+                taskId.intValue(), machineName, side);
         sendPrsTaskToRobot(getPrsTask);
     }
 
-    public void sendMoveToZoneTask(Long robotId, String zone) {
-        AgentTasksProtos.AgentTask getPrsTask = robotTaskCreator.createMoveToWaypointTask(robotId, zone);
+    public void sendMoveToZoneTask(Long robotId, Long taskId, String zone) {
+        AgentTasksProtos.AgentTask getPrsTask = robotTaskCreator.createMoveToWaypointTask(robotId, taskId.intValue(), zone);
         sendPrsTaskToRobot(getPrsTask);
     }
 }

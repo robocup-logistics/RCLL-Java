@@ -29,24 +29,32 @@ public class RobotTaskCreator {
     }
 
     public AgentTasksProtos.AgentTask createMoveToWaypointTask(@NonNull Long robotId,
+                                                               @NonNull Integer taskId,
                                                                @NonNull String waypoint) {
         AgentTasksProtos.Move moveToWayPointTask = AgentTasksProtos.Move.newBuilder()
                 .setWaypoint(waypoint)
                 .build();
 
         return AgentTasksProtos.AgentTask.newBuilder()
-                .setTaskId(uniqueTaskId.getAndIncrement())
+                .setTaskId(taskId)
                 .setTeamColor(TeamProtos.Team.CYAN) //TODO WHY DO WE NEED TEAM COLOR!!
                 .setRobotId(robotId.intValue())
                 .setMove(moveToWayPointTask).build();
     }
 
-    //MachinePointSHelf not working!
+    public AgentTasksProtos.AgentTask createMoveToMachineTask(@NonNull Long robotId,
+                                                              @NonNull Integer taskId,
+                                                              @NonNull MachineName machine,
+                                                              @NonNull MachineSide side) {
+
+        return this.createMoveToWaypointTask(robotId, taskId, machine.getRawMachineName() + side.toString().toLowerCase() + "_move_base");
+    }
+
     public AgentTasksProtos.AgentTask createMoveToMachineTask(@NonNull Long robotId,
                                                               @NonNull MachineName machine,
                                                               @NonNull MachineSide side) {
 
-        return this.createMoveToWaypointTask(robotId, machine.getRawMachineName() + side.toString().toLowerCase() + "_move_base");
+        return this.createMoveToMachineTask(robotId, uniqueTaskId.getAndIncrement(), machine, side);
     }
 
     public AgentTasksProtos.AgentTask createDummyTask(@NonNull Long robotId,
