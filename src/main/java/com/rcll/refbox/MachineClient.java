@@ -1,5 +1,6 @@
 package com.rcll.refbox;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.rcll.domain.*;
@@ -22,13 +23,16 @@ class MachineClient {
     private final TeamColor teamColor;
     private final Map<Machine, GeneratedMessageV3> sendQueue;
     private final Map<Machine, MachineState> machineStates;
+    private final Map<Machine, ZoneName> machineZones;
     private final Map<RingColor, Machine> ringColorToMachine;
     private final Map<RingColor, Integer> ringColorToCost;
+
 
     public MachineClient(TeamColor teamColor) {
         this.teamColor = teamColor;
         this.sendQueue = new ConcurrentHashMap<>();
         this.machineStates = new ConcurrentHashMap<>();
+        this.machineZones = new ConcurrentHashMap<>();
         this.ringColorToMachine = new ConcurrentHashMap<>();
         this.ringColorToCost = new ConcurrentHashMap<>();
     }
@@ -260,11 +264,23 @@ class MachineClient {
     private void updateMachineStatus(MachineInfoProtos.Machine machineInfo) {
         Machine machine = parseMachineWithColor(machineInfo.getName());
         MachineState state = parseMachineState(machineInfo.getState());
+
         if (machine == Machine.RS1 || machine == Machine.RS2) {
             this.ringColorToMachine.put(fromRefboxRingColor(machineInfo.getRingColors(0)), machine);
             this.ringColorToMachine.put(fromRefboxRingColor(machineInfo.getRingColors(1)), machine);
         }
         machineStates.put(machine, state);
+        if (machineInfo.hasZone()) {
+            ZoneName zoneName = parseZoneName(machineInfo.getZone());
+            machineZones.put(machine, zoneName);
+        }
+    }
+
+    private ZoneName parseZoneName(ZoneProtos.Zone zone) {
+        if (zone != null) {
+            return new ZoneName(zone.name());
+        }
+        return null;
     }
 
     public Ring getRingForColor(RingColor ringColor) {
@@ -367,6 +383,6 @@ class MachineClient {
     }
 
     public Integer getCountMachines() {
-        return this.machineStates.size();
+        return this.machineZones.size();
     }
 }
