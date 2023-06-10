@@ -313,4 +313,8 @@ public class RefboxClient {
         }
         throw new IllegalArgumentException("Unkown teamColor: " + teamColor);
     }
+
+    public Integer getKnownMachinesCount() {
+        return this.machineClient.orElseThrow().getCountMachines();
+    }
 }

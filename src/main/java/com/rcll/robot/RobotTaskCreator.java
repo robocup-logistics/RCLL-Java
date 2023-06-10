@@ -114,20 +114,28 @@ public class RobotTaskCreator {
                 .build();
     }
 
+    public AgentTasksProtos.AgentTask createGetWorkPieceTask(@NonNull Long robotId,
+                                                             @NonNull Integer taskId,
+                                                             @NonNull String machine,
+                                                             MachineSide side,
+                                                             String shelfslide) {
+        if (shelfslide != null) {
+            return createGetWorkPieceTaskNew(robotId, taskId, machine, shelfslide);
+        } else {
+            String providingType = convertSideToprovidingType(side);
+            return createGetWorkPieceTaskNew(robotId, taskId, machine, providingType);
+        }
+    }
     //todo refactor and replace magic String constants with ENUMs
     public AgentTasksProtos.AgentTask createGetWorkPieceTask(@NonNull Long robotId,
                                                              @NonNull String machine,
                                                              MachineSide side,
                                                              String shelfslide) {
-        if (shelfslide != null) {
-            return createGetWorkPieceTaskNew(robotId, machine, shelfslide);
-        } else {
-            String providingType = convertSideToprovidingType(side);
-            return createGetWorkPieceTaskNew(robotId, machine, providingType);
-        }
+        return this.createGetWorkPieceTask(robotId, uniqueTaskId.getAndIncrement(), machine, side, shelfslide);
     }
 
     public AgentTasksProtos.AgentTask createGetWorkPieceTaskNew(@NonNull Long robotId,
+                                                                @NonNull Integer taskId,
                                                                 @NonNull String machine,
                                                                 @NonNull String machinePoint) {
         AgentTasksProtos.Retrieve getWorkPieceTask = AgentTasksProtos.Retrieve.newBuilder()
@@ -138,24 +146,26 @@ public class RobotTaskCreator {
                 .setRetrieve(getWorkPieceTask)
                 .setTeamColor(TeamProtos.Team.CYAN)//TODO WHY DO WE NEED TEAM COLOR!!
                 .setRobotId(robotId.intValue())
-                .setTaskId(uniqueTaskId.getAndIncrement()).build();
+                .setTaskId(taskId).build();
     }
 
     //todo refactor and replace magic String constants with ENUMs
     public AgentTasksProtos.AgentTask createDeliverWorkPieceTask(@NonNull Long robotId,
+                                                                 @NonNull Integer taskId,
                                                                  @NonNull String machine,
                                                                  MachineSide side,
                                                                  String shelfslide) {
         if (shelfslide != null) {
-            return createDeliverWorkPieceTaskNew(robotId, machine, shelfslide);
+            return createDeliverWorkPieceTaskNew(robotId, machine, taskId, shelfslide);
         } else {
             String providingType = convertSideToprovidingType(side);
-            return createDeliverWorkPieceTaskNew(robotId, machine, providingType);
+            return createDeliverWorkPieceTaskNew(robotId, machine, taskId, providingType);
         }
     }
 
     public AgentTasksProtos.AgentTask createDeliverWorkPieceTaskNew(@NonNull Long robotId,
                                                                     @NonNull String machine,
+                                                                    @NonNull Integer taskId,
                                                                     @NonNull String machinePoint) {
         AgentTasksProtos.Deliver deliverWorkPieceTask = AgentTasksProtos.Deliver.newBuilder()
                 .setMachineId(machine)
@@ -165,10 +175,11 @@ public class RobotTaskCreator {
                 .setDeliver(deliverWorkPieceTask)
                 .setTeamColor(TeamProtos.Team.CYAN)//TODO WHY DO WE NEED TEAM COLOR!!
                 .setRobotId(robotId.intValue())
-                .setTaskId(uniqueTaskId.getAndIncrement()).build();
+                .setTaskId(taskId).build();
     }
 
-    public AgentTasksProtos.AgentTask createBufferCapTask(@NonNull Long robotId,
+
+    public AgentTasksProtos.AgentTask createBufferCapTask(@NonNull Long robotId, @NonNull Integer taskId,
                                                           MachineName machineName, Integer shelf) {
         AgentTasksProtos.BufferStation bufferCapTask = AgentTasksProtos.BufferStation.newBuilder()
                 .setMachineId(machineName.getRawMachineName())
@@ -178,7 +189,11 @@ public class RobotTaskCreator {
                 .setBuffer(bufferCapTask)
                 .setTeamColor(TeamProtos.Team.CYAN)//TODO WHY DO WE NEED TEAM COLOR!!
                 .setRobotId(robotId.intValue())
-                .setTaskId(uniqueTaskId.getAndIncrement()).build();
+                .setTaskId(taskId).build();
+    }
+    public AgentTasksProtos.AgentTask createBufferCapTask(@NonNull Long robotId,
+                                                          MachineName machineName, Integer shelf) {
+        return this.createBufferCapTask(robotId, uniqueTaskId.getAndIncrement(), machineName, shelf);
     }
 
     //todo check with jakob!

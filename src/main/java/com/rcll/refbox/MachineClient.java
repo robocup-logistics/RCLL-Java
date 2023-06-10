@@ -365,4 +365,8 @@ class MachineClient {
         }
         throw new IllegalArgumentException("Unkown machine: " + machine);
     }
+
+    public Integer getCountMachines() {
+        return this.machineStates.size();
+    }
 }
