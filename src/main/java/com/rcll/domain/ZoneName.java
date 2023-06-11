@@ -26,4 +26,16 @@ public class ZoneName {
     public ZoneProtos.Zone toProto() {
         return ZoneProtos.Zone.valueOf(this.rawZone);
     }
+
+    public String toString() {
+        return this.rawZone;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ZoneName) {
+            return ((ZoneName) obj).rawZone.equals(this.rawZone);
+        }
+        return false;
+    }
 }
