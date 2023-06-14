@@ -10,6 +10,41 @@ public class MachineName {
     private static String DUMMY_MACHINE = "XXX";
     private final String rawMachineName;
 
+    public MachineName(TeamColor teamColor, Machine machine) {
+        String name = "";
+        switch (teamColor) {
+            case CYAN:
+                name +="C-";
+                break;
+            case MAGENTA:
+                name +="M-";
+                break;
+        }
+        switch (machine) {
+            case BS:
+                name += "BS";
+                break;
+            case DS:
+                name += "DS";
+                break;
+            case RS1:
+                name += "RS1";
+                break;
+            case RS2:
+                name += "RS2";
+                break;
+            case CS1:
+                name += "CS1";
+                break;
+            case CS2:
+                name += "CS2";
+                break;
+            case SS:
+                name += "SS";
+                break;
+        }
+        this.rawMachineName = name;
+    }
     public MachineName(String name) {
         if (name.charAt(0) != 'M' && name.charAt(0) != 'C' && !name.equalsIgnoreCase(DUMMY_MACHINE)) {
             throw new IllegalArgumentException("Invalid machine name: " + name);
