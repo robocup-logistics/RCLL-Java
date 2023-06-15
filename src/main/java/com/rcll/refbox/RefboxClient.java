@@ -317,4 +317,8 @@ public class RefboxClient {
     public Integer getKnownMachinesCount() {
         return this.machineClient.orElseThrow().getCountMachines();
     }
+
+    public Set<Integer> getPreparedOrders() {
+        return this.machineClient.orElseThrow().getPreparedOrders();
+    }
 }

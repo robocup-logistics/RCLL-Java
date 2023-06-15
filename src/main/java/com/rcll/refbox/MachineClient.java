@@ -1,21 +1,19 @@
 package com.rcll.refbox;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.rcll.domain.*;
-import com.rcll.domain.RingColor;
+import com.rcll.llsf_comm.Key;
+import com.rcll.llsf_comm.ProtobufMessage;
 import com.rcll.protobuf_lib.RobotMessageRegister;
 import lombok.extern.java.Log;
-import com.rcll.llsf_comm.ProtobufMessage;
 import org.robocup_logistics.llsf_msgs.*;
-import com.rcll.llsf_comm.Key;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import static org.robocup_logistics.llsf_msgs.ProductColorProtos.*;
+import static org.robocup_logistics.llsf_msgs.ProductColorProtos.BaseColor;
 
 //todo move to refbox folder!
 @Log
@@ -26,6 +24,7 @@ class MachineClient {
     private final Map<Machine, ZoneName> machineZones;
     private final Map<RingColor, Machine> ringColorToMachine;
     private final Map<RingColor, Integer> ringColorToCost;
+    private Set<Integer> preparedOrders;
 
 
     public MachineClient(TeamColor teamColor) {
@@ -35,6 +34,7 @@ class MachineClient {
         this.machineZones = new ConcurrentHashMap<>();
         this.ringColorToMachine = new ConcurrentHashMap<>();
         this.ringColorToCost = new ConcurrentHashMap<>();
+        this.preparedOrders = new HashSet<>();
     }
 
     public void sendResetMachine(Machine machine) {
@@ -91,7 +91,8 @@ class MachineClient {
                         .setMachine(machineNameForMsg(machine, teamColor))
                         .setInstructionDs(dsInstruction)
                         .build();
-        log.info("Sending PrepareDS: " + prepareMachineMsg.toString());
+        log.info("Sending PrepareDS: " + prepareMachineMsg);
+        this.preparedOrders.add(orderId);
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
@@ -384,5 +385,9 @@ class MachineClient {
 
     public Integer getCountMachines() {
         return this.machineZones.size();
+    }
+
+    public Set<Integer> getPreparedOrders() {
+        return this.preparedOrders;
     }
 }
