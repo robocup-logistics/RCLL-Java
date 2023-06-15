@@ -3,6 +3,7 @@ package com.rcll.robot;
 import com.google.protobuf.GeneratedMessageV3;
 import com.rcll.domain.MachineName;
 import com.rcll.domain.MachineSide;
+import com.rcll.domain.Peer;
 import com.rcll.protobuf_lib.RobotConnections;
 import com.rcll.protobuf_lib.RobotMessageRegister;
 import lombok.NonNull;
@@ -39,7 +40,11 @@ public class RobotClient {
         return this.robotsStopped;
     }
 
-    public void cancelTask(int robotId) {
+    public void cancelOnAll() {
+        this.robotConnections.getRobots().stream().map(Peer::getId)
+                .forEach(this::cancelTask);
+    }
+    public void cancelTask(long robotId) {
         log.info("Canceling current task of robot: " + robotId);
         AgentTasksProtos.AgentTask prsTask = robotTaskCreator.createCancelTask((long) robotId);
         sendPrsTaskToRobot(prsTask);
