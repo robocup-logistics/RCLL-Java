@@ -165,5 +165,9 @@ public class RobotClient {
         AgentTasksProtos.AgentTask getPrsTask = robotTaskCreator.createMoveToWaypointTask(robotId, taskId.intValue(), zone);
         sendPrsTaskToRobot(getPrsTask);
     }
+
+    public Integer getRobotCont() {
+        return this.robotConnections.getRobots().size();
+    }
 }
 
