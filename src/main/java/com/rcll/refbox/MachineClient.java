@@ -390,4 +390,8 @@ class MachineClient {
     public Set<Integer> getPreparedOrders() {
         return this.preparedOrders;
     }
+
+    public Map<Machine, ZoneName> getMachineZones() {
+        return this.machineZones;
+    }
 }

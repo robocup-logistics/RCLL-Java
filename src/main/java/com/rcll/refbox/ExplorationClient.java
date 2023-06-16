@@ -1,5 +1,6 @@
 package com.rcll.refbox;
 
+import com.rcll.domain.Machine;
 import com.rcll.domain.MachineName;
 import com.rcll.domain.TeamColor;
 import com.rcll.domain.ZoneName;
@@ -20,11 +21,18 @@ class ExplorationClient {
     private final Map<MachineName, MachineReportProtos.MachineReportEntry> sendQueue;
     private final TeamColor team;
 
+    private final Map<MachineName, ZoneName> reportedZones;
+
     public ExplorationClient(TeamColor team) {
         this.team = team;
         this.sendQueue = new ConcurrentHashMap<>();
+        this.reportedZones = new ConcurrentHashMap<>();
     }
     public void sendExploreMachine(MachineName machineName, ZoneName zone, int rotation) {
+        if (reportedZones.containsKey(machineName)) {
+            log.warn(machineName + " was already before to be in zone: " + zone);
+        }
+        this.reportedZones.put(machineName, zone);
         MachineReportProtos.MachineReportEntry msg = MachineReportProtos.MachineReportEntry.newBuilder()
                 .setName(machineName.toString())
                 .setZone(zone.toProto())
@@ -47,5 +55,9 @@ class ExplorationClient {
 
     public void clearExploraionMsgs() {
         this.sendQueue.clear();
+    }
+
+    public Map<MachineName, ZoneName> getReportedZones() {
+        return this.reportedZones;
     }
 }
