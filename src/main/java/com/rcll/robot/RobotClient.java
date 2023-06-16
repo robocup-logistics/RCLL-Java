@@ -166,7 +166,7 @@ public class RobotClient {
         sendPrsTaskToRobot(getPrsTask);
     }
 
-    public Integer getRobotCont() {
+    public Integer getRobotCount() {
         return this.robotConnections.getRobots().size();
     }
 }

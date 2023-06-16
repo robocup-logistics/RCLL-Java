@@ -224,6 +224,12 @@ public class RefboxClient {
         return orderService.orElseThrow().getOrders();
     }
 
+    public List<Order> getAllNoDsPreparedOrders() {
+        return this.orderService.orElseThrow().getOrders().stream()
+                .filter(x -> !this.machineClient.orElseThrow().getPreparedOrders().contains(x.getId()))
+                .collect(Collectors.toList());
+    }
+
     public Ring getRingByColor(RingColor ringColor) {
         return machineClient.orElseThrow().getRingForColor(ringColor);
     }
