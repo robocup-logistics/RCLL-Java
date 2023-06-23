@@ -19,24 +19,27 @@ package com.rcll.protobuf_lib;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.rcll.domain.Peer;
+import com.rcll.domain.Pose;
+import com.rcll.domain.RobotBeacon;
 import com.rcll.llsf_comm.Key;
 import com.rcll.llsf_comm.ProtobufMessage;
 import lombok.extern.apachecommons.CommonsLog;
+import org.robocup_logistics.llsf_msgs.BeaconSignalProtos;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Set;
+import java.time.Instant;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @CommonsLog
 public class RobotConnections {
 
     private Collection<Peer> _connectedRobots = new ArrayList<>();
+    private Map<Long, RobotBeacon> robotBeaconMap = new ConcurrentHashMap<>();
     private int Timeout_Time;
 
     public RobotConnections(int mil_sec){
@@ -153,5 +156,19 @@ public class RobotConnections {
         Key key = RobotMessageRegister.getInstance().get_msg_key_from_class(msg.getClass());
         ProtobufMessage proto_msg = new ProtobufMessage(key.cmp_id, key.msg_id, msg);
         send_to_robot(robot_id, proto_msg);
+    }
+
+    public RobotBeacon getBeaconForRobot(Long robotId) {
+        if (robotBeaconMap.containsKey(robotId)) {
+            return robotBeaconMap.get(robotId);
+        }
+        throw new RuntimeException("Requested beacon data for unkown robot: " + robotId);
+    }
+
+    public void updateRobotBeacon(BeaconSignalProtos.BeaconSignal beaconSignal) {
+        robotBeaconMap.putIfAbsent((long) beaconSignal.getNumber(),
+                new RobotBeacon((long)beaconSignal.getNumber(), (long)beaconSignal.getTask().getTaskId(),
+                beaconSignal.getPeerName(), new Pose(beaconSignal.getPose().getX(), beaconSignal.getPose().getY(),
+                        beaconSignal.getPose().getOri()), Instant.now()));
     }
 }

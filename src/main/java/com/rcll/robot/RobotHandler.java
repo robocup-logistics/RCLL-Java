@@ -86,8 +86,9 @@ public class RobotHandler implements Runnable {
         if (msg.getKey() instanceof BeaconSignalProtos.BeaconSignal) {
             BeaconSignalProtos.BeaconSignal beaconSignal = BeaconSignalProtos.BeaconSignal.parseFrom(msg.getValue());
             updateRobotNetworkActivity(beaconSignal);
-        }
+            this.robotConnections.updateRobotBeacon(beaconSignal);
 
+        }
         this.threads.add(thread);
         thread.start();
     }

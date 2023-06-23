@@ -3,6 +3,7 @@ package com.rcll.robot;
 import com.google.protobuf.GeneratedMessageV3;
 import com.rcll.domain.MachineName;
 import com.rcll.domain.MachineSide;
+import com.rcll.domain.RobotBeacon;
 import com.rcll.domain.Peer;
 import com.rcll.protobuf_lib.RobotConnections;
 import com.rcll.protobuf_lib.RobotMessageRegister;
@@ -168,6 +169,10 @@ public class RobotClient {
 
     public Integer getRobotCount() {
         return this.robotConnections.getRobots().size();
+    }
+
+    public RobotBeacon getBeaconForRobot(Long robotId) {
+        return this.robotConnections.getBeaconForRobot(robotId);
     }
 }
 
