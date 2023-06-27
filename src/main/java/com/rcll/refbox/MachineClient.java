@@ -78,11 +78,10 @@ class MachineClient {
         addMessageToSendQueue(machine, prepareMachineMsg);
     }
 
-    public void sendPrepareDS(int gate, int orderId) {
+    public void sendPrepareDS(int orderId) {
         Machine machine = Machine.DS;
         MachineInstructionProtos.PrepareInstructionDS dsInstruction =
                 MachineInstructionProtos.PrepareInstructionDS.newBuilder()
-                        //.setGate(gate)
                         .setOrderId(orderId)
                         .build();
         MachineInstructionProtos.PrepareMachine prepareMachineMsg =

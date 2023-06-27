@@ -156,10 +156,10 @@ public class RefboxClient {
         }
     }
 
-    public void sendPrepareDS(int gate, int orderId) {
+    public void sendPrepareDS(int orderId) {
         checkIfPublicStarted();
         if (privateServerStarted) {
-            this.machineClient.orElseThrow().sendPrepareDS(gate, orderId);
+            this.machineClient.orElseThrow().sendPrepareDS(orderId);
         } else {
             log.warn("Private Server not yet started! Is your team configured on Refbox?");
         }

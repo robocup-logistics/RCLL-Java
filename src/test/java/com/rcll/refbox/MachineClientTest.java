@@ -17,7 +17,7 @@ class MachineClientTest {
         MachineClient machineClient = new MachineClient(CYAN);
         assertThat(machineClient.fetchMachinesPreparing()).isEmpty();
         assertThat(machineClient.fetchPrepareMessages()).isEmpty();
-        machineClient.sendPrepareDS(123, 456);
+        machineClient.sendPrepareDS(456);
         assertThat(machineClient.fetchMachinesPreparing()).size().isOne();
         assertThat(machineClient.fetchPrepareMessages()).size().isOne();
     }
