@@ -332,11 +332,17 @@ public class RefboxClient {
         return this.machineClient.orElseThrow().getPreparedOrders();
     }
 
-    public Map<MachineName, ZoneName>getMachineZones() {
+    public Map<MachineName, ZoneName> getMachineZones() {
         Map<MachineName, ZoneName> reported = this.explorationClient.orElseThrow().getReportedZones();
         this.machineClient.orElseThrow().getMachineZones().forEach((machine, zone) -> {
             reported.put(new MachineName(this.teamColor, machine), zone);
         });
         return reported;
+    }
+
+    public List<MachineName> getAllMachines() {
+        return this.machineClient.orElseThrow().getMachineZones().keySet().stream()
+                .map(machine -> new MachineName(teamColor, machine))
+                .collect(Collectors.toList());
     }
 }
