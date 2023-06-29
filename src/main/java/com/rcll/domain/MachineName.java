@@ -2,6 +2,7 @@ package com.rcll.domain;
 
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Getter
@@ -45,7 +46,7 @@ public class MachineName {
         }
         this.rawMachineName = name;
     }
-    public MachineName(String name) {
+    public MachineName(@NonNull String name) {
         if (name.charAt(0) != 'M' && name.charAt(0) != 'C' && !name.equalsIgnoreCase(DUMMY_MACHINE)) {
             throw new IllegalArgumentException("Invalid machine name: " + name);
         }
