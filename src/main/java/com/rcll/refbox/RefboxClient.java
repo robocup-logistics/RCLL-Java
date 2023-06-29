@@ -332,8 +332,8 @@ public class RefboxClient {
         return this.machineClient.orElseThrow().getPreparedOrders();
     }
 
-    public Map<MachineName, ZoneName> getMachineZones() {
-        Map<MachineName, ZoneName> reported = this.explorationClient.orElseThrow().getReportedZones();
+    public Map<MachineName, MachinePosition> getMachineZones() {
+        Map<MachineName, MachinePosition> reported = this.explorationClient.orElseThrow().getReportedZones();
         this.machineClient.orElseThrow().getMachineZones().forEach((machine, zone) -> {
             reported.put(new MachineName(this.teamColor, machine), zone);
         });

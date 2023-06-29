@@ -1,9 +1,6 @@
 package com.rcll.refbox;
 
-import com.rcll.domain.Machine;
-import com.rcll.domain.MachineName;
-import com.rcll.domain.TeamColor;
-import com.rcll.domain.ZoneName;
+import com.rcll.domain.*;
 import com.rcll.protobuf_lib.RobotMessageRegister;
 import lombok.extern.log4j.Log4j2;
 import com.rcll.llsf_comm.ProtobufMessage;
@@ -21,7 +18,7 @@ class ExplorationClient {
     private final Map<MachineName, MachineReportProtos.MachineReportEntry> sendQueue;
     private final TeamColor team;
 
-    private final Map<MachineName, ZoneName> reportedZones;
+    private final Map<MachineName, MachinePosition> reportedZones;
 
     public ExplorationClient(TeamColor team) {
         this.team = team;
@@ -32,7 +29,7 @@ class ExplorationClient {
         if (reportedZones.containsKey(machineName)) {
             log.warn(machineName + " was already before to be in zone: " + zone);
         }
-        this.reportedZones.put(machineName, zone);
+        this.reportedZones.put(machineName, new MachinePosition(zone, rotation));
         MachineReportProtos.MachineReportEntry msg = MachineReportProtos.MachineReportEntry.newBuilder()
                 .setName(machineName.toString())
                 .setZone(zone.toProto())
@@ -57,7 +54,7 @@ class ExplorationClient {
         this.sendQueue.clear();
     }
 
-    public Map<MachineName, ZoneName> getReportedZones() {
+    public Map<MachineName, MachinePosition> getReportedZones() {
         return this.reportedZones;
     }
 }

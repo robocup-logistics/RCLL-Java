@@ -21,7 +21,7 @@ class MachineClient {
     private final TeamColor teamColor;
     private final Map<Machine, GeneratedMessageV3> sendQueue;
     private final Map<Machine, MachineState> machineStates;
-    private final Map<Machine, ZoneName> machineZones;
+    private final Map<Machine, MachinePosition> machineZones;
     private final Map<RingColor, Machine> ringColorToMachine;
     private final Map<RingColor, Integer> ringColorToCost;
     private Set<Integer> preparedOrders;
@@ -272,7 +272,8 @@ class MachineClient {
         machineStates.put(machine, state);
         if (machineInfo.hasZone()) {
             ZoneName zoneName = parseZoneName(machineInfo.getZone());
-            machineZones.put(machine, zoneName);
+            MachinePosition machinePosition = new MachinePosition(zoneName, machineInfo.getRotation());
+            machineZones.put(machine, machinePosition);
         }
     }
 
@@ -390,7 +391,7 @@ class MachineClient {
         return this.preparedOrders;
     }
 
-    public Map<Machine, ZoneName> getMachineZones() {
+    public Map<Machine, MachinePosition> getMachineZones() {
         return this.machineZones;
     }
 }
