@@ -166,7 +166,7 @@ public class RobotConnections {
     }
 
     public void updateRobotBeacon(BeaconSignalProtos.BeaconSignal beaconSignal) {
-        robotBeaconMap.putIfAbsent((long) beaconSignal.getNumber(),
+        robotBeaconMap.put((long) beaconSignal.getNumber(),
                 new RobotBeacon((long)beaconSignal.getNumber(), (long)beaconSignal.getTask().getTaskId(),
                 beaconSignal.getPeerName(), new Pose(beaconSignal.getPose().getX(), beaconSignal.getPose().getY(),
                         beaconSignal.getPose().getOri()), Instant.now()));
