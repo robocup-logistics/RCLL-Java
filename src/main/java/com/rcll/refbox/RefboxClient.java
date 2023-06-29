@@ -240,6 +240,10 @@ public class RefboxClient {
                 .collect(Collectors.toList());
     }
 
+    public List<Ring> getRingsForMachine(Machine machine) {
+        return getAllRings().stream().filter(ring -> ring.getMachine().equals(machine)).collect(Collectors.toList());
+    }
+
     public Optional<TeamColor> getTeamColor() {
         return Optional.ofNullable(teamColor);
     }
