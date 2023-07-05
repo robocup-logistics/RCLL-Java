@@ -345,4 +345,17 @@ public class RefboxClient {
                 .map(machine -> new MachineName(teamColor, machine))
                 .collect(Collectors.toList());
     }
+
+    Boolean isReadyForProduction() {
+        if (machineClient.isEmpty() || robotClient.isEmpty() || orderService.isEmpty() || explorationClient.isEmpty()) {
+            return false;
+        }
+        if (machineClient.get().getCountMachines() == 0) {
+            return false;
+        }
+        if (this.getAllRings().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
 }
