@@ -353,9 +353,10 @@ public class RefboxClient {
         if (machineClient.get().getCountMachines() == 0) {
             return false;
         }
+        /*
         if (this.getAllRings().isEmpty()) {
             return false;
-        }
+        }*/
         return true;
     }
 }
