@@ -346,7 +346,7 @@ public class RefboxClient {
                 .collect(Collectors.toList());
     }
 
-    Boolean isReadyForProduction() {
+    public boolean isReadyForProduction() {
         if (machineClient.isEmpty() || robotClient.isEmpty() || orderService.isEmpty() || explorationClient.isEmpty()) {
             return false;
         }
