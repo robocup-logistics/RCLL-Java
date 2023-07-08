@@ -1,9 +1,11 @@
 package com.rcll.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import org.robocup_logistics.llsf_msgs.ZoneProtos;
 
 @AllArgsConstructor
+@EqualsAndHashCode
 public class ZoneName {
     private final String rawZone;
 
@@ -29,13 +31,5 @@ public class ZoneName {
 
     public String toString() {
         return this.rawZone;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof ZoneName) {
-            return ((ZoneName) obj).rawZone.equals(this.rawZone);
-        }
-        return false;
     }
 }
