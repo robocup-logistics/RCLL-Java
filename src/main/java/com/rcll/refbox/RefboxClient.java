@@ -325,7 +325,7 @@ public class RefboxClient {
     }
 
     public Integer getKnownMachinesCount() {
-        return this.machineClient.orElseThrow().getCountMachines();
+        return this.getMachineZones().size();
     }
 
     public Set<Integer> getPreparedOrders() {
