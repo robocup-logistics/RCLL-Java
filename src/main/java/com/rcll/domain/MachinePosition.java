@@ -12,4 +12,12 @@ import lombok.Setter;
 public class MachinePosition {
     ZoneName zone;
     Integer rotation;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof MachinePosition) {
+            return ((MachinePosition) obj).zone.equals(this.zone) && rotation == ((MachinePosition) obj).rotation;
+        }
+        return false;
+    }
 }
