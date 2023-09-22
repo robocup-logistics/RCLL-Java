@@ -52,8 +52,8 @@ public class RefboxClient {
         this.robotClient = Optional.empty();
         this.explorationClient = Optional.empty();
         this.orderService = Optional.empty();
-        Consumer<MachineInfoProtos.MachineInfo> oldMachineInfoCallback = publicHandler.getMachineInfoCallback();
-        publicHandler.setMachineInfoCallback(machineInfo -> {
+        Consumer<MachineInfoProtos.MachineInfo> oldMachineInfoCallback = privateHandler.getMachineInfoCallback();
+        privateHandler.setMachineInfoCallback(machineInfo -> {
             machineClient.ifPresent(m -> m.update(machineInfo));
             oldMachineInfoCallback.accept(machineInfo);
             inProduction = true;
