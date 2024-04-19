@@ -125,7 +125,8 @@ class RefBoxConnectionManager {
         privatePeer.add_message(OrderInfoProtos.OrderInfo.class);
         privatePeer.add_message(RingInfoProtos.RingInfo.class);         // Not documented but sent!
         privatePeer.add_message(MachineInfoProtos.MachineInfo.class);
-        privatePeer.add_message(MachineReportProtos.MachineReportInfo.class);
+        privatePeer.add_message(MachineReportProtos.MachineReportInfo.class); //this might can be removed!
+        privatePeer.add_message(MachineReportProtos.MachineReport.class);
         privatePeer.add_message(ExplorationInfoProtos.ExplorationInfo.class);
         privatePeer.add_message(MachineInstructionProtos.PrepareMachine.class);
         privatePeer.add_message(MachineInstructionProtos.ResetMachine.class);
