@@ -101,9 +101,7 @@ public class RefboxClient {
                 machineClient.ifPresent(m -> m.fetchResetMessages().forEach(rbcm::sendPrivateMsg));
                 robotClient.ifPresent(r -> r.fetchBeaconSignals().forEach(rbcm::sendPrivateMsg));
                 robotClient.ifPresent(RobotClient::clearBeaconSignals);
-                if (!inProduction) {
-                    explorationClient.ifPresent(e -> e.fetchExplorationMsg().forEach(rbcm::sendPrivateMsg));
-                }
+                explorationClient.ifPresent(e -> e.fetchExplorationMsg().forEach(rbcm::sendPrivateMsg));
             }
         }, 0, sendIntervalInMs);
     }
